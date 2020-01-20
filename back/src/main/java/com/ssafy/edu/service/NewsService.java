@@ -78,7 +78,7 @@ public class NewsService implements INewsService {
 //	}
 	
 //	@Scheduled(cron="0 31 10 * * *")
-	@Scheduled(fixedDelay = 20000)
+	@Scheduled(fixedDelay = 300000)
 	public void Scheduler() throws IOException, ParseException{
 		System.out.println("SAMSUNG CRAWLING 1 START");
 		samsung_Crawling1();
