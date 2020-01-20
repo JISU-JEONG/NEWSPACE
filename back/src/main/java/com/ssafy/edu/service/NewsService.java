@@ -77,14 +77,14 @@ public class NewsService implements INewsService {
 //		list.clear();
 //	}
 	
-	@Scheduled(cron="0 31 10 * * *")
-//	@Scheduled(fixedDelay = 20000)
+//	@Scheduled(cron="0 31 10 * * *")
+	@Scheduled(fixedDelay = 20000)
 	public void Scheduler() throws IOException, ParseException{
 		System.out.println("SAMSUNG CRAWLING 1 START");
-//		samsung_Crawling1();
+		samsung_Crawling1();
 		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
 		System.out.println("SAMSUNG CRAWLING 2 START");
-//		samsung_Crawling2();
+		samsung_Crawling2();
 		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
 	}
 
