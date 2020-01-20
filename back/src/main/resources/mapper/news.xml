@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssafy.news">
+
+	<select id="getNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS ORDER BY DATE DESC LIMIT 50
+	</select>
+
+	<select id="getNewsOne" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE URL
+		LIKE #{url}
+	</select>
+
+	<insert id="addNews" parameterType="com.ssafy.edu.dto.NewsDTO">
+		INSERT INTO NEWS(title, date,
+		body, brand, category, keyword, url, bodytext) VALUES (#{title}, #{date},
+		#{body}, #{brand}, #{category}, #{keyword}, #{url}, #{bodytext})
+	</insert>
+
+</mapper>
