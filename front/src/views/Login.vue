@@ -25,7 +25,7 @@ export default {
     return {
       email: "",
       password: "",
-      user: ""
+      user: "",
     };
   },
   methods: {

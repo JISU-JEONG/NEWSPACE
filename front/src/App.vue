@@ -1,12 +1,16 @@
 <template>
 	<v-app>
-		<header class="header">
+		<v-app-bar
+		color="blue"
+		dense
+		dark
+		app
+		class="header">
 			<Sidebar class="hidden-sm-and-up">
 			</Sidebar>
-		
 			<Navigation class="hidden-xs-only">
 			</Navigation>
-		</header>
+		</v-app-bar>
 		<v-content>
 			<router-view/>
 		</v-content>
@@ -32,7 +36,7 @@ export default {
 	},
 	components: {
 		Sidebar,
-		Navigation
+		Navigation,
 	}
 }
 </script>

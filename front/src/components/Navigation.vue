@@ -1,6 +1,6 @@
 <template>
-  <v-bottom-navigation color="deep-purple accent-4">
-    <v-btn to="/">
+  <div>
+    <v-btn flat to="/">
       <span>Home</span>
     </v-btn>
 
@@ -13,5 +13,5 @@
     </v-btn>
 
     <v-btn to="/Login">Login</v-btn>
-  </v-bottom-navigation>
+  </div>
 </template>
