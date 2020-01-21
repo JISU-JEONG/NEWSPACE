@@ -1,14 +1,11 @@
 <template>
   <div class="login">
-    <h3>Login</h3>
-    <input type="email" v-model="email" />
-    <br />
-    <input type="password" v-model="password" />
-    <br />
-    <button v-on:click="login">로그인</button>
-    <br />
-    <button @click="googleLogin">Google 로그인</button>
-    <br />
+    <br><br><br>
+    <input type="email" v-model="email" /><br/>
+    <input type="password" v-model="password"/><br/>
+    <button v-on:click="login">로그인</button><br/>
+    <button @click="googleLogin">Google 로그인</button><br/>
+    <button @click="githubLogin">Github 로그인</button><br/>
     <button @click="logout">로그아웃</button><br>
     <input v-model="user" />
   </div>
@@ -29,6 +26,21 @@ export default {
     };
   },
   methods: {
+    githubLogin(){
+      const provider = new firebase.auth.GithubAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(result => {
+          console.log(result.dh.message.email);
+          this.user = result.dh.email;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errorMessage = error.message;
+          this.showError = true;
+        });
+    },
     googleLogin() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase

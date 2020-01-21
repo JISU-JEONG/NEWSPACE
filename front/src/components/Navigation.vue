@@ -13,5 +13,7 @@
     </v-btn>
 
     <v-btn to="/Login">Login</v-btn>
+
+    <v-btn to="/Googlelogin">Googlelogin</v-btn>
   </v-bottom-navigation>
 </template>
