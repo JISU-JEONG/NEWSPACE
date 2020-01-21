@@ -8,12 +8,15 @@ const PORTFOLIOS = 'portfolios'
 // Setup Firebase
 // Do change to your own firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyCu4NcBWZjSfW5s0JNwtCTp3ssA_r_iRgo",
-	authDomain: "ssafy-front.firebaseapp.com",
-	databaseURL: "https://ssafy-front.firebaseio.com",
-	projectId: "ssafy-front",
- 	storageBucket: "ssafy-front.appspot.com"
-}
+	apiKey: "AIzaSyCmNi_cE0oKL_pZHbSD4ot8f-sjIJp8ZMc",
+	authDomain: "ssafydb-780f1.firebaseapp.com",
+	databaseURL: "https://ssafydb-780f1.firebaseio.com",
+	projectId: "ssafydb-780f1",
+	storageBucket: "ssafydb-780f1.appspot.com",
+	messagingSenderId: "905531341249",
+	appId: "1:905531341249:web:9a2349b97422991f44d740",
+	measurementId: "G-CPB8S2P52F"
+};
 firebase.initializeApp(firebaseConfig)
 
 const firestore = firebase.firestore()
@@ -22,15 +25,15 @@ export default {
 	getPosts() {
 		const postsCollection = firestore.collection(POSTS)
 		return postsCollection
-				.orderBy('created_at', 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data()
-						data.created_at = new Date(data.created_at.toDate())
-						return data
-					})
+			.orderBy('created_at', 'desc')
+			.get()
+			.then((docSnapshots) => {
+				return docSnapshots.docs.map((doc) => {
+					let data = doc.data()
+					data.created_at = new Date(data.created_at.toDate())
+					return data
 				})
+			})
 	},
 	postPost(title, body) {
 		return firestore.collection(POSTS).add({
@@ -42,15 +45,15 @@ export default {
 	getPortfolios() {
 		const postsCollection = firestore.collection(PORTFOLIOS)
 		return postsCollection
-				.orderBy('created_at', 'desc')
-				.get()
-				.then((docSnapshots) => {					
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data()
-						data.created_at = new Date(data.created_at.toDate())
-						return data
-					})
+			.orderBy('created_at', 'desc')
+			.get()
+			.then((docSnapshots) => {
+				return docSnapshots.docs.map((doc) => {
+					let data = doc.data()
+					data.created_at = new Date(data.created_at.toDate())
+					return data
 				})
+			})
 	},
 	postPortfolio(title, body, img) {
 		return firestore.collection(PORTFOLIOS).add({
@@ -62,11 +65,11 @@ export default {
 	},
 	loginWithGoogle() {
 		let provider = new firebase.auth.GoogleAuthProvider()
-		return firebase.auth().signInWithPopup(provider).then(function(result) {
+		return firebase.auth().signInWithPopup(provider).then(function (result) {
 			let accessToken = result.credential.accessToken
 			let user = result.user
 			return result
-		}).catch(function(error) {
+		}).catch(function (error) {
 			console.error('[Google Login Error]', error)
 		})
 	}
