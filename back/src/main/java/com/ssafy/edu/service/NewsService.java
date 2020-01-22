@@ -154,7 +154,7 @@ public class NewsService implements INewsService {
 			for(int i=0; i<100; i++) {
 				System.out.println(list.get(i).getKeyword() + " " + list.get(i).getCount());
 			}
-		}
+		}   
 		
 		
 	}
