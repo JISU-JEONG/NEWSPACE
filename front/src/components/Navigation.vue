@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn flat to="/">
+    <v-btn to="/">
       <span>Home</span>
     </v-btn>
 
