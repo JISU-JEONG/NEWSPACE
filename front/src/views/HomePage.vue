@@ -17,7 +17,6 @@ import PortfolioList from '../components/PortfolioList'
 import PostList from '../components/PostList'
 import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
-import Searchbar from '../components/Searchbar'
 
 export default {
 	name: 'HomePage',
@@ -26,8 +25,7 @@ export default {
 		PortfolioList,
 		PostList,
     RepositoryList,
-    Searchbar,
-    NewsList
+    NewsList,
 	},
 	methods: {
 		getImgUrl(img) {
