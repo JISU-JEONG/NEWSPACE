@@ -12,6 +12,7 @@ import store from './store'
 import './registerServiceWorker'
 import lineClamp from 'vue-line-clamp'
 import VModal from 'vue-js-modal'
+import VueCarousel from 'vue-carousel'
 
 Vue.config.productionTip = false
 
@@ -19,6 +20,7 @@ Vue.use(VueSimplemde)
 Vue.use(Vuetify)
 Vue.use(lineClamp)
 Vue.use(VModal, { dynamic: true })
+Vue.use(VueCarousel)
 
 new Vue({
   router,

@@ -1,12 +1,13 @@
 <template>
   <div>
-    <!-- NewsList -->
-    <v-layout my-5>
-      <v-flex xs12>
-        <h2 class="headline my-5 text-xs-center">NewsList</h2>
-        <NewsList></NewsList>
-      </v-flex>
-    </v-layout>
+      <!-- Searchbar -->
+    	<Searchbar/>
+      <!-- NewsList -->
+      <v-layout my-5>
+        <v-flex xs12>
+          <NewsList></NewsList>
+        </v-flex>
+      </v-layout>
   </div>
 </template>
 

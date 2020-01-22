@@ -8,7 +8,7 @@
 		class="header">
 			<Sidebar class="hidden-sm-and-up">
 			</Sidebar>
-			<Navigation class="hidden-xs-only">
+			<Navigation class="hidden-xs-only">s
 			</Navigation>
 		</v-app-bar>
 		<v-content>
