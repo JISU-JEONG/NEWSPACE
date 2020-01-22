@@ -1,10 +1,12 @@
 <template>
+<div>
   <form class="form-body" @submit.prevent="searchEvent()">
     <v-icon>mdi-magnify</v-icon>
     <input class="search-input" @keyup.esc="clearInput()" v-model="inputValue" type="text" placeholder="검색어를 입력하세요">
     <span class="clear-btn" @click="clearInput()" v-if="inputValue">clear</span>
     <input class="submit-input" type="submit" value="search">
   </form>
+</div>
 </template>
 
 <script>

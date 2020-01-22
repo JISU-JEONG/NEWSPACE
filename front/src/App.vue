@@ -23,7 +23,7 @@ import store from './store';
 import '@mdi/font/css/materialdesignicons.css'
 import Sidebar from './components/Sidebar'
 import Navigation from './components/Navigation'
-import SearchBar from './components/SearchBar'
+import SearchBar from './components/Searchbar'
 
 export default {
 	name: 'App',
