@@ -12,7 +12,7 @@
 			</Navigation>
 		</v-app-bar>
 		<v-content>
-			<SearchBar/>
+			<SearchForm/>
 			<router-view/>
 		</v-content>
 	</v-app>
@@ -23,7 +23,7 @@ import store from './store';
 import '@mdi/font/css/materialdesignicons.css'
 import Sidebar from './components/Sidebar'
 import Navigation from './components/Navigation'
-import SearchBar from './components/Searchbar'
+import SearchForm from './components/SearchForm'
 
 export default {
 	name: 'App',
@@ -39,7 +39,7 @@ export default {
 	components: {
 		Sidebar,
 		Navigation,
-		SearchBar
+		SearchForm,
 	}
 }
 </script>
