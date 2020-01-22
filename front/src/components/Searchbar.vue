@@ -33,7 +33,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .form-body {
     position: relative;
     margin: 15px auto 0 auto ;
