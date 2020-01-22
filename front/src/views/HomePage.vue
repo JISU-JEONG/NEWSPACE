@@ -1,7 +1,5 @@
 <template>
   <div>
-      <!-- Searchbar -->
-    	<Searchbar/>
       <!-- NewsList -->
       <v-layout my-5>
         <v-flex xs12>
