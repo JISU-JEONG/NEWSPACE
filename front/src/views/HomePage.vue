@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- Searchbar -->
-    <!-- <SearchBar/> -->
     <!-- NewsList -->
     <v-layout my-5>
       <v-flex xs12>
@@ -18,7 +16,6 @@ import PortfolioList from '../components/PortfolioList'
 import PostList from '../components/PostList'
 import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
-// import SearchBar from '../components/SearchBar'
 
 export default {
 	name: 'HomePage',
@@ -28,7 +25,6 @@ export default {
 		PostList,
     RepositoryList,
     NewsList,
-    // SearchBar,
 	},
 	methods: {
 		getImgUrl(img) {
