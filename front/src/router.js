@@ -3,14 +3,15 @@ import Router from 'vue-router'
 import HomePage from './views/HomePage.vue'
 import PostPage from './views/PostPage.vue'
 import PortfolioPage from './views/PortfolioPage.vue'
-import LoginPage from './views/LoginPage.vue'
+import Login from './views/Login.vue'
+import test from './views/test.vue'
 
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
+	mode: 'history',
+	base: process.env.BASE_URL,
+	routes: [
 		{
 			path: '/',
 			name: 'home',
@@ -29,7 +30,12 @@ export default new Router({
 		{
 			path: '/login',
 			name: 'login',
-			component: LoginPage
+			component: Login
+		},
+		{
+			path: '/test',
+			name: 'test',
+			component: test
 		}
-  ]
+	]
 })
