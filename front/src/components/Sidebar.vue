@@ -1,9 +1,5 @@
 <template>
-  <v-app-bar
-    color="blue"
-    dense
-    dark
-  >
+  <div>
     <v-menu
       left
       bottom
@@ -20,7 +16,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-  </v-app-bar>
+  </div>
 </template>
 
 <script>
