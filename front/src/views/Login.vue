@@ -1,13 +1,21 @@
 <template>
   <div class="login">
-    <br><br><br>
-    <input type="email" v-model="email" /><br/>
-    <input type="password" v-model="password"/><br/>
-    <button v-on:click="login">로그인</button><br/>
-    <button @click="googleLogin">Google 로그인</button><br/>
-    <button @click="githubLogin">Github 로그인</button><br/>
-    <button @click="logout">로그아웃</button><br>
-    <input v-model="user" />
+    <br />
+    <br />
+    <br />
+    <input type="email" v-model="email" />
+    <br />
+    <input type="password" v-model="password" />
+    <br />
+    <button v-on:click="login">로그인</button>
+    <br />
+    <button @click="googleLogin">Google 로그인</button>
+    <br />
+    <button @click="facebookLogin">facebook 로그인</button>
+    <br />
+    <button @click="logout">로그아웃</button>
+    <br />
+
   </div>
 </template>
  
@@ -22,23 +30,27 @@ export default {
     return {
       email: "",
       password: "",
-      user: ""
+      facebookuser: "facebook",
+      googleuser: "google"
     };
   },
   methods: {
-    githubLogin(){
-      const provider = new firebase.auth.GithubAuthProvider();
+    facebookLogin() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+
       firebase
         .auth()
         .signInWithPopup(provider)
         .then(result => {
-          console.log(result.dh.message.email);
-          this.user = result.dh.email;
+          var token = result.credential.accessToken;
+          var user = result.user;
+
+          console.log("token : " + token);
+          this.facebookuser = result.user.displayName;
+          console.log("user : " + JSON.stringify(user));
         })
-        .catch(error => {
-          console.log(error);
-          this.errorMessage = error.message;
-          this.showError = true;
+        .catch(err => {
+          alert("에러 : " + err.message);
         });
     },
     googleLogin() {
@@ -48,7 +60,7 @@ export default {
         .signInWithPopup(provider)
         .then(result => {
           console.log(result.user);
-          this.user = result.user.displayName;
+          this.googleuser = result.user.displayName;
         })
         .catch(error => {
           console.log(error);

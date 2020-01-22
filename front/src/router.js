@@ -4,7 +4,7 @@ import HomePage from './views/HomePage.vue'
 import PostPage from './views/PostPage.vue'
 import PortfolioPage from './views/PortfolioPage.vue'
 import Login from './views/Login.vue'
-import Googlelogin from './views/GoogleLogin.vue'
+import test from './views/test.vue'
 
 Vue.use(Router)
 
@@ -33,9 +33,9 @@ export default new Router({
 			component: Login
 		},
 		{
-			path: '/Googlelogin',
-			name: 'Googlelogin',
-			component: Googlelogin
+			path: '/test',
+			name: 'test',
+			component: test
 		}
 	]
 })
