@@ -1,77 +1,69 @@
 <template>
-  <fieldset class="main-search">
-    <legend>전체 검색</legend>
-    <label class="search-word" for="main-search">
-      <span class="icon">검색 :</span>
-      <input v-model="seacrValue" id="main-search" class="HomeSearchInput" name="main-search" type="text" maxlength="20" placeholder="검색어를 입력하세요"/>
-      <span class="clear-btn">CLEAR</span>
-    </label>
-    <input class="btn-search" type="submit" value="search"/>
-    <p>{{searchValue}}</p>
-  </fieldset>
+  <form class="form-body" @submit.prevent="searchEvent()">
+    <v-icon>mdi-magnify</v-icon>
+    <input class="search-input" @keyup.esc="clearInput()" v-model="inputValue" type="text" placeholder="검색어를 입력하세요">
+    <span class="clear-btn" @click="clearInput()" v-if="inputValue">clear</span>
+    <input class="submit-input" type="submit" value="search">
+  </form>
 </template>
 
 <script>
 export default {
+  name: 'SearchBar',
   data() {
     return {
-      searchValue: ''
+      inputValue: ''
+    }
+  },
+  methods: {
+    clearInput() {
+      this.inputValue = ''
+    },
+    searchEvent() {
+      if (!this.inputValue) {
+        // TODO : 비어있는 상태로 검색시 뭔가 행동이 있으면 좋겠다 - placeholder가 흔들린다거나 등
+        console.log('검색어를 입력하세요')
+        return
+      }
+      console.log('이곳에 검색 코드 들어갑니다.')
+      this.inputValue = ''
     }
   }
+
 }
 </script>
 
-<style scoped>
-    fieldset {
-      border: none;
-    }
-    legend {
-      display: none;
-    }
-    .main-search {
-      position: relative;
-      height: 50px;
-      width: 600px;
-      box-sizing: border-box;
-      border-bottom: solid 2px black;
-      margin: 20px auto 0 auto;
-    }
-    .search-word {
-      position: absolute;
-      top: 0;
-      right: 70px;
-      left: 50px;
-    }
-    .icon {
-      position: absolute;
-      top: 30%;
-      left: -45px;
-    }
-    .HomeSearchInput {
-      height: 60px;
-      width: 500px;
-      font-size: 20px;
-      border: none;
-      outline: none;
-    }
-    .clear-btn {
-      position: absolute;
-      top: 30%;
-      right: 0;
-      cursor: pointer;
-    }
-    .btn-search {
-      width: 80px;
-      height: 50px;
-      box-sizing: border-box;
-      position: absolute;
-      right: -40px;
-      border: solid 10px black;
-      border-radius: 5px;
-      background-color: black;
-      outline: none;
-      cursor: pointer;
-      color: white;
-      font-size: 20px;
-    }
+<style>
+  .form-body {
+    position: relative;
+    margin: 15px auto 0 auto ;
+    max-width: 500px;
+    text-align: center;
+  }
+  .search-input {
+    padding: 5px 10px;
+    width: 80%;
+    outline: none;
+    border: none;
+    border-bottom: solid 2px black;
+    box-sizing: border-box;
+  }
+  .submit-input {
+    height: 35px;
+    width: 70px;
+    border: none;
+    background-color: black;
+    color: white;
+    font-size: 17px;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  .clear-btn {
+    position: absolute;
+    cursor: pointer;
+    color: gray;
+    font-size: 20px;
+    top: 5%;
+    right: 17%;
+  }
 </style>
