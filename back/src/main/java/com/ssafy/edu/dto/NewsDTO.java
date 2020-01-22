@@ -31,6 +31,15 @@ public class NewsDTO {
 		this.bodytext = bodytext;
 	}
 
+	public NewsDTO(String title, String date, String brand, String category, String url) {
+		super();
+		this.title = title;
+		this.date = date;
+		this.brand = brand;
+		this.category = category;
+		this.url = url;
+	}
+
 	@Override
 	public String toString() {
 		return "NewsDTO [number=" + number + ", title=" + title + ", date=" + date + ", body=" + body + ", brand="

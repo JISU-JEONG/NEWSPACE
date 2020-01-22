@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.news">
 
 	<select id="getNews" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS ORDER BY DATE DESC LIMIT 50
+		SELECT * FROM NEWS ORDER BY DATE DESC
 	</select>
 
 	<select id="getNewsOne" resultType="com.ssafy.edu.dto.NewsDTO">
@@ -18,5 +18,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		body, brand, category, keyword, url, bodytext) VALUES (#{title}, #{date},
 		#{body}, #{brand}, #{category}, #{keyword}, #{url}, #{bodytext})
 	</insert>
+	
+	<select id="getSamsungNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "SAMSUNG" ORDER BY DATE DESC
+	</select>
+	
+	<select id="getLgNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "LG" ORDER BY DATE DESC
+	</select>
+	
+	<select id="getSkNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "SK" ORDER BY DATE DESC
+	</select>
+	
+	<select id="getSamsungRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "SAMSUNG" ORDER BY DATE DESC LIMIT 20
+	</select>
+	
+	<select id="getLgRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "LG" ORDER BY DATE DESC LIMIT 20
+	</select>
+	
+	<select id="getSkRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "SK" ORDER BY DATE DESC LIMIT 20
+	</select>
+	
+	<select id="getNewsCountSamsung" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM NEWS WHERE BRAND LIKE "SAMSUNG"
+	</select>
+	
+	<select id="getNewsKeywordSamsung" resultType="java.lang.String">
+		SELECT KEYWORD FROM NEWS WHERE BRAND LIKE "SAMSUNG"
+	</select>
+	
 
 </mapper>

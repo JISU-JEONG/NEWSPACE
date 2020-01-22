@@ -26,11 +26,66 @@ public class NewsController {
 	@Autowired
 	INewsService newsService;
 	
-	@RequestMapping(value = "/getNews", method = RequestMethod.GET)
-	public ResponseEntity<List<NewsDTO>> getNews() throws Exception {
-		logger.info("NewsController Excute ! getNews \t" + new Date());
+	@RequestMapping(value = "/getSamsungNews", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getSamsungNews() throws Exception {
+		logger.info("NewsController Excute ! getSamsungNews \t" + new Date());
 		
-		List<NewsDTO> list = newsService.getNews();
+		List<NewsDTO> list = newsService.getSamsungNews();
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getLgNews", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getLgNews() throws Exception {
+		logger.info("NewsController Excute ! getLgNews \t" + new Date());
+		
+		List<NewsDTO> list = newsService.getLgNews();
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getSkNews", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getSkNews() throws Exception {
+		logger.info("NewsController Excute ! getSkNews \t" + new Date());
+		
+		List<NewsDTO> list = newsService.getSkNews();
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getSamsungRecent", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getSamsungRecent() throws Exception {
+		logger.info("NewsController Excute ! getSamsungRecent \t" + new Date());
+		
+		List<NewsDTO> list = newsService.getSamsungRecent();
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getLgRecent", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getLgRecent() throws Exception {
+		logger.info("NewsController Excute ! getLgRecent \t" + new Date());
+		
+		List<NewsDTO> list = newsService.getLgRecent();
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getSkRecent", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getSkRecent() throws Exception {
+		logger.info("NewsController Excute ! getSkRecent \t" + new Date());
+		
+		List<NewsDTO> list = newsService.getSkRecent();
 		if (list.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
@@ -38,5 +93,5 @@ public class NewsController {
 	}
 	
 	
-
+	
 }
