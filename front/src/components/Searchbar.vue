@@ -29,7 +29,6 @@ export default {
       this.inputValue = ''
     }
   }
-
 }
 </script>
 
