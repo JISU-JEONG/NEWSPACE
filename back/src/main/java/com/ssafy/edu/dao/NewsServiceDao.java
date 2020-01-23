@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.NewsKeyword;
 
 @Repository
 public class NewsServiceDao {
@@ -15,8 +16,8 @@ public class NewsServiceDao {
 	@Autowired
 	private SqlSession SQL;
 	
-	public List<NewsDTO> getNews(){
-		return SQL.selectList(ns+"getNews");
+	public NewsDTO getNews(int news_id){
+		return SQL.selectOne(ns+"getNews", news_id);
 	}
 
 	public NewsDTO getNewsOne(String url) {
@@ -68,7 +69,16 @@ public class NewsServiceDao {
 		// TODO Auto-generated method stub
 		return SQL.selectList(ns + "getNewsKeywordSamsung");
 	}
-	
-	
 
+	public void addNewsKeyword(NewsKeyword news) {
+		SQL.insert(ns + "addNewsKeyword", news);
+	}
+
+	public NewsKeyword newsKeywordValid(int news_id) {
+		return SQL.selectOne(ns + "newsKeywordValid", news_id);
+	}
+
+	public void updateNewsKeyword(NewsKeyword news) {
+		SQL.update(ns + "updateNewsKeyword", news);
+	}
 }

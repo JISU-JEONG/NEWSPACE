@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,6 +93,17 @@ public class NewsController {
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
 	}
 	
-	
-	
+	@RequestMapping(value = "/getNews/{news_id}", method = RequestMethod.GET)
+	public ResponseEntity getNews(@PathVariable int news_id) throws Exception {
+		logger.info("NewsController Excute ! getNews " + news_id + "\t" + new Date());
+		
+		NewsDTO news = newsService.getNews(news_id);
+		
+		if (news == null) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<NewsDTO>(news, HttpStatus.OK);
+	}
+	   
+	   
 }

@@ -4,8 +4,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ssafy.news">
 
-	<select id="getNews" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS ORDER BY DATE DESC
+	<select id="getNews" resultType="com.ssafy.edu.dto.NewsDTO"
+	parameterType="java.lang.Integer">
+		SELECT * FROM NEWS WHERE NEWS_ID = #{news_id}
 	</select>
 
 	<select id="getNewsOne" resultType="com.ssafy.edu.dto.NewsDTO">
@@ -15,41 +16,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="addNews" parameterType="com.ssafy.edu.dto.NewsDTO">
 		INSERT INTO NEWS(title, date,
-		body, brand, category, keyword, url, bodytext) VALUES (#{title}, #{date},
-		#{body}, #{brand}, #{category}, #{keyword}, #{url}, #{bodytext})
+		body, brand, category, keyword, url, bodytext) VALUES (#{title},
+		#{date},
+		#{body}, #{brand}, #{category}, #{keyword}, #{url},
+		#{bodytext})
 	</insert>
-	
-	<select id="getSamsungNews" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS WHERE BRAND LIKE "SAMSUNG" ORDER BY DATE DESC
-	</select>
-	
-	<select id="getLgNews" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS WHERE BRAND LIKE "LG" ORDER BY DATE DESC
-	</select>
-	
-	<select id="getSkNews" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS WHERE BRAND LIKE "SK" ORDER BY DATE DESC
-	</select>
-	
-	<select id="getSamsungRecent" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS WHERE BRAND LIKE "SAMSUNG" ORDER BY DATE DESC LIMIT 20
-	</select>
-	
-	<select id="getLgRecent" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS WHERE BRAND LIKE "LG" ORDER BY DATE DESC LIMIT 20
-	</select>
-	
-	<select id="getSkRecent" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT * FROM NEWS WHERE BRAND LIKE "SK" ORDER BY DATE DESC LIMIT 20
-	</select>
-	
-	<select id="getNewsCountSamsung" resultType="java.lang.Integer">
-		SELECT COUNT(*) FROM NEWS WHERE BRAND LIKE "SAMSUNG"
-	</select>
-	
-	<select id="getNewsKeywordSamsung" resultType="java.lang.String">
-		SELECT KEYWORD FROM NEWS WHERE BRAND LIKE "SAMSUNG"
-	</select>
-	
 
+	<select id="getSamsungNews"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "SAMSUNG" ORDER BY DATE
+		DESC
+	</select>
+
+	<select id="getLgNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND
+		LIKE "LG" ORDER BY DATE DESC
+	</select>
+
+	<select id="getSkNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND
+		LIKE "SK" ORDER BY DATE DESC
+	</select>
+
+	<select id="getSamsungRecent"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE BRAND LIKE "SAMSUNG" ORDER BY DATE
+		DESC LIMIT 20
+	</select>
+
+	<select id="getLgRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE
+		BRAND LIKE "LG" ORDER BY DATE DESC LIMIT 20
+	</select>
+
+	<select id="getSkRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS WHERE
+		BRAND LIKE "SK" ORDER BY DATE DESC LIMIT 20
+	</select>
+
+	<select id="getNewsCountSamsung" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM
+		NEWS WHERE BRAND LIKE "SAMSUNG"
+	</select>
+
+	<select id="getNewsKeywordSamsung" resultType="java.lang.String">
+		SELECT KEYWORD
+		FROM NEWS WHERE BRAND LIKE "SAMSUNG"
+	</select>
+
+	<insert id="addNewsKeyword"
+		parameterType="com.ssafy.edu.help.NewsKeyword">
+		INSERT INTO NEWSKEYWORD(news_id, keyword) VALUES(#{news_id}, #{keyword})
+	</insert>
+
+	<select id="newsKeywordValid"
+		parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.help.NewsKeyword">
+		SELECT * FROM NEWSKEYWORD WHERE NEWS_ID = #{news_id}
+	</select>
+
+	<update id="updateNewsKeyword"
+		parameterType="com.ssafy.edu.help.NewsKeyword">
+		UPDATE NEWSKEYWORD SET KEYWORD = #{keyword} WHERE NEWS_ID = #{news_id}
+	</update>
 </mapper>
