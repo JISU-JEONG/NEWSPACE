@@ -1,12 +1,13 @@
 <template>
 	<v-app>
+    <Sidebar></Sidebar>
 		<v-app-bar
 		color="blue"
 		dense
 		dark
 		app
 		class="header">
-			<Navigation class="hidden-xs-only"></Navigation>
+			<Navigation></Navigation>
 		</v-app-bar>
 		<v-content>
 			<SearchForm/>
@@ -16,7 +17,6 @@
 </template>
 
 <script>
-import store from './store';
 import '@mdi/font/css/materialdesignicons.css'
 import Sidebar from './components/Sidebar'
 import Navigation from './components/Navigation'
@@ -24,7 +24,6 @@ import SearchForm from './components/SearchForm'
 
 export default {
 	name: 'App',
-	store,
 	data() {
 		return {
 			//
