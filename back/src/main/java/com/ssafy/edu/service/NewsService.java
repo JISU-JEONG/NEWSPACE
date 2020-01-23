@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.edu.dao.NewsServiceDao;
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsKeywordCounter;
 
 import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
@@ -49,8 +50,18 @@ public class NewsService implements INewsService {
 	public static final String WEB_DRIVER_PATH = "C:\\JAVA\\selenium\\chromedriver.exe";
 
 	@Override
-	public List<NewsDTO> getNews() {
-		return dao.getNews();
+	public NewsDTO getNews(int news_id) {
+		NewsDTO news = null;
+		news = dao.getNews(news_id);
+		
+		if(news == null) {
+			return news;
+		}else {
+			NewsKeyword keyword = dao.newsKeywordValid(news_id);
+			news.setKeyword(keyword.getKeyword());
+		}
+		
+		return news;
 	}
 
 	@Override
@@ -62,7 +73,7 @@ public class NewsService implements INewsService {
 	public void addNews(NewsDTO news) {
 		dao.addNews(news);
 	}
-	
+
 	@Override
 	public List<NewsDTO> getSamsungNews() {
 		// TODO Auto-generated method stub
@@ -80,83 +91,73 @@ public class NewsService implements INewsService {
 		// TODO Auto-generated method stub
 		return dao.getSkNews();
 	}
-	
+
 	@Override
 	public List<NewsDTO> getSamsungRecent() {
 		// TODO Auto-generated method stub
-		return dao.getSamsungRecent();
+		List<NewsDTO> list = dao.getSamsungRecent();
+
+		for (int i = 0; i < list.size(); i++) {
+			NewsKeyword newsKeyword = dao.newsKeywordValid(list.get(i).getNews_id());
+			list.get(i).setKeyword(newsKeyword.getKeyword());
+		}
+
+		return list;
 	}
 
 	@Override
 	public List<NewsDTO> getLgRecent() {
 		// TODO Auto-generated method stub
-		return dao.getLgRecent();
+		List<NewsDTO> list = dao.getLgRecent();
+
+		for (int i = 0; i < list.size(); i++) {
+			NewsKeyword newsKeyword = dao.newsKeywordValid(list.get(i).getNews_id());
+			list.get(i).setKeyword(newsKeyword.getKeyword());
+		}
+
+		return list;
 	}
 
 	@Override
 	public List<NewsDTO> getSkRecent() {
 		// TODO Auto-generated method stub
-		return dao.getSkRecent();
+		List<NewsDTO> list = dao.getSkRecent();
+
+		for (int i = 0; i < list.size(); i++) {
+			NewsKeyword newsKeyword = dao.newsKeywordValid(list.get(i).getNews_id());
+			list.get(i).setKeyword(newsKeyword.getKeyword());
+		}
+
+		return list;
 	}
-	
-	public void keywordSort() {
-		
-//		HashMap<String, Integer> hm = new HashMap<String, Integer>();
-//		if(hm.containsKey("str")) {
-//			int value = hm.get("str");
-//			value++;
-//			hm.put("str", value);
-//		}else {
-//			hm.put("str", 1);
-//		}
-		
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		
-		int newsCount = dao.getNewsCountSamsung();
-		System.out.println(newsCount);
-		
-		List<String> keywords = dao.getNewsKeywordSamsung();
-		for(int i=0; i<newsCount; i++) {
-			String keyword = keywords.get(i);
-			
-			String[] key = keyword.split(" ");
-			
-			for(String s : key) {
-				if(s.length() <= 1 || s.equals("삼성전자") || s.equals("삼성")) {
-					continue;
-				}
-				if(map.containsKey(s)) {
-					int value = map.get(s);
-					value++;
-					map.put(s, value);
-				}else {
-					map.put(s, 1);
-				}
-			}
-		}
-		
-		ArrayList<NewsKeywordCounter> list = new ArrayList<NewsKeywordCounter>();
 
-		for(String key : map.keySet()) {
-			list.add(new NewsKeywordCounter(key, map.get(key)));
-		}
-		
-		list.sort(new Comparator<NewsKeywordCounter>() {
+	public void keywordSet() {
 
-			@Override
-			public int compare(NewsKeywordCounter o1, NewsKeywordCounter o2) {
-				// TODO Auto-generated method stub
-				return o2.getCount() - o1.getCount();
-			}
-		});
+		List<NewsDTO> listSamsung = new ArrayList<>();
+		List<NewsDTO> listLg = new ArrayList<>();
+		List<NewsDTO> listSk = new ArrayList<>();
+
+		listSamsung = getSamsungNews();
+		listLg = getLgNews();
+		listSk = getSkNews();
+
+		addKeyword(listSamsung);
+		addKeyword(listLg);
+		addKeyword(listSk);
+	}
+
+	public void addNewsKeyword(int news_id, String keyword) {
+
+		NewsKeyword check = null;
+		NewsKeyword news = new NewsKeyword(news_id, keyword);
+
+		check = dao.newsKeywordValid(news_id);
 		
-		if(list.size() >= 100) {
-			for(int i=0; i<100; i++) {
-				System.out.println(list.get(i).getKeyword() + " " + list.get(i).getCount());
-			}
-		}   
-		
-		
+		if (check == null) {
+			dao.addNewsKeyword(news);
+		} else {
+			dao.updateNewsKeyword(news);
+		}
 	}
 
 	////////////////////////////////// 스케쥴러메소드
@@ -473,7 +474,7 @@ public class NewsService implements INewsService {
 					}
 				}
 			}
-			
+
 			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
 			int[] count = new int[countString.length];
 
@@ -642,24 +643,85 @@ public class NewsService implements INewsService {
 			}
 		}
 		list.clear();
-
 	}
-	
+
+	public void addKeyword(List<NewsDTO> list) {
+
+		for (NewsDTO n : list) {
+			int news_id = n.getNews_id();
+			String word = n.getKeyword();
+
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+
+			String[] keys = word.split(" ");
+
+			for (String s : keys) {
+				if (s.length() <= 1 || s.equals("삼성전자") || s.equals("삼성") || s.equals("전자") || s.equals("분야")
+						|| s.equals("사람") || s.equals("임직원") || s.equals("월드") || s.equals("최대") || s.equals("선정")
+						|| s.equals("코리아") || s.equals("최적") || s.equals("진행") || s.equals("아래") || s.equals("소개")
+						|| s.equals("부문") || s.equals("적용") || s.equals("기간") || s.equals("이상") || s.equals("상판")
+						|| s.equals("규모") || s.equals("북미") || s.equals("지급") || s.equals("사원") || s.equals("규모")
+						|| s.equals("지원") || s.equals("대상") || s.equals("영민") || s.equals("주옥") || s.equals("구성")
+						|| s.equals("사용") || s.equals("자녀") || s.equals("사용자") || s.equals("시간") || s.equals("경험")
+						|| s.equals("신창") || s.equals("제공") || s.equals("대표") || s.equals("레이") || s.equals("학교")
+						|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
+						|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
+						|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")) {
+					continue;
+				}
+				if (map.containsKey(s)) {
+					int value = map.get(s);
+					value++;
+					map.put(s, value);
+				} else {
+					map.put(s, 1);
+				}
+			}
+
+			ArrayList<NewsKeywordCounter> counterList = new ArrayList<NewsKeywordCounter>();
+
+			for (String key : map.keySet()) {
+				counterList.add(new NewsKeywordCounter(key, map.get(key)));
+			}
+
+			counterList.sort(new Comparator<NewsKeywordCounter>() {
+
+				@Override
+				public int compare(NewsKeywordCounter o1, NewsKeywordCounter o2) {
+					// TODO Auto-generated method stub
+					return o2.getCount() - o1.getCount();
+				}
+			});
+
+			String keyword = "";
+
+			for (int i = 0; i < counterList.size(); i++) {
+				if (i >= 5) {
+					break;
+				}
+				keyword += counterList.get(i).getKeyword() + " ";
+			}
+			addNewsKeyword(news_id, keyword);
+		}
+	}
+
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 600000)
 	public void Scheduler() throws IOException, ParseException {
-		System.out.println("SAMSUNG CRAWLING 1 START");
+//		System.out.println("SAMSUNG CRAWLING 1 START");
 //		samsung_Crawling1();
-		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
-		System.out.println("SAMSUNG CRAWLING 2 START");
+//		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
+//		System.out.println("SAMSUNG CRAWLING 2 START");
 //		samsung_Crawling2();
-		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
-		System.out.println("LG CRAWLING START");
+//		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
+//		System.out.println("LG CRAWLING START");
 //		lg_Crawling();
-		System.out.println("LG CRAWLING COMPLETE");
-		System.out.println("SK CRAWLING START");
+//		System.out.println("LG CRAWLING COMPLETE");
+//		System.out.println("SK CRAWLING START");
 //		sk_Crawling();
-		System.out.println("SK CRAWLING COMPLETE");
-		keywordSort();
+//		System.out.println("SK CRAWLING COMPLETE");
+		System.out.println("KEYWORD SETTING START");
+		keywordSet();
+		System.out.println("KEYWORD SETTING COMPLETE");
 	}
 }

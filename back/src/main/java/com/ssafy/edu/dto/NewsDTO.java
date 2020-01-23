@@ -2,7 +2,7 @@ package com.ssafy.edu.dto;
 
 public class NewsDTO {
 
-	private int number;
+	private int news_id;
 	private String title;
 	private String date;
 	private String body;
@@ -17,10 +17,11 @@ public class NewsDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NewsDTO(int number, String title, String date, String body, String brand, String category, String keyword,
+
+	public NewsDTO(int news_id, String title, String date, String body, String brand, String category, String keyword,
 			String url, String bodytext) {
 		super();
-		this.number = number;
+		this.news_id = news_id;
 		this.title = title;
 		this.date = date;
 		this.body = body;
@@ -30,6 +31,7 @@ public class NewsDTO {
 		this.url = url;
 		this.bodytext = bodytext;
 	}
+
 
 	public NewsDTO(String title, String date, String brand, String category, String url) {
 		super();
@@ -42,18 +44,22 @@ public class NewsDTO {
 
 	@Override
 	public String toString() {
-		return "NewsDTO [number=" + number + ", title=" + title + ", date=" + date + ", body=" + body + ", brand="
+		return "NewsDTO [news_id=" + news_id + ", title=" + title + ", date=" + date + ", body=" + body + ", brand="
 				+ brand + ", category=" + category + ", keyword=" + keyword + ", url=" + url + ", bodytext=" + bodytext
 				+ "]";
 	}
 
-	public int getNumber() {
-		return number;
+	
+
+	public int getNews_id() {
+		return news_id;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+
+	public void setNews_id(int news_id) {
+		this.news_id = news_id;
 	}
+
 
 	public String getTitle() {
 		return title;

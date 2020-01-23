@@ -6,7 +6,6 @@ import com.ssafy.edu.dto.NewsDTO;
 
 public interface INewsService {
 
-	List<NewsDTO> getNews();
 	NewsDTO getNewsOne(String url);
 	void addNews(NewsDTO news);
 	List<NewsDTO> getSamsungNews();
@@ -15,4 +14,5 @@ public interface INewsService {
 	List<NewsDTO> getSamsungRecent();
 	List<NewsDTO> getLgRecent();
 	List<NewsDTO> getSkRecent();
+	NewsDTO getNews(int news_id);
 }
