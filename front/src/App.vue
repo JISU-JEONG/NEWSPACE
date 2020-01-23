@@ -6,10 +6,7 @@
 		dark
 		app
 		class="header">
-			<Sidebar class="hidden-sm-and-up">
-			</Sidebar>
-			<Navigation class="hidden-xs-only">s
-			</Navigation>
+			<Navigation class="hidden-xs-only"></Navigation>
 		</v-app-bar>
 		<v-content>
 			<SearchForm/>
