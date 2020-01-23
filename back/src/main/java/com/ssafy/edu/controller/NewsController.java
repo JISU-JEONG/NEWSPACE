@@ -105,5 +105,5 @@ public class NewsController {
 		return new ResponseEntity<NewsDTO>(news, HttpStatus.OK);
 	}
 	
-	
+	   
 }
