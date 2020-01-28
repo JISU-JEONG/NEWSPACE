@@ -184,7 +184,19 @@ public class NewsService implements INewsService {
 		return dao.getAllNews();
 	}
 
-	
+	@Override
+	public List<NewsDTO> getAllNewsRecent() {
+		// TODO Auto-generated method stub
+		
+		List<NewsDTO> list = dao.getAllNewsRecent();
+
+		for (int i = 0; i < list.size(); i++) {
+			NewsKeyword newsKeyword = dao.newsKeywordValid(list.get(i).getNews_id());
+			list.get(i).setKeyword(newsKeyword.getKeyword());
+		}
+
+		return list;
+	}
 
 	////////////////////////////////// 스케쥴러메소드
 	////////////////////////////////// ////////////////////////////////////////////
