@@ -1,33 +1,18 @@
 <template>
 	<v-app>
-		<v-app-bar
-		color="blue"
-		dense
-		dark
-		app
-		class="header">
-			<Sidebar class="hidden-sm-and-up">
-			</Sidebar>
-			<Navigation class="hidden-xs-only">s
-			</Navigation>
-		</v-app-bar>
-		<v-content class="background">
-			<SearchForm/>
+    <Navigation />
+		<v-content>
 			<router-view/>
 		</v-content>
 	</v-app>
 </template>
 
 <script>
-import store from './store';
 import '@mdi/font/css/materialdesignicons.css'
-import Sidebar from './components/Sidebar'
 import Navigation from './components/Navigation'
-import SearchForm from './components/SearchForm'
 
 export default {
 	name: 'App',
-	store,
 	data() {
 		return {
 			//
@@ -37,9 +22,7 @@ export default {
 		iconfont: 'mdi', // default - only for display purposes
 	},
 	components: {
-		Sidebar,
 		Navigation,
-		SearchForm,
 	}
 }
 </script>

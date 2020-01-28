@@ -24,11 +24,8 @@ Vue.use(VueCarousel)
 
 new Vue({
   router,
-	store,
+  store,
 	vuetify: new Vuetify({
-		icons: {
-      iconfont: 'fa' || 'mdi',
-    },
 		theme: {
 			primary: '#3f51b5',
 			secondary: '#b0bec5',

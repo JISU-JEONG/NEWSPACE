@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsKeyword;
+import com.ssafy.edu.help.NewsSearch;
 
 @Repository
 public class NewsServiceDao {
@@ -80,5 +81,39 @@ public class NewsServiceDao {
 
 	public void updateNewsKeyword(NewsKeyword news) {
 		SQL.update(ns + "updateNewsKeyword", news);
+	}
+
+	public List<NewsDTO> findNewsSamsung(String[] str) {
+		// TODO Auto-generated method stub
+		
+		NewsSearch find = new NewsSearch(str, "SAMSUNG");
+		
+		return SQL.selectList(ns + "findNewsSamsung", find);
+	}
+
+	public List<NewsDTO> findNewsLg(String[] str) {
+		// TODO Auto-generated method stub
+		
+		NewsSearch find = new NewsSearch(str, "LG");
+		
+		return SQL.selectList(ns + "findNewsLg", find);
+	}
+
+	public List<NewsDTO> findNewsSk(String[] str) {
+		// TODO Auto-generated method stub
+
+		NewsSearch find = new NewsSearch(str, "SK");
+		
+		return SQL.selectList(ns + "findNewsSk", find);
+	}
+
+	public List<NewsDTO> getAllNews() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getAllNews");
+	}
+
+	public List<NewsDTO> getAllNewsRecent() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getAllNewsRecent");
 	}
 }
