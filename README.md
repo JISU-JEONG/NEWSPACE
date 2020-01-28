@@ -15,22 +15,12 @@ Content 1 | Content 3
 Content 2 | Content 4
 
 
-
 # front-end
 
-<details>
-
-
-
-</details>
 
 # back-end
 
-<details>
-
-
-
-# function
+## function
 
 ### REST 명령어 뒤에 ?는 검색하고자 하는 검색명
 
@@ -225,5 +215,3 @@ for (NewsDTO n : list) {
 }
 
 ```
-
-</details>
