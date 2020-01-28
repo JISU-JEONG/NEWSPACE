@@ -5,7 +5,14 @@
 
 ## 개발환경
 
+> OS
+>> Windows
 
+> Language
+>> JAVA, Vue, CSS, JS
+
+> IDE
+>> VS CODE, Eclipse, WorkBench
 
 ## 기술역할 분담
 
