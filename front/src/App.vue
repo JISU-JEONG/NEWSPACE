@@ -11,7 +11,7 @@
 			<Navigation class="hidden-xs-only">s
 			</Navigation>
 		</v-app-bar>
-		<v-content>
+		<v-content class="background">
 			<SearchForm/>
 			<router-view/>
 		</v-content>
@@ -53,5 +53,7 @@ export default {
 	width:100vw;
 	z-index:200;
 }
-
+.background{
+	background-color: white;
+}
 </style>

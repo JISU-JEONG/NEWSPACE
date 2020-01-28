@@ -1,17 +1,17 @@
 <template>
-  <div @click="goDetail(id)">
-    <v-card class="cardbox" color="#E0E0E0" >
-      <v-card-title class="cardfont">
-        <v-clamp autoresize :max-lines="2">
-          {{title}}
-        </v-clamp>
-      </v-card-title>
-      <v-card-text>
-        <v-clamp autoresize :max-lines="10">
-          {{bodytext}}
-        </v-clamp>
-      </v-card-text>
-    </v-card>
+  <div @click="goDetail(news.news_id)" class="cardbox">
+        <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'">{{news.brand}}<hr></div>
+        <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}}<hr></div>
+        <div class="SK_font" v-else>{{news.brand}}<hr></div>
+        <div class="head_font">{{news.title}}</div>
+        <div class="box">
+          {{news.date}}
+        </div>
+        <div class="tagfont">
+          <span v-for="key in news.keyword.split(' ')" :key="key">
+            #{{key}}
+          </span>
+        </div>
   </div>
 </template>
 
@@ -22,10 +22,7 @@ import router from '../router'
 export default {
    name: 'News',
    props: {
-    id : {type: Number},
-    title : {type: String},
-    bodytext : {type: String},
-    body : {type: String}
+    news : {type: Object}
    },
    components: {
       VClamp
@@ -39,3 +36,46 @@ export default {
    }
 }
 </script>
+
+<style>
+  .cardbox{
+    margin: 30px 30px;
+    padding: 10px 20px;
+    border: solid 1px gray;
+    border-radius: 10px;
+  }
+  .tagfont{
+  width: 100%;
+  font-size: 18px;
+  color : blue;
+  margin-top: 10px;
+  }
+  .head_font{
+    width: 100%;
+    color : black;
+    font-size: 20px;
+  }
+  .box{
+    width: 100%;
+    font-size:15px;
+    color: gray;
+  }
+  .Samsung_font{
+    width: 100%;
+    font-size:30px;
+    color:blue;
+    margin-bottom: 10px;
+  }
+  .LG_font{
+    width: 100%;
+    font-size:30px;
+    color: red;
+    margin-bottom: 10px;
+  }
+  .SK_font{
+    width: 100%;
+    font-size:30px;
+    color: orange;
+    margin-bottom: 10px;
+  }
+</style>
