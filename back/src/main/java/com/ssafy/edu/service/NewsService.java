@@ -159,6 +159,24 @@ public class NewsService implements INewsService {
 			dao.updateNewsKeyword(news);
 		}
 	}
+	
+	@Override
+	public List<NewsDTO> findNewsSamsung(String[] str) {
+		// TODO Auto-generated method stub
+		return dao.findNewsSamsung(str);
+	}
+
+	@Override
+	public List<NewsDTO> findNewsLg(String[] str) {
+		// TODO Auto-generated method stub
+		return dao.findNewsLg(str);
+	}
+
+	@Override
+	public List<NewsDTO> findNewsSk(String[] str) {
+		// TODO Auto-generated method stub
+		return dao.findNewsSk(str);
+	}
 
 	////////////////////////////////// 스케쥴러메소드
 	////////////////////////////////// ////////////////////////////////////////////
@@ -410,6 +428,7 @@ public class NewsService implements INewsService {
 
 			for (int i = 0; i < webElements.size(); i++) {
 				String temp = webElements.get(i).getText();
+				System.out.println(temp);
 				String date = "";
 				if (temp.length() >= 12) {
 					date = temp.substring(0, 4) + "-" + temp.substring(6, 8) + "-" + temp.substring(10, 12);
@@ -450,6 +469,8 @@ public class NewsService implements INewsService {
 
 		for (NewsDTO n : list) {
 			Document doc = Jsoup.connect(n.getUrl()).get();
+			
+			System.out.println(n.getTitle());
 
 			String title = n.getTitle();
 			String date = n.getDate();
@@ -666,7 +687,8 @@ public class NewsService implements INewsService {
 						|| s.equals("신창") || s.equals("제공") || s.equals("대표") || s.equals("레이") || s.equals("학교")
 						|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
 						|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
-						|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")) {
+						|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")
+						|| s.equals("그니") || s.equals("그랑")) {
 					continue;
 				}
 				if (map.containsKey(s)) {
@@ -701,27 +723,31 @@ public class NewsService implements INewsService {
 				}
 				keyword += counterList.get(i).getKeyword() + " ";
 			}
+			if(keyword.length() >= 1) {
+				keyword = keyword.substring(0, keyword.length()-1);
+			}
 			addNewsKeyword(news_id, keyword);
 		}
 	}
 
 //	@Scheduled(cron = "0 31 10 * * *")
-	@Scheduled(fixedDelay = 600000)
+	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
-//		System.out.println("SAMSUNG CRAWLING 1 START");
-//		samsung_Crawling1();
-//		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
-//		System.out.println("SAMSUNG CRAWLING 2 START");
-//		samsung_Crawling2();
-//		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
-//		System.out.println("LG CRAWLING START");
-//		lg_Crawling();
-//		System.out.println("LG CRAWLING COMPLETE");
-//		System.out.println("SK CRAWLING START");
-//		sk_Crawling();
-//		System.out.println("SK CRAWLING COMPLETE");
+		System.out.println("SAMSUNG CRAWLING 1 START");
+		samsung_Crawling1();
+		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
+		System.out.println("SAMSUNG CRAWLING 2 START");
+		samsung_Crawling2();
+		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
+		System.out.println("LG CRAWLING START");
+		lg_Crawling();
+		System.out.println("LG CRAWLING COMPLETE");
+		System.out.println("SK CRAWLING START");
+		sk_Crawling();
+		System.out.println("SK CRAWLING COMPLETE");
 		System.out.println("KEYWORD SETTING START");
 		keywordSet();
 		System.out.println("KEYWORD SETTING COMPLETE");
 	}
+
 }
