@@ -1,6 +1,8 @@
 
 ### function
 
+# REST 명령어 뒤에 ?는 검색하고자 하는 검색명
+
 <details><summary>News Rest Function</summary>
 
 ```
@@ -29,3 +31,51 @@ newsKeywordValid		:	해당 뉴스 번호의 키워드들을 가져온다.
 updateNewsKeyword		:	해당 번호의 키워드들을 수정한다.
 ```
 </details>
+
+
+## Crawling
+
+```java
+
+doc = Jsoup.connect("https://news.samsung.com/kr/category/%ea%b8%b0%ec%97%85/" + category[i] + "/page/"
+						+ pageIndex++).get();
+index 증가를 통해 페이지 이동
+
+long diffSec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
+long diffDay = diffSec / (24 * 60 * 60);
+
+해당 기사의 날짜를 기반으로 최근 7일간의 데이터를 크롤링
+
+BODYTEXT 내용을 토대로
+
+Komoran komoran = new Komoran("C:\\KOMORAN\\models");
+List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
+for (List<Pair<String, String>> eojeolResult : result) {
+	for (Pair<String, String> wordMorph : eojeolResult) {
+		if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW") || wordMorph.getSecond().equals("SL")) {
+			txt += wordMorph.getFirst();
+		}
+		if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
+			keyword += wordMorph.getFirst() + " ";
+		}
+	}
+}
+
+KOMORAN에 대입하여, KEYWORD들을 추출
+
+KOMORAN을 통해 나타나지 않는 영단어 키워드들은 따로 지정하여 추가한다.
+
+String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
+int[] count = new int[countString.length];
+
+for (int c = 0; c < count.length; c++) {
+	count[c] = StringUtils.countMatches(txt, countString[c]);
+}
+for (int c = 0; c < count.length; c++) {
+	for (int index = 0; index < count[c]; index++) {
+		keyword += countString[c] + " ";
+	}
+}
+
+```
+
