@@ -147,8 +147,6 @@ export default {
         params: { searchValue: searchValue }
       })
       this.searchValue = ''
-    }
-      console.log('asd')
     },
     logout(){
       storage.removeItem("login-token");
