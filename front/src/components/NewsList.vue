@@ -1,21 +1,66 @@
  <template>
-  <div>
-    <v-container>
-      <v-row>
-      <div class="SamsungFont">SAMSUNG NEWS</div>
-        <carousel :perPageCustom="[[0,1],[600,3],[960, 4],[1264,5]]">
-          <slide v-for = "i in list.length > limits ? limits : list.length" :key="i">
+  <v-container class="main_web">
+      <v-tabs
+        v-model="tab"
+        background-color="transparent"
+        grow
+      >
+        <v-tab>
+          all
+        </v-tab>
+        <v-tab>
+          Samsung
+        </v-tab>
+        <v-tab>
+          LG
+        </v-tab>
+        <v-tab>
+          SK
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab">
+        <v-tab-item>
+          <div class="box"
+            v-for="i in AllList.length" :key="i"
+          >
+          <News
+              :news = AllList[i-1]
+            >
+          </News>
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <div class="box"
+            v-for="i in Samsunglist.length" :key="i"
+          >
             <News
-            :title="list[i-1].title"
-            :bodytext="list[i-1].bodytext"
-            :body = "list[i-1].body"
-            :id = "list[i-1].number">
+              :news = Samsunglist[i-1]
+            >
             </News>
-          </slide>
-        </carousel>
-      </v-row>
-    </v-container>
-  </div>
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <div class="box"
+            v-for="i in LGlist.length" :key="i"
+          >
+            <News
+              :news = LGlist[i-1]
+            >
+            </News>
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <div class="box"
+            v-for="i in SKlist.length" :key="i"
+          >
+            <News
+              :news = SKlist[i-1]
+            >
+            </News>
+          </div>
+        </v-tab-item>
+      </v-tabs-items>
+  </v-container>
 </template>
 <!--
 <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Close</v-btn>
@@ -24,8 +69,6 @@
 <script>
 import VClamp from "vue-clamp";
 import http from "../http-common";
-import news from "@/components/News";
-import { Carousel, Slide } from 'vue-carousel';
 import json from "@/components/getNews"
 import News from "./News"
 
@@ -35,39 +78,65 @@ export default {
     limits: { type: Number, default: 8 },
     loadMore: { type: Boolean, default: false }
   },
-
-  methods: {
-    NewsList() {
-      http
-        .get("/getNews")
-        .then(response => (this.list = response.data))
-        .catch(() => {
-          this.errored = true;
-        });
-    }
+  components: {
+    News,
+    VClamp,
   },
-
   data() {
     return {
-      list: json,
+      Samsunglist: [],
+      LGlist: [],
+      SKlist: [],
+      AllList:[],
+      tab: null,
       popup: true,
       dialog: false
     };
   },
-
-  components: {
-    News,
-    VClamp,
-    Carousel,
-    Slide
+  methods: {
+      SamsungRecentNewsList() {
+        http
+          .get("/getSamsungRecent")
+          .then(response => (this.Samsunglist = response.data))
+          .catch(() => {
+            this.errored = true;
+          });
+          
+      },
+      LgRecentNewsList() {
+        http
+          .get("/getLgRecent")
+          .then(response => (this.LGlist = response.data))
+          .catch(() => {
+            this.errored = true;
+          });
+      },
+      SkRecentNewsList() {
+        http
+          .get("/getSkRecent")
+          .then(response => (this.SKlist = response.data))
+          .catch(() => {
+            this.errored = true;
+          });
+      },
+      getAllNewsRecent(){
+        http
+          .get("/getAllNewsRecent")
+          .then(response => (this.AllList = response.data))
+          .catch(() => {
+            this.errored = true;
+          });
+    }
   },
-
   mounted() {
-    // this.NewsList();
-  }
-};
+      // this.NewsList();
+      this.SamsungRecentNewsList();
+      this.LgRecentNewsList();
+      this.SkRecentNewsList();
+      this.getAllNewsRecent();
+    }
+}
 </script>
-
 <style>
 .size-full{
   height: auto;
@@ -89,9 +158,10 @@ img{
   max-width: 90%;
 }
 .SamsungFont{
-  font-size: 5vw;
+  font-size: 30px;
   margin-bottom: 1vw;
   color: blue;
+  width: 100%;
 }
 
 iframe{
@@ -105,4 +175,8 @@ iframe{
   font-size: 1vw;
   height: 1vw;
 }
+.main_web{
+  background-color: white;
+}
+
 </style>
