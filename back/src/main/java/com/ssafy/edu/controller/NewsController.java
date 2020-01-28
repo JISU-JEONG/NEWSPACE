@@ -131,4 +131,15 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<List<NewsDTO>>>(list, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/getAllNews", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getAllNews() throws Exception {
+		logger.info("NewsController Excute ! getAllNews \t" + new Date());
+
+		List<NewsDTO> list = newsService.getAllNews();
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
 }

@@ -106,4 +106,9 @@ public class NewsServiceDao {
 		
 		return SQL.selectList(ns + "findNewsSk", find);
 	}
+
+	public List<NewsDTO> getAllNews() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getAllNews");
+	}
 }

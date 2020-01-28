@@ -179,4 +179,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</choose>
 		)
 	</select>
+	
+	<select id="getAllNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS
+	</select>
+	
 </mapper>
