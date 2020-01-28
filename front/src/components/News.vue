@@ -1,9 +1,9 @@
 <template>
-  <div @click="goDetail(news.news_id)" class="cardbox">
-        <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'">{{news.brand}}<hr></div>
-        <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}}<hr></div>
-        <div class="SK_font" v-else>{{news.brand}}<hr></div>
-        <div class="head_font">{{news.title}}</div>
+  <div class="cardbox">
+        <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'" >{{news.brand}}<hr></div>
+        <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}} Electronics<hr></div>
+        <div class="SK_font" v-else>{{news.brand}} Hynix<hr></div>
+        <div class="head_font" v-bind:style="mystyle" @click="goDetail(news.news_id)" v-on:mouseover = "changebgcolor" v-on:mouseout = "originalcolor">{{news.title}}</div>
         <div class="box">
           {{news.date}}
         </div>
@@ -21,6 +21,14 @@ import router from '../router'
 
 export default {
    name: 'News',
+   data() {
+     return{
+      mystyle: {
+        color:"black",
+        fontSize: 25,
+      },
+     }
+  },
    props: {
     news : {type: Object}
    },
@@ -32,8 +40,17 @@ export default {
        alert(id);
        router.push({ name: 'detail', params: { id: id }})
         // this.$router.push(`/detail/${id}`)
-     }
-   }
+     },
+     changebgcolor: function() {
+      this.mystyle.color = "grey";
+      this.mystyle.fontSize = "30px";
+    },
+    originalcolor: function() {
+      this.mystyle.color = "black";
+      this.mystyle.fontSize = "25px";
+    }
+   },
+   
 }
 </script>
 
@@ -52,8 +69,7 @@ export default {
   }
   .head_font{
     width: 100%;
-    color : black;
-    font-size: 20px;
+    font-size: 25px;
   }
   .box{
     width: 100%;
@@ -63,19 +79,19 @@ export default {
   .Samsung_font{
     width: 100%;
     font-size:30px;
-    color:blue;
+    color: #1428A0;
     margin-bottom: 10px;
   }
   .LG_font{
     width: 100%;
     font-size:30px;
-    color: red;
+    color: #A50034;
     margin-bottom: 10px;
   }
   .SK_font{
     width: 100%;
     font-size:30px;
-    color: orange;
+    color: #DB1026;
     margin-bottom: 10px;
   }
 </style>
