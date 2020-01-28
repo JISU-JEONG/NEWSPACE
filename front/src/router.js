@@ -6,6 +6,7 @@ import PortfolioPage from './views/PortfolioPage.vue'
 import SearchPage from './views/SearchPage.vue'
 import Login from './views/Login.vue'
 import test from './views/test.vue'
+import Detail from './views/Detail.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
 			path: '/test',
 			name: 'test',
 			component: test
+		},
+		{
+			path: '/detail/:id',
+			name: 'detail',
+			component: Detail
 		}
 	]
 })
