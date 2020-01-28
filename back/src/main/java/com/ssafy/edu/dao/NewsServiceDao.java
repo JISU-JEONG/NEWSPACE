@@ -111,4 +111,9 @@ public class NewsServiceDao {
 		// TODO Auto-generated method stub
 		return SQL.selectList(ns + "getAllNews");
 	}
+
+	public List<NewsDTO> getAllNewsRecent() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getAllNewsRecent");
+	}
 }

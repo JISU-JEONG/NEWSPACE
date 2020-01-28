@@ -184,4 +184,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM NEWS
 	</select>
 	
+	<select id="getAllNewsRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS ORDER BY DATE DESC LIMIT 50
+	</select>
+	
 </mapper>
