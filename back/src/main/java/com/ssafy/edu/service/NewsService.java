@@ -177,6 +177,14 @@ public class NewsService implements INewsService {
 		// TODO Auto-generated method stub
 		return dao.findNewsSk(str);
 	}
+	
+	@Override
+	public List<NewsDTO> getAllNews() {
+		// TODO Auto-generated method stub
+		return dao.getAllNews();
+	}
+
+	
 
 	////////////////////////////////// 스케쥴러메소드
 	////////////////////////////////// ////////////////////////////////////////////
@@ -733,18 +741,18 @@ public class NewsService implements INewsService {
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
-		System.out.println("SAMSUNG CRAWLING 1 START");
-		samsung_Crawling1();
-		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
-		System.out.println("SAMSUNG CRAWLING 2 START");
-		samsung_Crawling2();
-		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
-		System.out.println("LG CRAWLING START");
-		lg_Crawling();
-		System.out.println("LG CRAWLING COMPLETE");
-		System.out.println("SK CRAWLING START");
-		sk_Crawling();
-		System.out.println("SK CRAWLING COMPLETE");
+//		System.out.println("SAMSUNG CRAWLING 1 START");
+//		samsung_Crawling1();
+//		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
+//		System.out.println("SAMSUNG CRAWLING 2 START");
+//		samsung_Crawling2();
+//		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
+//		System.out.println("LG CRAWLING START");
+//		lg_Crawling();
+//		System.out.println("LG CRAWLING COMPLETE");
+//		System.out.println("SK CRAWLING START");
+//		sk_Crawling();
+//		System.out.println("SK CRAWLING COMPLETE");
 		System.out.println("KEYWORD SETTING START");
 		keywordSet();
 		System.out.println("KEYWORD SETTING COMPLETE");

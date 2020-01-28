@@ -12,6 +12,7 @@ getSamsungRecent	:	날짜순으로 최근 20개의 삼성 뉴스를 가져온다
 getLgRecent	:	날짜순으로 최근 20개의 LG 뉴스를 가져온다.
 getSkRecent	:	날짜순으로 최근 20개의 SK 뉴스를 가져온다.
 findNews/?	:	SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 검색한다.
+getAllNews	:	모든 뉴스를 가져온다.(DataBase에 저장된 순서대로)
 ```
 </details>
 
