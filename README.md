@@ -1,7 +1,20 @@
+# DEMO
 
-# 개발환경
+[DEMOSITE](http://merong.merong)
 
-# 기술역할 분담
+
+## 개발환경
+
+
+
+## 기술역할 분담
+
+김태우 | 정지수 | 정영길 | 정영훈
+------- | -------
+Content 1 | Content 3
+Content 2 | Content 4
+
+
 
 # front-end
 
