@@ -1,12 +1,13 @@
 
-## 개발환경
+# 개발환경
 
-## 기술역할 분담
+# 기술역할 분담
 
-### front-end
+# front-end
 
-<details>### back-end
+# back-end
 
+<details>
 # function
 
 ### REST 명령어 뒤에 ?는 검색하고자 하는 검색명
