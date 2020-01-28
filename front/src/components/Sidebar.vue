@@ -1,8 +1,8 @@
 <template>
+<!-- 곧 지워질 컴포넌트입니다. -->
   <v-navigation-drawer
-    v-model="$store.state.drawer"
+    :value="drawer"
     app
-    clipped
     right
   >
     <v-list-item>
@@ -72,6 +72,11 @@
   export default {
     props: {
       source: String,
+    },
+    computed: {
+      drawer() {
+        return this.$store.state.drawer
+      }
     },
     data: () => ({
       dialog: false,
