@@ -1,7 +1,7 @@
 
-### function
+# function
 
-# REST 명령어 뒤에 ?는 검색하고자 하는 검색명
+### REST 명령어 뒤에 ?는 검색하고자 하는 검색명
 
 <details><summary>News Rest Function</summary>
 
@@ -79,3 +79,12 @@ for (int c = 0; c < count.length; c++) {
 
 ```
 
+
+## Selenium
+### 무한 스크롤링 페이지를 크롤링 하기 위해 사용
+
+```java
+
+
+
+```
