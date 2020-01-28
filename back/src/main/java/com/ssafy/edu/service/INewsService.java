@@ -18,4 +18,6 @@ public interface INewsService {
 	List<NewsDTO> findNewsSamsung(String[] str);
 	List<NewsDTO> findNewsLg(String[] str);
 	List<NewsDTO> findNewsSk(String[] str);
+	List<NewsDTO> getAllNews();
+	List<NewsDTO> getAllNewsRecent();
 }

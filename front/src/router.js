@@ -4,9 +4,11 @@ import HomePage from './views/HomePage.vue'
 import PostPage from './views/PostPage.vue'
 import PortfolioPage from './views/PortfolioPage.vue'
 import SearchPage from './views/SearchPage.vue'
-import Login from './views/Login.vue'
-import test from './views/test.vue'
 import Detail from './views/Detail.vue'
+import Home from './views/login/Home.vue'
+import Signup from './views/login/Signup.vue'
+import Login from './views/login/Login.vue'
+import SocialSignup from './views/login/Social-Signup.vue'
 
 Vue.use(Router)
 
@@ -40,14 +42,30 @@ export default new Router({
 			component: SearchPage
 		},
 		{
-			path: '/test',
-			name: 'test',
-			component: test
-		},
-		{
 			path: '/detail/:id',
 			name: 'detail',
 			component: Detail
-		}
+		},
+		{
+			path: "/home/:id",
+			name: "home",
+			component: HomePage,
+			props : true
+		  },
+		  {
+			path: "/Signup",
+			name: "signup",
+			component: Signup
+		  },
+		  {
+			path: "/Login",
+			name: "Login",
+			component: Login
+		  },
+		  {
+			path: "/SocialSignup",
+			name: "SocialSignup",
+			component: SocialSignup
+		  }
 	]
 })

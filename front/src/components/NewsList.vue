@@ -28,6 +28,7 @@ import news from "@/components/News";
 import { Carousel, Slide } from 'vue-carousel';
 import json from "@/components/getNews"
 import News from "./News"
+
 export default {
   name: "NewsList",
   props: {

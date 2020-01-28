@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssafy.member">
+	<select id="getMember" parameterType="com.ssafy.edu.dto.Member" resultType="com.ssafy.edu.dto.Member">
+		SELECT * FROM amt.MEMBER WHERE EMAIL = #{email} AND PASSWORD = #{password} AND TYPE = #{type};
+	</select>
+	
+	<select id="getEmail" parameterType="java.lang.String" resultType="com.ssafy.edu.dto.Member">
+		SELECT * FROM amt.MEMBER WHERE EMAIL = #{email}
+	</select>
+	
+	<insert id="insertMember" parameterType="com.ssafy.edu.dto.Member">
+		INSERT INTO amt.MEMBER(EMAIL, PASSWORD, NAME, AUTH, DELFLAG, KEYWORD, TYPE) VALUES(#{email}, #{password}, #{name}, 0, 0, #{keyword}, #{type})
+	</insert>
+</mapper>

@@ -106,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(
 				<foreach collection="search" item="word" index="index"
 					separator="OR ">
-					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+					k.KEYWORD LIKE #{word}
 				</foreach>
 				)
 			</when>
@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(
 				<foreach collection="search" item="word" index="index"
 					separator="OR ">
-					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+					k.KEYWORD LIKE #{word}
 				</foreach>
 				)
 			</when>
@@ -172,11 +172,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(
 				<foreach collection="search" item="word" index="index"
 					separator="OR ">
-					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+					k.KEYWORD LIKE #{word}
 				</foreach>
 				)
 			</when>
 		</choose>
 		)
 	</select>
+	
+	<select id="getAllNews" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS
+	</select>
+	
+	<select id="getAllNewsRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT * FROM NEWS ORDER BY DATE DESC LIMIT 50
+	</select>
+	
 </mapper>

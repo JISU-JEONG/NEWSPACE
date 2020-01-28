@@ -177,6 +177,26 @@ public class NewsService implements INewsService {
 		// TODO Auto-generated method stub
 		return dao.findNewsSk(str);
 	}
+	
+	@Override
+	public List<NewsDTO> getAllNews() {
+		// TODO Auto-generated method stub
+		return dao.getAllNews();
+	}
+
+	@Override
+	public List<NewsDTO> getAllNewsRecent() {
+		// TODO Auto-generated method stub
+		
+		List<NewsDTO> list = dao.getAllNewsRecent();
+
+		for (int i = 0; i < list.size(); i++) {
+			NewsKeyword newsKeyword = dao.newsKeywordValid(list.get(i).getNews_id());
+			list.get(i).setKeyword(newsKeyword.getKeyword());
+		}
+
+		return list;
+	}
 
 	////////////////////////////////// 스케쥴러메소드
 	////////////////////////////////// ////////////////////////////////////////////
@@ -428,7 +448,6 @@ public class NewsService implements INewsService {
 
 			for (int i = 0; i < webElements.size(); i++) {
 				String temp = webElements.get(i).getText();
-				System.out.println(temp);
 				String date = "";
 				if (temp.length() >= 12) {
 					date = temp.substring(0, 4) + "-" + temp.substring(6, 8) + "-" + temp.substring(10, 12);
@@ -451,7 +470,6 @@ public class NewsService implements INewsService {
 
 		if (!flag) {
 			webElements = driver.findElements(By.className("basictwo_itempostbx"));
-
 			for (int i = 0; i < webElements.size(); i++) {
 				webElement = webElements.get(i);
 				String title = webElement.findElement(By.className("title")).getText();
@@ -466,11 +484,10 @@ public class NewsService implements INewsService {
 		}
 
 		driver.close();
-
+		
 		for (NewsDTO n : list) {
-			Document doc = Jsoup.connect(n.getUrl()).get();
 			
-			System.out.println(n.getTitle());
+			Document doc = Jsoup.connect(n.getUrl()).timeout(120000).get();
 
 			String title = n.getTitle();
 			String date = n.getDate();
@@ -482,6 +499,7 @@ public class NewsService implements INewsService {
 
 			String keyword = "";
 			String txt = "";
+			
 			Komoran komoran = new Komoran("C:\\KOMORAN\\models");
 			List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
 			for (List<Pair<String, String>> eojeolResult : result) {
@@ -512,14 +530,15 @@ public class NewsService implements INewsService {
 			NewsDTO check = null;
 			NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, newsurl, bodytext);
 			check = getNewsOne(news.getUrl());
-
 			if (check == null) {
 				addNews(news);
+				System.out.println("add complete" + "\t" + news.getTitle()+ "\t" + news.getBrand());
 			} else {
 				break;
 			}
 		}
 		list.clear();
+		return;
 	}
 
 	public void sk_Crawling() throws ParseException, IOException {
@@ -614,13 +633,18 @@ public class NewsService implements INewsService {
 
 		for (String s : list) {
 			Document doc = Jsoup.connect(s).get();
-
+			
 			String title = doc.getElementsByClass("postTitle").get(0).getElementsByTag("h2").text();
 			String date = doc.getElementsByClass("postInfo").get(0).getElementsByTag("p").get(1).text();
 			String brand = "SK";
 			String cate = "ALL";
 			String newsurl = s;
-			String body = doc.getElementsByClass("post").toString();
+			Elements bodyEle = doc.getElementsByClass("post").get(0).getElementsByTag("p");
+			String body = "";
+			for(int i=0; i<bodyEle.size(); i++) {
+				body += bodyEle.get(i);
+			}
+			
 			String bodytext = doc.getElementsByClass("post").text();
 
 			String keyword = "";
@@ -688,7 +712,7 @@ public class NewsService implements INewsService {
 						|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
 						|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
 						|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")
-						|| s.equals("그니") || s.equals("그랑")) {
+						|| s.equals("그니") || s.equals("그랑") || s.equals("튜브")) {
 					continue;
 				}
 				if (map.containsKey(s)) {

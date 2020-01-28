@@ -11,7 +11,7 @@
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title>우리 서비스으</v-list-item-title>
+        <v-list-item-title>{{username}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -69,9 +69,10 @@
 </template>
 
 <script>
+
   export default {
     props: {
-      source: String,
+      source: String
     },
     computed: {
       drawer() {
