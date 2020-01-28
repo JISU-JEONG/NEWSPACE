@@ -35,7 +35,7 @@ export default new Router({
 			component: Login
 		},
 		{
-			path: '/search',
+			path: '/search/:searchValue',
 			name: 'search',
 			component: SearchPage
 		},

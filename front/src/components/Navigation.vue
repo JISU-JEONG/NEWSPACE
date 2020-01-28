@@ -1,21 +1,21 @@
 <template>
   <nav>
     <v-app-bar color="blue lighten-2" dark app >
-      <v-btn to="/" text>
+      <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
       </v-btn>
-      <v-btn to="/" icon>
+      <v-btn to="/" icon v-else>
         <v-icon>mdi-home</v-icon>
       </v-btn>
       <v-spacer />
-      <v-form style="width:350px;" @submit.prevent="onSubmit">
+      <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)">
         <v-text-field 
           v-model="searchValue"
           label="검색"
           hide-details
           clearable
           append-outer-icon="mdi-magnify"
-          @click:append-outer.stop="onSubmit"
+          @click:append-outer.stop="onSubmit(searchValue)"
         />
       </v-form>
       <v-spacer />
@@ -137,12 +137,12 @@ export default {
     changeDrawer() {
       this.drawer = !this.drawer 
     },
-    onSubmit() {
-      this.searchValue = ''
+    onSubmit(searchValue) {
       this.$router.push({ 
-        path: '/search'
+        name: 'search',
+        params: { searchValue: searchValue }
       })
-      console.log('asd')
+      this.searchValue = ''
     }
   },
 }
