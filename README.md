@@ -85,6 +85,39 @@ for (int c = 0; c < count.length; c++) {
 
 ```java
 
+System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
+// Driver SetUp
+driver = new ChromeDriver();
+driver.get(url);
+
+//URL은 크롤링 하고자 하는 URL
+
+webElement = driver.findElement(By.className("basic_list_morebtn"));
+//basic_list_morebtn의 위치를 찾아 클릭을 한다.
+//단, 이 부분에서 페이지 내의 basic_list_morebtn의 y축 위치가 변경되지 않았을 경우에는 클릭하지 않는다.
+
+if (tempy != locationy) {
+	webElement.click();
+	webElement = null;
+	tempy = locationy;
+}
+
+//이와 동시에 계속해서 date 클래스의 elements 들을 계속 검색해와 자신이 찾고자 하는 날짜까지 무한 스크롤링 한다.
+
+for (int i = 0; i < webElements.size(); i++) {
+	webElement = webElements.get(i);
+	String title = webElement.findElement(By.className("title")).getText();
+	String date = webElement.findElement(By.className("date")).getText();
+	date = date.substring(0, 4) + "-" + date.substring(6, 8) + "-" + date.substring(10, 12);
+	String brand = "LG";
+	String cate = "ALL";
+	String newsurl = webElement.findElement(By.className("thum_itembx")).getAttribute("href");
+	NewsDTO news = new NewsDTO(title, date, brand, cate, newsurl);
+	list.add(news);
+}
+
+//원하는 날짜까지 크롤링이 된 후 NewsDTO에 담아, 위 Crawling에서 기술한 KOMORAN을 통해
+//키워드를 분류하여 DataBase에 추가한다.
 
 ```
