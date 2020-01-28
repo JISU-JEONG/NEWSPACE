@@ -10,10 +10,8 @@
 ## 기술역할 분담
 
 김태우 | 정지수 | 정영길 | 정영훈
-------- | -------
-Content 1 | Content 3
-Content 2 | Content 4
-
+------- | ------- | ------- | -------
+ Front | Front | Back | Back
 
 # front-end
 
