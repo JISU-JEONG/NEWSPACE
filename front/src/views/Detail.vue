@@ -12,6 +12,7 @@
       <hr>
       <br>
       <div v-html="news.body" class="page"></div>
+      <hr>
     </v-container>
   </div>
 </template>
@@ -49,7 +50,7 @@ export default {
 <style scoped>
 .newsbody{
   border: solid 2px black;
-  padding : 5vw 5vw;
+  padding : 3vw 3vw;
   margin: 50px auto;
   background-color : #FFF;
   border-radius: 50px;
@@ -59,6 +60,9 @@ export default {
   color : blue;
   margin-bottom: 10px;
   margin-top: 10px;
+}
+.page{
+  padding-bottom: 20px;
 }
 .page >>> img { 
   width:50vw !important;
