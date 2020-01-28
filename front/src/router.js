@@ -32,7 +32,12 @@ export default new Router({
 			component: PortfolioPage
 		},
 		{
-			path: '/search',
+			path: '/login',
+			name: 'login',
+			component: Login
+		},
+		{
+			path: '/search/:searchValue',
 			name: 'search',
 			component: SearchPage
 		},
