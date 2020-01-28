@@ -29,4 +29,14 @@ export default {
 
 <style>
 
+.header{
+	position:fixed;
+	left:0;
+	top:0;
+	width:100vw;
+	z-index:200;
+}
+.background{
+	background-color: white;
+}
 </style>
