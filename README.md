@@ -1,4 +1,12 @@
 
+## 개발환경
+
+## 기술역할 분담
+
+### front-end
+
+<details>### back-end
+
 # function
 
 ### REST 명령어 뒤에 ?는 검색하고자 하는 검색명
@@ -194,3 +202,5 @@ for (NewsDTO n : list) {
 }
 
 ```
+
+</details>
