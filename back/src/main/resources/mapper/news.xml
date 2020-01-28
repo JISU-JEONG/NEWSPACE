@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.news">
 
 	<select id="getNews" resultType="com.ssafy.edu.dto.NewsDTO"
-	parameterType="java.lang.Integer">
+		parameterType="java.lang.Integer">
 		SELECT * FROM NEWS WHERE NEWS_ID = #{news_id}
 	</select>
 
@@ -66,17 +66,117 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="addNewsKeyword"
 		parameterType="com.ssafy.edu.help.NewsKeyword">
-		INSERT INTO NEWSKEYWORD(news_id, keyword) VALUES(#{news_id}, #{keyword})
+		INSERT INTO NEWSKEYWORD(news_id, keyword)
+		VALUES(#{news_id}, #{keyword})
 	</insert>
 
-	<select id="newsKeywordValid"
-		parameterType="java.lang.Integer"
+	<select id="newsKeywordValid" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.help.NewsKeyword">
 		SELECT * FROM NEWSKEYWORD WHERE NEWS_ID = #{news_id}
 	</select>
 
 	<update id="updateNewsKeyword"
 		parameterType="com.ssafy.edu.help.NewsKeyword">
-		UPDATE NEWSKEYWORD SET KEYWORD = #{keyword} WHERE NEWS_ID = #{news_id}
+		UPDATE NEWSKEYWORD SET KEYWORD = #{keyword} WHERE
+		NEWS_ID = #{news_id}
 	</update>
+
+	<select id="findNewsSamsung"
+		parameterType="com.ssafy.edu.help.NewsSearch"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+		k.KEYWORD, n.URL, n.BODYTEXT
+		FROM NEWS n JOIN NEWSKEYWORD k
+		WHERE n.NEWS_ID = k.NEWS_ID
+		AND BRAND LIKE #{brand}
+		AND (
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="AND ">
+					TITLE LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		OR
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="OR ">
+					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		)
+	</select>
+
+	<select id="findNewsLg"
+		parameterType="com.ssafy.edu.help.NewsSearch"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+		k.KEYWORD, n.URL, n.BODYTEXT
+		FROM NEWS n JOIN NEWSKEYWORD k
+		WHERE n.NEWS_ID = k.NEWS_ID
+		AND BRAND LIKE #{brand}
+		AND (
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="AND ">
+					TITLE LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		OR
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="OR ">
+					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		)
+	</select>
+
+	<select id="findNewsSk"
+		parameterType="com.ssafy.edu.help.NewsSearch"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+		k.KEYWORD, n.URL, n.BODYTEXT
+		FROM NEWS n JOIN NEWSKEYWORD k
+		WHERE n.NEWS_ID = k.NEWS_ID
+		AND BRAND LIKE #{brand}
+		AND (
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="AND ">
+					TITLE LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		OR
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="OR ">
+					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		)
+	</select>
 </mapper>
