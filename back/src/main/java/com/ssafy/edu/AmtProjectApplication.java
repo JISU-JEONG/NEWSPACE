@@ -25,8 +25,8 @@ public class AmtProjectApplication implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor).addPathPatterns("/api/**") // 기본 적용 경로
-                .excludePathPatterns(Arrays.asList("/api/member/**"));// 적용 제외 경로
+        registry.addInterceptor(jwtInterceptor).addPathPatterns("/") // 기본 적용 경로
+                .excludePathPatterns(Arrays.asList("/member/**"));// 적용 제외 경로
     }
 
     // Interceptor를 이용해서 처리하므로 전역의 Cross Origin 처리를 해준다.

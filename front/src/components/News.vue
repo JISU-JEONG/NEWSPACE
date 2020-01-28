@@ -30,7 +30,10 @@ export default {
      }
   },
    props: {
-    news : {type: Object}
+    id : {type: Number},
+    title : {type: String},
+    bodytext : {type: String},
+    body : {type: String}
    },
    components: {
       VClamp

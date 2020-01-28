@@ -106,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(
 				<foreach collection="search" item="word" index="index"
 					separator="OR ">
-					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+					k.KEYWORD LIKE #{word}
 				</foreach>
 				)
 			</when>
@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(
 				<foreach collection="search" item="word" index="index"
 					separator="OR ">
-					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+					k.KEYWORD LIKE #{word}
 				</foreach>
 				)
 			</when>
@@ -172,7 +172,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(
 				<foreach collection="search" item="word" index="index"
 					separator="OR ">
-					k.KEYWORD LIKE CONCAT('%',#{word},'%')
+					k.KEYWORD LIKE #{word}
 				</foreach>
 				)
 			</when>

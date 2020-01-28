@@ -31,11 +31,11 @@
     >
      <v-list-item>
         <v-list-item-avatar>
-          <v-img src="http://edu.ssafy.com/edu/comm/imgDownload.do?userId=lAenTIrEs1O1LdGdfpnDrw%3D%3D"></v-img>
+          <v-img :src="userimg"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>우리 서비스으</v-list-item-title>
+          <v-list-item-title>{{username}}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -82,7 +82,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>
+              <v-list-item-title v-on:click="logout()">
                 {{ item.text }}
               </v-list-item-title>
             </v-list-item-content>
@@ -97,6 +97,8 @@
 
 import {CHANGE_DRAWER} from '../store'
 
+import http from "../http-common"
+const storage = localStorage;
 export default {
   name: "Navigation",
   data() {
@@ -104,9 +106,11 @@ export default {
       searchValue: '',
       drawer: false,
       dialog: false,
+      username : "",
+      userimg : "",
       items: [
-        { icon: 'mdi-contacts', text: '로그아웃' },
-        { icon: 'mdi-history', text: '혹시 게시판을 만들게 된다면' },
+        { icon: 'mdi-contacts', text: '로그아웃', click : ''},
+        { icon: 'mdi-history', text: '혹시 게시판을 만들게 된다면'},
         {
           icon: 'mdi-chevron-up',
           'icon-alt': 'mdi-chevron-down',
@@ -143,8 +147,40 @@ export default {
         path: '/search'
       })
       console.log('asd')
-    }
+    },
+    logout(){
+      storage.removeItem("login-token");
+      this.username = "";
+    },
+    getInfo() {
+      
+      console.log("login-token: " + storage.getItem("login-token"));
+      http
+        .post(
+          "/info",
+          {},
+          {
+            headers: {
+              "login-token": storage.getItem("login-token")
+            }
+          }
+        )
+        .then(res => {
+          this.username = res.data.data.name;
+          this.userimg = "http://edu.ssafy.com/edu/comm/imgDownload.do?userId=lAenTIrEs1O1LdGdfpnDrw%3D%3D";
+        })
+        .catch(e => {
+          this.username = "비로그인 상태"
+          this.userimg = "https://www.momjobgo.com/momjobgo3ct/wp-content/themes/hello-momjobgo/images/default-profile.jpg";
+          console.log("정보 조회 실패 : " + e.response.data.msg);
+
+        });
+    },
   },
+
+  mounted(){
+    this.getInfo();
+  }
 }
 </script>
 
