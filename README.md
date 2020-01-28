@@ -121,3 +121,76 @@ for (int i = 0; i < webElements.size(); i++) {
 //키워드를 분류하여 DataBase에 추가한다.
 
 ```
+
+## Keyword Sort
+
+```java
+
+//DataBase에 저장되어있는 News 데이터들을 브랜드 별로 불러와 해당 뉴스의 키워드들을 압축한다.
+//압축된 키워드들은 NewsKeyword 라는 Table에 저장된다.
+
+for (NewsDTO n : list) {
+	int news_id = n.getNews_id();
+	String word = n.getKeyword();
+
+	HashMap<String, Integer> map = new HashMap<String, Integer>();
+	//각 키워드별 인기 순위를 찾기 위해 String Integer 타입의 HashMap을 사용
+
+	String[] keys = word.split(" ");
+	//각 뉴스별 Keyword 들은 띄워쓰기를 통한 한 문자열로 되어있어, 공백을 기준으로 Split 한다.
+
+	for (String s : keys) {
+		if (s.length() <= 1 || s.equals("삼성전자") || s.equals("삼성") || s.equals("전자") || s.equals("분야")
+			|| s.equals("사람") || s.equals("임직원") || s.equals("월드") || s.equals("최대") || s.equals("선정")
+			|| s.equals("코리아") || s.equals("최적") || s.equals("진행") || s.equals("아래") || s.equals("소개")
+			|| s.equals("부문") || s.equals("적용") || s.equals("기간") || s.equals("이상") || s.equals("상판")
+			|| s.equals("규모") || s.equals("북미") || s.equals("지급") || s.equals("사원") || s.equals("규모")
+			|| s.equals("지원") || s.equals("대상") || s.equals("영민") || s.equals("주옥") || s.equals("구성")
+			|| s.equals("사용") || s.equals("자녀") || s.equals("사용자") || s.equals("시간") || s.equals("경험")
+			|| s.equals("신창") || s.equals("제공") || s.equals("대표") || s.equals("레이") || s.equals("학교")
+			|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
+			|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
+			|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")
+			|| s.equals("그니") || s.equals("그랑")) {
+			continue;
+			//위 문자들을 키워드 리스트에서 제외한다.
+		}
+		if (map.containsKey(s)) {
+			int value = map.get(s);
+			value++;
+			map.put(s, value);
+		} else {
+			map.put(s, 1);
+		}
+	}
+	ArrayList<NewsKeywordCounter> counterList = new ArrayList<NewsKeywordCounter>();
+
+	for (String key : map.keySet()) {
+		counterList.add(new NewsKeywordCounter(key, map.get(key)));
+	}
+
+	counterList.sort(new Comparator<NewsKeywordCounter>() {
+
+		@Override
+		public int compare(NewsKeywordCounter o1, NewsKeywordCounter o2) {
+			// TODO Auto-generated method stub
+			return o2.getCount() - o1.getCount();
+		}
+	});
+	//키워드별 Count를 기준으로, 내림차순 정렬을 한다.
+
+	String keyword = "";
+
+	for (int i = 0; i < counterList.size(); i++) {
+		if (i >= 5) {
+			break;
+		}
+		keyword += counterList.get(i).getKeyword() + " ";
+	}
+	if(keyword.length() >= 1) {
+		keyword = keyword.substring(0, keyword.length()-1);
+	}
+	addNewsKeyword(news_id, keyword);
+}
+
+```
