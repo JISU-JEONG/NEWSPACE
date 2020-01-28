@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
@@ -28,7 +27,6 @@ import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
 
 @RestController
-@RequestMapping("/api")
 public class MemberRestController {
 	private static final Logger log = LoggerFactory.getLogger(JwtService.class);
     
@@ -45,9 +43,7 @@ public class MemberRestController {
     //일반 로그인
     @PostMapping("/member/signin")
     public ResponseEntity<Map<String, Object>> signin(@RequestBody Member member, HttpServletResponse res) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-    	log.info("=====================signin=====================");
-		log.info("로그인 정보 : " + member);
-		log.info("================================================");
+		log.info("MemberRestController Excute ! signin : " + member);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
         try {
@@ -95,9 +91,7 @@ public class MemberRestController {
     //아이디 중복체크
     public String search(String email) {
     	if(memberservice.getEmail(email)==null) {
-    		log.info("=====================search=====================");
-    		log.info("email : " + memberservice.getEmail(email));
-    		log.info("================================================");
+    		log.info("MemberRestController Excute ! search : " + memberservice.getEmail(email));
     		return "Notexist";
     	}
     	else {
@@ -119,9 +113,7 @@ public class MemberRestController {
     	    String sha256password = String.format("%064x", new BigInteger(1, digest.digest()));
     	    member.setPassword(sha256password);
     		
-    		log.info("=====================signup=====================");
-    		log.info("회원가입 : " + member);
-    		log.info("================================================");
+    		log.info("MemberRestController Excute ! signup : " + member);
     		memberservice.insertMember(member);
     		return 1;
     	}
@@ -140,9 +132,7 @@ public class MemberRestController {
     @PostMapping("/member/socialtoken")
     public ResponseEntity<Map<String, Object>> socialtoken(@RequestBody Member member,
             HttpServletResponse res) {
-		log.info("=====================socialtoken=====================");
-		log.info("소셜로그인 정보 : " + member);
-		log.info("================================================");
+		log.info("\"MemberRestController Excute ! socialtoken " + member);
 
         Map<String, Object> resultMap = new HashMap<>();
         String token = jwtService.create(member);

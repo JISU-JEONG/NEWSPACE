@@ -220,3 +220,4 @@ for (NewsDTO n : list) {
 }
 
 ```
+
