@@ -15,6 +15,8 @@ import PortfolioList from '../components/PortfolioList'
 import PostList from '../components/PostList'
 import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
+const storage = sessionStorage;
+
 
 export default {
 	name: 'HomePage',
@@ -22,13 +24,14 @@ export default {
 		ImgBanner,
 		PortfolioList,
 		PostList,
-    RepositoryList,
-    NewsList,
+    	RepositoryList,
+    	NewsList,
 	},
 	methods: {
 		getImgUrl(img) {
 			return require('../assets/' + img)
 		}
-	},
+	}
+	
 }
 </script>
