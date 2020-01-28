@@ -44,6 +44,7 @@ export default {
         .then(result => {
           var token = result.credential.accessToken;
           var user = result.user;
+          console.log(this.$store.state.accessToken)
 
           console.log("token : " + token);
           this.facebookuser = result.user.displayName;
