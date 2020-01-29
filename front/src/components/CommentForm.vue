@@ -1,11 +1,30 @@
 <template>
-	<form @submit.prevent="CommentCreate">
-      <label for="text">댓글: </label>
-      <input
-      v-model="text"
-      type="text" id="text">
-      <button type="submit">등록</button>
-  </form>
+    <div class="my-5">
+        <h3 class="px-5">토론 게시판</h3>
+        <form @submit.prevent="CommentCreate" class="inputcomment">
+            <v-row class="inputbox1">
+                <textarea
+                v-model="text"
+                type="text" id="text"
+                class="textbox"
+                rows = "5"
+                >
+                댓글을 달아 주세요
+                </textarea>
+            </v-row>
+            <v-row class="inputbox2">
+                <v-btn
+                class = "inputbtn"
+                depressed 
+                type="submit"
+                text color="white"
+                >
+                    <strong>등록</strong>
+                </v-btn>
+            </v-row>
+        </form>
+        <hr>
+    </div>
 </template>
 
 <script>
@@ -26,5 +45,30 @@ export default {
 </script>
 
 <style>
-
+.inputcomment{
+    padding: 10px 50px 30px;
+}
+    
+.inputbox1{
+    border: solid 1px rgb(209, 209, 209);
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.inputbox2{
+    border: solid 1px rgb(209, 209, 209);
+    background-color: white;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.textbox{
+    padding: 10px 10px;
+    margin: 10px 10px;
+    resize: none;
+    width: 100%;
+}
+.inputbtn{
+    margin: 5px;
+    background-color : rgb(81, 126, 223);
+}
 </style>

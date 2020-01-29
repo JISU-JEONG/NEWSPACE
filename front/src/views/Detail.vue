@@ -42,7 +42,7 @@ export default {
       CommentForm,
 	  },
     methods: {
-<<<<<<< front/src/views/Detail.vue
+
           info(){
             const storage = localStorage;
           axios.post("http://192.168.31.85:8080/info",
@@ -109,7 +109,6 @@ export default {
         params: { searchValue: key }
         }).catch(err =>{})
       },
->>>>>>> front/src/views/Detail.vue
     },
     mounted(){
         this.getNews(),
@@ -122,7 +121,7 @@ export default {
 <style scoped>
 .newsbody{
   border: solid 2px black;
-  padding : 3vw 3vw;
+  padding : 3vw 3vw 5vw;
   margin: 50px auto;
   background-color : #FFF;
   border-radius: 50px;
