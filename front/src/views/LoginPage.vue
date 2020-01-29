@@ -31,25 +31,6 @@
           </v-container>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6">
-        <v-card raised>
-          <v-card-title>정보확인</v-card-title>
-          <v-container>
-            <v-form ref="infoForm" @submit.prevent="getInfo" v-model="infoValid" >
-              <v-container>
-                <!-- <v-text-field :rules="emptyRules" label="유저" v-model="LoiginStatus" type="text" /> -->
-                <v-text-field :rules="emptyRules" v-model="username"></v-text-field>
-                <v-text-field :rules="emptyRules" label="상태" v-model="status" type="text" />
-                <v-text-field :rules="emptyRules" label="토큰" v-model="token" type="text" />
-                <v-text-field :rules="emptyRules" label="정보" v-model="info" type="text" />
-                <v-btn :disabled="!infoValid" type="submit" color="success" style="while--text">정보확인</v-btn>
-              </v-container>
-            </v-form>
-            <v-divider></v-divider>
-          </v-container>
-          <v-btn rounded color="primary" dark v-on:click="logout"> 사라지게 될 logout</v-btn>
-        </v-card>
-      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -58,7 +39,7 @@
 import firebase from "firebase";
 import http from "../http-common"
 const storage = localStorage;
-// const storage = sessionStorage;
+
 export default {
   name: "login",
   data() {
@@ -68,6 +49,7 @@ export default {
       username: "",
       duplicationflag: 0,
       type: "",
+
       //로그인 폼 양식 확인
       loginValid: false,
       infoValid: false,
@@ -76,84 +58,38 @@ export default {
         v => !!/.+@+./.test(v) || '이메일 형식이 아닙니다.'
       ],
       passwordRules: [v => !!v || '비밀번호를 입력하세요'],
-      emptyRules: [v => !!v || '값을 입력해주세요'],
-      //로그인 정보 확인부분
-      status: "",
-      token: "",
-      info: "",
+      emptyRules: [v => !!v || '값을 입력해주세요']
     };
   },
   methods: {
-    ////////////////////////// 일반로그인 /////////////////////////////
-    // 정보확인용
-    setInfo(status, token, info) {
-      this.status = status;
-      this.token = token;
-      this.info = info;
-    },
-
-    //일반 로그인 로직
     login() {
       if (this.$refs.loginForm.validate()){ // 로그인 폼이 유효한지 확인
         http
-          .post("/member/signin", {
-            email: this.email,
-            password: this.password,
-            type : "nomal"
-          })
-          .then(res => {
-            if (res.data.status) {
-              storage.setItem("login-token", res.headers["login-token"]);
-              this.setInfo("로그인성공", "", "");
-              this.getInfo();
-            } else {
-              this.setInfo("", "", "");
-              this.username = "";
-              alert("입력 정보를 확인하세요.");
-            }
-          })
-          .catch(e => {
-            this.setInfo("실패", "", JSON.stringify(e.response || e.message));
+        .post("/member/signin", {
+          email: this.email,
+          password: this.password,
+          type: "nomal"
+        })
+        .then(res => {
+          if (res.data.status) {
+            storage.setItem("login-token", res.headers["login-token"]);
+            storage.setItem("login-session-time", res.data.exp);
+            this.$router.push("/");
+          } else {
+            alert("입력 정보를 확인하세요.");
+          }
+        })
+        .catch(e => {
+          console.log(e);
         });
       }
     },
-    //토큰정보 획득
-    
-    getInfo() {
-      if (this.$refs.infoForm.validate()) {   // 정보확인 폼 유효한지 확인
-        console.log("login-token: " + storage.getItem("login-token"));
-        http
-          .post(
-            "/info",
-            {},
-            {
-              headers: {
-                "login-token": storage.getItem("login-token")
-              }
-            }
-          )
-          .then(res => {
-            this.username = res.data.data.name;
-            this.$router.push("/");
-            // this.setInfo(
-            //   "정보 조회 성공",
-            //   JSON.stringify(res.data),
-            //   JSON.stringify(res.data.data)
-            // );
-          })
-          .catch(e => {
-            this.setInfo("정보 조회 실패", "", e.response.data.msg);
-          });
-      }
-    },
+
     logout() {
       storage.removeItem("login-token");
-      this.username = "";
-      this.setInfo("로그아웃 성공", "", "");
+      storage.removeItem("login-session-time");
     },
-    ////////////////////////// 일반로그인 /////////////////////////////
 
-    ////////////////////////// 소셜로그인 /////////////////////////////
     FacebookLogin() {
       const provider = new firebase.auth.FacebookAuthProvider();
       const parentFunc = this;
@@ -234,16 +170,16 @@ export default {
       _promise().then(() => {
         var _promise2 = function() {
           return new Promise(function(resolve) {
-              http
-                .post("/member/socialtoken", {
-                  email: parentFunc.email,
-                  name: parentFunc.username,
-                  type: parentFunc.type
-                })
-                .then(res => {
-                  storage.setItem("login-token", res.headers["login-token"]);
-                  resolve("ㄲ");
-                });
+            http
+              .post("/member/socialtoken", {
+                email: parentFunc.email,
+                name: parentFunc.username,
+                type: parentFunc.type
+              })
+              .then(res => {
+                storage.setItem("login-token", res.headers["login-token"]);
+                resolve("ㄲ");
+              });
           });
         };
         _promise2().then(() => {
@@ -252,15 +188,28 @@ export default {
             this.$router.push("/SocialSignup");
           } else {
             //이미 로그인한적이 있을시 홈으루
-            this.getInfo();
+            this.$$router.push("/");
           }
         });
       });
+    },
+
+    SessionStatus() {
+      var exptime = storage.getItem("login-session-time");
+      var time = new Date().getTime().toString();
+      var timesub = time.substring(0, time.length - 3);
+      console.log(exptime);
+      console.log(timesub);
+      if (exptime < timesub) {
+        console.log("세션이 만료되었습니다.");
+      } else {
+        console.log("로그인 유지상태");
+        this.$router.push("/");
+      }
     }
-    ////////////////////////// 소셜로그인 /////////////////////////////
   },
   mounted() {
-    this.getInfo();
+    this.SessionStatus();
   }
 };
 </script>
