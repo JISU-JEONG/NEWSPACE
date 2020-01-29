@@ -5,8 +5,9 @@
         <h1>{{ news.title }}</h1>
       </div>
       <div class="tagfont">
-        <span v-for="i in keywords.length" :key="i">
-          #{{ keywords[i-1]+' ' }}
+        <!-- for i in keywords.length에서 바꿨읍니다. -->
+        <span v-for="key in keywords" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;">
+          #{{ key }}
         </span>
       </div>
       <hr>
@@ -29,17 +30,23 @@ export default {
         }
     },
     methods: {
-        getNews() {
-            axios.get(`http://192.168.31.85:8080/getNews/${this.$route.params.id}`)
-                .then(response => {
-                    this.news = response.data
-                    this.keywords = this.news.keyword.split(' ')
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+      getNews() {
+        axios.get(`http://192.168.31.85:8080/getNews/${this.$route.params.id}`)
+          .then(response => {
+            this.news = response.data
+            this.keywords = this.news.keyword.split(' ')
+          })
+            .catch(error => {
+              console.log(error)
+            })
 
-        }
+      },
+      onClickKeyword(key){
+        this.$router.push({ 
+        name: 'search',
+        params: { searchValue: key }
+        }).catch(err =>{})
+      },
     },
     mounted(){
         this.getNews()
