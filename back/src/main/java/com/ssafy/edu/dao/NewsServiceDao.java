@@ -61,16 +61,6 @@ public class NewsServiceDao {
 		return SQL.selectList(ns+"getSkRecent");
 	}
 
-	public int getNewsCountSamsung() {
-		// TODO Auto-generated method stub
-		return SQL.selectOne(ns + "getNewsCountSamsung");
-	}
-
-	public List<String> getNewsKeywordSamsung() {
-		// TODO Auto-generated method stub
-		return SQL.selectList(ns + "getNewsKeywordSamsung");
-	}
-
 	public void addNewsKeyword(NewsKeyword news) {
 		SQL.insert(ns + "addNewsKeyword", news);
 	}
@@ -81,6 +71,14 @@ public class NewsServiceDao {
 
 	public void updateNewsKeyword(NewsKeyword news) {
 		SQL.update(ns + "updateNewsKeyword", news);
+	}
+	
+	public List<NewsDTO> findNewsAll(String[] str) {
+		// TODO Auto-generated method stub
+		
+		NewsSearch find = new NewsSearch(str, "ALL");
+		
+		return SQL.selectList(ns + "findNewsAll", find);
 	}
 
 	public List<NewsDTO> findNewsSamsung(String[] str) {
@@ -115,5 +113,10 @@ public class NewsServiceDao {
 	public List<NewsDTO> getAllNewsRecent() {
 		// TODO Auto-generated method stub
 		return SQL.selectList(ns + "getAllNewsRecent");
+	}
+
+	public List<NewsKeyword> getNewsKeywordAll() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getNewsKeywordAll");
 	}
 }
