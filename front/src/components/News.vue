@@ -1,18 +1,20 @@
 <template>
-  <div class="cardbox">
+  <v-container>
+      <div class="tagfont">
+        <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;">
+          #{{key}}
+        </span>
+      </div>
+      <div class="cardbox" @click="goDetail(news.news_id)">
         <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'" >{{news.brand}}<hr></div>
         <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}} Electronics<hr></div>
         <div class="SK_font" v-else>{{news.brand}} Hynix<hr></div>
-        <div class="head_font" v-bind:style="mystyle" @click="goDetail(news.news_id)" v-on:mouseover = "changebgcolor" v-on:mouseout = "originalcolor">{{news.title}}</div>
+        <div class="head_font">{{news.title}}</div>
         <div class="box">
           {{news.date}}
         </div>
-        <div class="tagfont">
-          <span v-for="key in news.keyword.split(' ')" :key="key">
-            #{{key}}
-          </span>
-        </div>
-  </div>
+      </div>
+  </v-container>
 </template>
 
 <script>
@@ -20,46 +22,43 @@ import VClamp from 'vue-clamp'
 import router from '../router'
 
 export default {
-   name: 'News',
-   data() {
-     return{
-      mystyle: {
-        color:"black",
-        fontSize: 25,
-      },
-     }
-  },
-   props: {
-    news : {type: Object},
-   },
-   components: {
-      VClamp
-   },
-   methods: {
-     goDetail(id) {
-       alert(id);
-       router.push({ name: 'detail', params: { id: id }})
-        // this.$router.push(`/detail/${id}`)
-     },
-     changebgcolor: function() {
-      this.mystyle.color = "grey";
-      this.mystyle.fontSize = "30px";
-    },
-    originalcolor: function() {
-      this.mystyle.color = "black";
-      this.mystyle.fontSize = "25px";
+  name: 'News',
+  data() {
+    return {
     }
+  },
+  props: {
+    news : {type: Object},
+  },
+  components: {
+    VClamp
+  },
+  methods: {
+    goDetail(id) {
+      router.push({ name: 'detail', params: { id: id }})
+    },
+    onClickKeyword(key){
+      this.$router.push({ 
+        name: 'search',
+        params: { searchValue: key }
+      }).catch(err =>{})
+    },
    },
-   
 }
 </script>
 
 <style>
   .cardbox{
-    margin: 30px 30px;
     padding: 10px 20px;
     border: solid 1px gray;
     border-radius: 10px;
+    box-sizing: border-box;
+  }
+  .cardbox:hover {
+    border: solid 2px rgb(4, 0, 255);
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 9px 19px;
   }
   .tagfont{
   width: 100%;
@@ -68,6 +67,7 @@ export default {
   margin-top: 10px;
   }
   .head_font{
+    color: black;
     width: 100%;
     font-size: 25px;
   }

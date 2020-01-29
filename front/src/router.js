@@ -46,12 +46,6 @@ export default new Router({
 			name: 'detail',
 			component: Detail
 		},
-		{
-			path: "/home/:id",
-			name: "home",
-			component: HomePage,
-			props : true
-		  },
 		  {
 			path: "/Signup",
 			name: "signup",
