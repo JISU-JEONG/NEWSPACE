@@ -12,13 +12,19 @@
       <hr>
       <br>
       <div v-html="news.body" class="page"></div>
-      <hr>
+      <hr> 
+      <CommentForm @commentCreate-event="CommentCreate"/>
+      <CommentList
+      :comments=comments
+      ></CommentList>
     </v-container>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import CommentList from '../components/CommentList'
+import CommentForm from '../components/CommentForm'
 
 export default {
     name : "detail",
@@ -26,9 +32,54 @@ export default {
         return {
             news:[],
             keywords:[],
+            comments:[],
+            member_name: '',
         }
     },
+    components: {
+      CommentList,
+      CommentForm,
+	  },
     methods: {
+          info(){
+            const storage = localStorage;
+          axios.post("http://192.168.31.85:8080/info",
+                    {},
+                    {
+                      headers: {
+                        "login-token": storage.getItem("login-token")
+                      }
+                    }
+                  )
+                .then(res => {
+                    this.member_name = res.data.data.name;
+                  })
+                  .catch(e => {
+                    console.log(e);
+                  });
+        },
+        CommentCreate(text){
+          if(text!==''){
+            const storage = localStorage;
+            const data ={
+                news_id: this.$route.params.id,
+                comment_text: text,
+                member_name:this.member_name,
+              }
+            axios.post("http://192.168.31.85:8080/addComment", data,
+              {
+                headers: {
+                  "login-token": storage.getItem("login-token")
+                }
+              })
+              .then(response => {
+                this.CommentGet()
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }
+        },
         getNews() {
             axios.get(`http://192.168.31.85:8080/getNews/${this.$route.params.id}`)
                 .then(response => {
@@ -39,10 +90,22 @@ export default {
                     console.log(error)
                 })
 
+        },
+        CommentGet() {
+          axios.get(`http://192.168.31.85:8080/getComment/${this.$route.params.id}`)
+                .then(response => {
+                    this.comments = response.data
+                    console.log(this.comments)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     },
     mounted(){
-        this.getNews()
+        this.getNews(),
+        this.CommentGet(),
+        this.info()
     }
 }
 </script>

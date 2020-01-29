@@ -167,7 +167,7 @@ export default {
         )
         .then(res => {
           this.username = res.data.data.name;
-          this.userimg = "http://edu.ssafy.com/edu/comm/imgDownload.do?userId=lAenTIrEs1O1LdGdfpnDrw%3D%3D";
+          this.userimg = "";
         })
         .catch(e => {
           this.username = "비로그인 상태"
