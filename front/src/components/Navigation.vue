@@ -29,15 +29,27 @@
       app
       right
     >
-     <v-list-item>
+    <!-- 로그인시 보여지는 사이드바 타이틀 -->
+      <v-list-item>
         <v-list-item-avatar>
-          <v-img :src="userimg"></v-img>
+        <v-img :src="userimg"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
           <v-list-item-title>{{username}}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+    <!-- 비로그인시 보여지는 사이드바 타이틀 -->
+      <v-list-item>
+        <v-btn text to="/login"> 
+          로그인
+        </v-btn>
+        <v-spacer />
+        <v-btn text to="/signup">  
+          회원가입
+        </v-btn>
+      </v-list-item>
+
 
       <v-divider></v-divider>
 
@@ -82,7 +94,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title v-on:click="logout()">
+              <v-list-item-title @click.stop="logout()">
                 {{ item.text }}
               </v-list-item-title>
             </v-list-item-content>
@@ -140,6 +152,7 @@ export default {
   methods: {
     changeDrawer() {
       this.drawer = !this.drawer 
+      console.log(this.drawer)
     },
     onSubmit(searchValue) {
       this.$router.push({ 

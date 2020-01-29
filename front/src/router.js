@@ -5,9 +5,8 @@ import PostPage from './views/PostPage.vue'
 import PortfolioPage from './views/PortfolioPage.vue'
 import SearchPage from './views/SearchPage.vue'
 import Detail from './views/Detail.vue'
-import Home from './views/login/Home.vue'
-import Signup from './views/login/Signup.vue'
-import Login from './views/login/Login.vue'
+import SignupPage from './views/SignupPage.vue'
+import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/login/Social-Signup.vue'
 
 Vue.use(Router)
@@ -32,11 +31,6 @@ export default new Router({
 			component: PortfolioPage
 		},
 		{
-			path: '/login',
-			name: 'login',
-			component: Login
-		},
-		{
 			path: '/search/:searchValue',
 			name: 'search',
 			component: SearchPage
@@ -47,14 +41,14 @@ export default new Router({
 			component: Detail
 		},
 		  {
-			path: "/Signup",
+			path: "/signup",
 			name: "signup",
-			component: Signup
+			component: SignupPage
 		  },
 		  {
-			path: "/Login",
-			name: "Login",
-			component: Login
+			path: "/login",
+			name: "login",
+			component: LoginPage
 		  },
 		  {
 			path: "/SocialSignup",
