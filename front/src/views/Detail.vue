@@ -42,7 +42,6 @@ export default {
       CommentForm,
 	  },
     methods: {
-<<<<<<< front/src/views/Detail.vue
           info(){
             const storage = localStorage;
           axios.post("http://192.168.31.85:8080/info",
@@ -109,7 +108,6 @@ export default {
         params: { searchValue: key }
         }).catch(err =>{})
       },
->>>>>>> front/src/views/Detail.vue
     },
     mounted(){
         this.getNews(),
