@@ -42,7 +42,6 @@ export default {
       CommentForm,
 	  },
     methods: {
-
           info(){
             const storage = localStorage;
           axios.post("http://192.168.31.85:8080/info",

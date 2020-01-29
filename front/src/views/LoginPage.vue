@@ -55,7 +55,7 @@ export default {
       infoValid: false,
       emailRules: [
         v => !!v || '이메일을 입력하세요',
-        v => !!/.+@+./.test(v) || '이메일 형식이 아닙니다.'
+        v => /.+@+./.test(v) || '이메일 형식이 아닙니다.'
       ],
       passwordRules: [v => !!v || '비밀번호를 입력하세요'],
       emptyRules: [v => !!v || '값을 입력해주세요']
