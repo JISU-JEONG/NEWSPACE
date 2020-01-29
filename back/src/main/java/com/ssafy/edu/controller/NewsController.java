@@ -112,16 +112,19 @@ public class NewsController {
 
 		List<List<NewsDTO>> list = new ArrayList<>();
 
+		List<NewsDTO> allList = new ArrayList<>();
 		List<NewsDTO> samsungList = new ArrayList<>();
 		List<NewsDTO> lgList = new ArrayList<>();
 		List<NewsDTO> skList = new ArrayList<>();
 
 		String[] str = search.split(" ");
-
+		
+		allList = newsService.findNewsAll(str);
 		samsungList = newsService.findNewsSamsung(str);
 		lgList = newsService.findNewsLg(str);
 		skList = newsService.findNewsSk(str);
 
+		list.add(allList);
 		list.add(samsungList);
 		list.add(lgList);
 		list.add(skList);
@@ -152,5 +155,14 @@ public class NewsController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getUserKeyword", method = RequestMethod.GET)
+	public ResponseEntity<String[]> getUserKeyword() throws Exception{
+		logger.info("NewsController Excute ! getUserKeyword \t" + new Date());
+		
+		String[] keywords = newsService.getUserKeyword();
+		
+		return new ResponseEntity<String[]>(keywords, HttpStatus.OK);
 	}
 }

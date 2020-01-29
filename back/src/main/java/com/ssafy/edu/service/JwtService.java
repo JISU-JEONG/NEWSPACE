@@ -36,8 +36,9 @@ public class JwtService {
 
         // Payload 설정 - claim 정보 포함
         builder.setSubject(member.getTokenname())// 토큰 제목 설정
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin))// 유효기간
-                .claim("data", member);
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * expireMin)))// 유효기간
+                .claim("data", member)
+                .claim("member_id", member.getMember_id());
 
         // signature - secret key를 이용한 암호화
         builder.signWith(SignatureAlgorithm.HS256, salt.getBytes());
