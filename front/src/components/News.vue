@@ -1,19 +1,22 @@
 <template>
   <v-container>
-      <div class="tagfont">
-        <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;">
-          #{{key}}
-        </span>
-      </div>
-      <div class="cardbox" @click="goDetail(news.news_id)">
-        <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'" >{{news.brand}}<hr></div>
-        <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}} Electronics<hr></div>
-        <div class="SK_font" v-else>{{news.brand}} Hynix<hr></div>
-        <div class="head_font">{{news.title}}</div>
-        <div class="box">
-          {{news.date}}
+      <div class="cardbox">
+        <div  @click="goDetail(news.news_id)">
+          <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'" >{{news.brand}}<hr></div>
+          <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}} Electronics<hr></div>
+          <div class="SK_font" v-else>{{news.brand}} Hynix<hr></div>
+          <div class="head_font">{{news.title}}</div>
+          <div class="box">
+            {{news.date}}
+        </div>
+        </div>
+        <div class="tagfont">
+          <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;">
+            #{{key}}
+          </span>
         </div>
       </div>
+      
   </v-container>
 </template>
 
