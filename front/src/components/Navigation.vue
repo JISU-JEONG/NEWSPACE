@@ -145,7 +145,7 @@ export default {
       this.$router.push({ 
         name: 'search',
         params: { searchValue: searchValue }
-      })
+      }).catch(err =>{})
       this.searchValue = ''
     },
     logout(){
