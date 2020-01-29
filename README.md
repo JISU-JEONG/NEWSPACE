@@ -21,8 +21,139 @@
  Front | Front | Back | Back
 
 # front-end
+## Login
 
+```java
+// 일반 로그인 로직
+// email과 password를 서버에 보낸 후 올바른 정보가 왔을경우
+// headers로 온 토큰정보를 localstorege에 저장한다. 
+http
+.post("/member/signin", {
+	email: this.email,
+	password: this.password,
+	type : "nomal"
+})
+.then(res => {
+	if (res.data.status) {
+		storage.setItem("login-token", res.headers["login-token"]);
+		this.setInfo("로그인성공", "", "");
+		this.getInfo();
+	} else {
+		this.setInfo("", "", "");
+		this.username = "";
+		alert("입력 정보를 확인하세요.");
+	}
+})
+.catch(e => {
+	this.setInfo("실패", "", JSON.stringify(e.response || e.message));
+});
+```
 
+## SocialLogin
+```java
+// 구글로그인 로직
+// firebase API를 이용하여 토큰을 발급받고 정보를 획득한다.
+const provider = new firebase.auth.GoogleAuthProvider();
+const parentFunc = this;
+var _promise = function() {
+return new Promise(function(resolve, reject) {
+	firebase
+	.auth()
+	.signInWithPopup(provider)
+	.then(res => {
+		console.log(res.user);
+		parentFunc.username = res.user.displayName;
+		parentFunc.email = res.user.uid;
+		parentFunc.type = "google";
+		resolve("ㄲ");
+	})
+	.catch(error => {
+		console.log(error);
+		reject(error);
+	});
+});
+};
+_promise().then(() => {
+	// 구글로그인을 완료한 후에 아래의 함수를 실행합니다.
+	this.duplicationCheck();
+});
+```
+
+## duplicationCheck
+```java
+const parentFunc = this;
+storage.setItem("login-token", "");
+
+// 리턴받은 소셜로그인 정보가 DB에 있는지 확인합니다.
+var _promise = function() {
+return new Promise(function(resolve) {
+	http
+	.post("/member/signupcheck", {
+		email: parentFunc.email
+	})
+	.then(res => {
+		console.log(res.data);
+		if (res.data == "Notexist") {
+		//아이디 중복없다.
+		parentFunc.duplicationflag = 1;
+		} else {
+		//아이디 중복있다.
+		parentFunc.duplicationflag = 0;
+		}
+		resolve("ㄲ");
+	});
+});
+};
+
+_promise().then(() => {
+var _promise2 = function() {
+	// 소셜로그인 정보를 JWT를 이용하여 암호화시킵니다.
+	return new Promise(function(resolve) {
+		http
+		.post("/member/socialtoken", {
+			email: parentFunc.email,
+			name: parentFunc.username,
+			type: parentFunc.type
+		})
+		.then(res => {
+			storage.setItem("login-token", res.headers["login-token"]);
+			resolve("ㄲ");
+		});
+	});
+};
+_promise2().then(() => {
+	if (parentFunc.duplicationflag == 1) {
+		//처음 로그인시 키워드 선택하는 페이지로 라우팅
+		this.$router.push("/SocialSignup");
+	} else {
+		//이미 로그인한적이 있을시 홈으루
+		this.getInfo();
+	}
+});
+```
+
+## getInfo
+```java
+// header로 현재 토큰을 서버로 전송하고 해당 토큰의 유효기간을
+// 확인한 뒤 폐기되지 않은 토큰일 경우 해당하는 정보를 불러옵니다.
+http
+.post(
+	"/info",
+	{},
+	{
+		headers: {
+			"login-token": storage.getItem("login-token")
+		}
+	}
+)
+.then(res => {
+	this.username = res.data.data.name;
+	this.$router.push("/");
+})
+.catch(e => {
+	this.setInfo("정보 조회 실패", "", e.response.data.msg);
+});
+```
 # back-end
 
 ## function
@@ -230,3 +361,144 @@ for (NewsDTO n : list) {
 
 ```
 
+
+## Login
+#### Application.java
+```java
+// Spring의 Application에 인터셉터를 설정한다.
+// /member/이후의 모든경로는 토큰유뮤를 검사하지 않고 그외 모든 경로는 토큰유무를 검사한다.
+@Override
+public void addInterceptors(InterceptorRegistry registry) {
+	registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
+			.excludePathPatterns(Arrays.asList("/member/**"));// 적용 제외 경로
+}
+
+// Interceptor를 이용해서 처리하므로 전역의 Cross Origin 처리를 해준다.
+@Override
+public void addCorsMappings(CorsRegistry registry) {
+	registry.addMapping("/**")
+			.allowedOrigins("*")
+			.allowedMethods("*")
+			.allowedHeaders("*")
+			.exposedHeaders("login-token");
+}
+```
+
+#### JwtInterceptor.java
+```java
+// JWT토큰은 header를 통하여 통신을 진행하며,
+// 경로를 이동할때마다 인증토큰을 검사한다.
+@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+		Object handler)
+		throws Exception {
+	log.info(request.getMethod() + " :" + request.getServletPath());
+	
+	if (request.getMethod().equals("OPTIONS")) {
+		return true;
+	} else {
+		String logintoken = request.getHeader("login-token");
+
+		if(logintoken != null && logintoken.length() > 0) {            	
+			jwtService.checkValid(logintoken);
+			log.trace("토큰 사용 가능: {}", logintoken);
+			return true;
+		}
+		else {
+			throw new RuntimeException("인증 토큰이 없습니다.");            	
+		}
+	}
+}
+```
+
+#### JwtService.java
+```java
+//토큰 생성
+public String create(final Member member) {
+	log.trace("time: {}", expireMin);
+	final JwtBuilder builder = Jwts.builder();
+	// JWT Token = Header + Payload + Signagure
+
+	builder.setHeaderParam("typ", "JWT");// 토큰의 타입으로 고정 값
+
+	// Payload 설정 - claim 정보 포함
+	builder.setSubject(member.getTokenname())// 토큰 제목 설정
+			.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin))// 유효기간
+			.claim("data", member);
+
+	// signature - secret key를 이용한 암호화
+	builder.signWith(SignatureAlgorithm.HS256, salt.getBytes());
+
+	// 마지막 직렬화 처리
+	final String token = builder.compact();
+	log.info(member.getTokenname() + " 발행: {}", token);
+	return token;
+}
+
+//토큰 체크
+public void checkValid(final String token) {
+	log.info("토큰 점검: {}", token);
+	Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(token);
+}
+
+//토큰 분석
+public Map<String, Object> get(final String token) {
+	Jws<Claims> claims = null;
+	try {
+		claims = Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(token);
+	} catch (final Exception e) {
+		throw new RuntimeException();
+	}
+
+	log.info("claims: {}", claims);
+
+	// Claims는 Map의 구현체이다.
+	return claims.getBody();
+}
+```
+
+#### MemberRestController.java
+```java
+// 로그인
+try {
+	// Salt를 추가하여 SHA-256 암호화한 값으로 비밀번호를 찾는다.
+	MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	digest.reset();
+	String password = member.getPassword() + salt;
+	digest.update(password.getBytes("utf8"));
+	String sha256password = String.format("%064x", new BigInteger(1, digest.digest()));
+	member.setPassword(sha256password);
+	
+	Member loginUser = memberservice.signin(member);
+	String token = jwtService.create(loginUser);
+	
+	// Hearder에 토큰정보를 전달한다.
+	res.setHeader("login-token", token);
+	status = HttpStatus.ACCEPTED;
+} catch (RuntimeException e) {
+	log.error("로그인 실패", e);
+	resultMap.put("message", e.getMessage());
+	status = HttpStatus.INTERNAL_SERVER_ERROR;
+}
+
+//토큰 정보획득
+try {
+	//Header에서 토큰을 받아온 정보를 리턴해준다.
+	resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+	status = HttpStatus.ACCEPTED;
+} catch (RuntimeException e) {
+	log.error("정보조회 실패", e);
+	resultMap.put("message", e.getMessage());
+	status = HttpStatus.INTERNAL_SERVER_ERROR;
+}
+
+//회원가입
+// Salt를 추가하여 SHA-256 암호화한다.
+MessageDigest digest = MessageDigest.getInstance("SHA-256");
+digest.reset();
+String password = member.getPassword() + salt;
+digest.update(password.getBytes("utf8"));
+String sha256password = String.format("%064x", new BigInteger(1, digest.digest()));
+member.setPassword(sha256password);
+memberservice.insertMember(member);
+```
