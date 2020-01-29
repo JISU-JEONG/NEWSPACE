@@ -54,16 +54,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		BRAND LIKE "SK" ORDER BY DATE DESC LIMIT 20
 	</select>
 
-	<select id="getNewsCountSamsung" resultType="java.lang.Integer">
-		SELECT COUNT(*) FROM
-		NEWS WHERE BRAND LIKE "SAMSUNG"
-	</select>
-
-	<select id="getNewsKeywordSamsung" resultType="java.lang.String">
-		SELECT KEYWORD
-		FROM NEWS WHERE BRAND LIKE "SAMSUNG"
-	</select>
-
 	<insert id="addNewsKeyword"
 		parameterType="com.ssafy.edu.help.NewsKeyword">
 		INSERT INTO NEWSKEYWORD(news_id, keyword)
@@ -81,13 +71,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		NEWS_ID = #{news_id}
 	</update>
 
+	<select id="findNewsAll"
+		parameterType="com.ssafy.edu.help.NewsSearch"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+		k.KEYWORD, n.URL, n.BODYTEXT
+		FROM NEWS n JOIN NEWSKEYWORD k
+		WHERE
+		n.NEWS_ID = k.NEWS_ID
+		AND (
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="AND ">
+					TITLE LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		OR
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="OR ">
+					k.KEYWORD LIKE #{word}
+				</foreach>
+				)
+			</when>
+		</choose>
+		) ORDER BY DATE DESC
+	</select>
+
 	<select id="findNewsSamsung"
 		parameterType="com.ssafy.edu.help.NewsSearch"
 		resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
 		k.KEYWORD, n.URL, n.BODYTEXT
 		FROM NEWS n JOIN NEWSKEYWORD k
-		WHERE n.NEWS_ID = k.NEWS_ID
+		WHERE
+		n.NEWS_ID = k.NEWS_ID
 		AND BRAND LIKE #{brand}
 		AND (
 		<choose>
@@ -111,7 +135,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				)
 			</when>
 		</choose>
-		)
+		) ORDER BY DATE DESC
 	</select>
 
 	<select id="findNewsLg"
@@ -120,7 +144,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
 		k.KEYWORD, n.URL, n.BODYTEXT
 		FROM NEWS n JOIN NEWSKEYWORD k
-		WHERE n.NEWS_ID = k.NEWS_ID
+		WHERE
+		n.NEWS_ID = k.NEWS_ID
 		AND BRAND LIKE #{brand}
 		AND (
 		<choose>
@@ -144,7 +169,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				)
 			</when>
 		</choose>
-		)
+		) ORDER BY DATE DESC
 	</select>
 
 	<select id="findNewsSk"
@@ -153,7 +178,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
 		k.KEYWORD, n.URL, n.BODYTEXT
 		FROM NEWS n JOIN NEWSKEYWORD k
-		WHERE n.NEWS_ID = k.NEWS_ID
+		WHERE
+		n.NEWS_ID = k.NEWS_ID
 		AND BRAND LIKE #{brand}
 		AND (
 		<choose>
@@ -177,15 +203,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				)
 			</when>
 		</choose>
-		)
+		) ORDER BY DATE DESC
 	</select>
-	
+
 	<select id="getAllNews" resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT * FROM NEWS
 	</select>
-	
-	<select id="getAllNewsRecent" resultType="com.ssafy.edu.dto.NewsDTO">
+
+	<select id="getAllNewsRecent"
+		resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT * FROM NEWS ORDER BY DATE DESC LIMIT 50
 	</select>
-	
+
+	<select id="getNewsKeywordAll"
+		resultType="com.ssafy.edu.help.NewsKeyword">
+		SELECT * FROM NEWSKEYWORD
+	</select>
+
 </mapper>

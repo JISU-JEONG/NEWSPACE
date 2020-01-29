@@ -1,4 +1,5 @@
 <template>
+<!-- 삭제될 컴포넌트 -->
   <v-app>
     <v-container>
       <v-row align="center" justify="center">

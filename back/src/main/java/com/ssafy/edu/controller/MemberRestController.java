@@ -81,7 +81,7 @@ public class MemberRestController {
             resultMap.putAll(jwtService.get(req.getHeader("login-token")));
             status = HttpStatus.ACCEPTED;
         } catch (RuntimeException e) {
-            log.error("정보조회 실패", e);
+            log.error("정보조회 실패", e.getMessage());
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
