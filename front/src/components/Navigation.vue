@@ -164,35 +164,10 @@ export default {
     logout(){
       storage.removeItem("login-token");
       this.username = "";
-    },
-    getInfo() {
-      
-      console.log("login-token: " + storage.getItem("login-token"));
-      http
-        .post(
-          "/info",
-          {},
-          {
-            headers: {
-              "login-token": storage.getItem("login-token")
-            }
-          }
-        )
-        .then(res => {
-          this.username = res.data.data.name;
-          this.userimg = "";
-        })
-        .catch(e => {
-          this.username = "비로그인 상태"
-          this.userimg = "https://www.momjobgo.com/momjobgo3ct/wp-content/themes/hello-momjobgo/images/default-profile.jpg";
-          console.log("정보 조회 실패 : " + e.response.data.msg);
-
-        });
-    },
+    }
   },
 
   mounted(){
-    this.getInfo();
   }
 }
 </script>

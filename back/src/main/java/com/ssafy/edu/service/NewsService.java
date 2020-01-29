@@ -23,10 +23,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By.ByClassName;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.edu.controller.NewsController;
 import com.ssafy.edu.dao.NewsServiceDao;
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsKeyword;
@@ -49,18 +52,20 @@ public class NewsService implements INewsService {
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	public static final String WEB_DRIVER_PATH = "C:\\JAVA\\selenium\\chromedriver.exe";
 
+	private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
+
 	@Override
 	public NewsDTO getNews(int news_id) {
 		NewsDTO news = null;
 		news = dao.getNews(news_id);
-		
-		if(news == null) {
+
+		if (news == null) {
 			return news;
-		}else {
+		} else {
 			NewsKeyword keyword = dao.newsKeywordValid(news_id);
 			news.setKeyword(keyword.getKeyword());
 		}
-		
+
 		return news;
 	}
 
@@ -131,7 +136,7 @@ public class NewsService implements INewsService {
 		return list;
 	}
 
-	public void keywordSet() {
+	public void newsKeywordSet() {
 
 		List<NewsDTO> listSamsung = new ArrayList<>();
 		List<NewsDTO> listLg = new ArrayList<>();
@@ -152,14 +157,20 @@ public class NewsService implements INewsService {
 		NewsKeyword news = new NewsKeyword(news_id, keyword);
 
 		check = dao.newsKeywordValid(news_id);
-		
+
 		if (check == null) {
 			dao.addNewsKeyword(news);
 		} else {
 			dao.updateNewsKeyword(news);
 		}
 	}
-	
+
+	@Override
+	public List<NewsDTO> findNewsAll(String[] str) {
+		// TODO Auto-generated method stub
+		return dao.findNewsAll(str);
+	}
+
 	@Override
 	public List<NewsDTO> findNewsSamsung(String[] str) {
 		// TODO Auto-generated method stub
@@ -177,7 +188,7 @@ public class NewsService implements INewsService {
 		// TODO Auto-generated method stub
 		return dao.findNewsSk(str);
 	}
-	
+
 	@Override
 	public List<NewsDTO> getAllNews() {
 		// TODO Auto-generated method stub
@@ -187,7 +198,7 @@ public class NewsService implements INewsService {
 	@Override
 	public List<NewsDTO> getAllNewsRecent() {
 		// TODO Auto-generated method stub
-		
+
 		List<NewsDTO> list = dao.getAllNewsRecent();
 
 		for (int i = 0; i < list.size(); i++) {
@@ -196,6 +207,65 @@ public class NewsService implements INewsService {
 		}
 
 		return list;
+	}
+	
+	@Override
+	public String[] getUserKeyword() {
+		// TODO Auto-generated method stub
+		
+		List<NewsKeyword> list = dao.getNewsKeywordAll();
+
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+
+		for (NewsKeyword nk : list) {
+
+			String[] str = nk.getKeyword().split(" ");
+
+			if (str.length <= 1) {
+				continue;
+			}
+
+			for (String s : str) {
+				if (map.containsKey(s)) {
+					int value = map.get(s);
+					value++;
+					map.put(s, value);
+				} else {
+					map.put(s, 1);
+				}
+			}
+		}
+
+		ArrayList<NewsKeywordCounter> counterList = new ArrayList<NewsKeywordCounter>();
+
+		for (String key : map.keySet()) {
+			counterList.add(new NewsKeywordCounter(key, map.get(key)));
+		}
+
+		counterList.sort(new Comparator<NewsKeywordCounter>() {
+
+			@Override
+			public int compare(NewsKeywordCounter o1, NewsKeywordCounter o2) {
+				// TODO Auto-generated method stub
+				return o2.getCount() - o1.getCount();
+			}
+		});
+
+		int index = 0;
+		int size = 20;
+		String[] keywordList = new String[size];
+
+		for (NewsKeywordCounter nkc : counterList) {
+//			System.out.println(nkc.toString());
+			keywordList[index] = nkc.getKeyword();
+			index++;
+
+			if (index >= size) {
+				break;
+			}
+		}
+
+		return keywordList;
 	}
 
 	////////////////////////////////// 스케쥴러메소드
@@ -269,7 +339,9 @@ public class NewsService implements INewsService {
 							}
 						}
 
-						String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
+						String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV",
+								"빌트인", "인공지능", "바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션",
+								"하이닉스", "유튜브" };
 						int[] count = new int[countString.length];
 
 						for (int c = 0; c < count.length; c++) {
@@ -370,7 +442,9 @@ public class NewsService implements INewsService {
 							}
 						}
 
-						String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
+						String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV",
+								"빌트인", "인공지능", "바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션",
+								"하이닉스", "유튜브" };
 						int[] count = new int[countString.length];
 
 						for (int c = 0; c < count.length; c++) {
@@ -484,9 +558,9 @@ public class NewsService implements INewsService {
 		}
 
 		driver.close();
-		
+
 		for (NewsDTO n : list) {
-			
+
 			Document doc = Jsoup.connect(n.getUrl()).timeout(120000).get();
 
 			String title = n.getTitle();
@@ -499,7 +573,7 @@ public class NewsService implements INewsService {
 
 			String keyword = "";
 			String txt = "";
-			
+
 			Komoran komoran = new Komoran("C:\\KOMORAN\\models");
 			List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
 			for (List<Pair<String, String>> eojeolResult : result) {
@@ -514,7 +588,8 @@ public class NewsService implements INewsService {
 				}
 			}
 
-			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
+			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "빌트인", "인공지능",
+					"바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션", "하이닉스", "유튜브" };
 			int[] count = new int[countString.length];
 
 			for (int c = 0; c < count.length; c++) {
@@ -532,7 +607,6 @@ public class NewsService implements INewsService {
 			check = getNewsOne(news.getUrl());
 			if (check == null) {
 				addNews(news);
-				System.out.println("add complete" + "\t" + news.getTitle()+ "\t" + news.getBrand());
 			} else {
 				break;
 			}
@@ -633,7 +707,7 @@ public class NewsService implements INewsService {
 
 		for (String s : list) {
 			Document doc = Jsoup.connect(s).get();
-			
+
 			String title = doc.getElementsByClass("postTitle").get(0).getElementsByTag("h2").text();
 			String date = doc.getElementsByClass("postInfo").get(0).getElementsByTag("p").get(1).text();
 			String brand = "SK";
@@ -641,10 +715,10 @@ public class NewsService implements INewsService {
 			String newsurl = s;
 			Elements bodyEle = doc.getElementsByClass("post").get(0).getElementsByTag("p");
 			String body = "";
-			for(int i=0; i<bodyEle.size(); i++) {
+			for (int i = 0; i < bodyEle.size(); i++) {
 				body += bodyEle.get(i);
 			}
-			
+
 			String bodytext = doc.getElementsByClass("post").text();
 
 			String keyword = "";
@@ -664,7 +738,8 @@ public class NewsService implements INewsService {
 				}
 			}
 
-			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
+			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "빌트인", "인공지능",
+					"바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션", "하이닉스", "유튜브" };
 			int[] count = new int[countString.length];
 
 			for (int c = 0; c < count.length; c++) {
@@ -712,7 +787,10 @@ public class NewsService implements INewsService {
 						|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
 						|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
 						|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")
-						|| s.equals("그니") || s.equals("그랑") || s.equals("튜브")) {
+						|| s.equals("그니") || s.equals("그랑") || s.equals("튜브") || s.equals("빌리") || s.equals("이노")
+						|| s.equals("베이") || s.equals("방식") || s.equals("빌트") || s.equals("프리") || s.equals("제품")
+						|| s.equals("레드") || s.equals("하이") || s.equals("기능") || s.equals("상배") || s.equals("양사")
+						|| s.equals("바이") || s.equals("인공") || s.equals("지능")) {
 					continue;
 				}
 				if (map.containsKey(s)) {
@@ -747,8 +825,8 @@ public class NewsService implements INewsService {
 				}
 				keyword += counterList.get(i).getKeyword() + " ";
 			}
-			if(keyword.length() >= 1) {
-				keyword = keyword.substring(0, keyword.length()-1);
+			if (keyword.length() >= 1) {
+				keyword = keyword.substring(0, keyword.length() - 1);
 			}
 			addNewsKeyword(news_id, keyword);
 		}
@@ -757,21 +835,16 @@ public class NewsService implements INewsService {
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
-		System.out.println("SAMSUNG CRAWLING 1 START");
+		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING1..." + "\t" + new Date());
 		samsung_Crawling1();
-		System.out.println("SAMSUNG CRAWLING 1 COMPLETE");
-		System.out.println("SAMSUNG CRAWLING 2 START");
+		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING2..." + "\t" + new Date());
 		samsung_Crawling2();
-		System.out.println("SAMSUNG CRAWLING 2 COMPLETE");
-		System.out.println("LG CRAWLING START");
+		logger.info("News Service Scheduled Action : LG ELECTRONICS CRAWLING..." + "\t" + new Date());
 		lg_Crawling();
-		System.out.println("LG CRAWLING COMPLETE");
-		System.out.println("SK CRAWLING START");
+		logger.info("News Service Scheduled Action : SK HYNIX CRAWLING..." + "\t" + new Date());
 		sk_Crawling();
-		System.out.println("SK CRAWLING COMPLETE");
-		System.out.println("KEYWORD SETTING START");
-		keywordSet();
-		System.out.println("KEYWORD SETTING COMPLETE");
+		logger.info("News Service Scheduled Action : NEWS KEYWORD SETTING..." + "\t" + new Date());
+		newsKeywordSet();
 	}
 
 }

@@ -20,4 +20,6 @@ public interface INewsService {
 	List<NewsDTO> findNewsSk(String[] str);
 	List<NewsDTO> getAllNews();
 	List<NewsDTO> getAllNewsRecent();
+	List<NewsDTO> findNewsAll(String[] str);
+	String[] getUserKeyword();
 }
