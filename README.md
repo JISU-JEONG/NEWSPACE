@@ -1,4 +1,4 @@
-﻿# DEMO
+# DEMO
 
 [DEMOSITE](http://merong.merong)
 
@@ -41,7 +41,7 @@ getAllNewsRecent	:	날짜순으로 최근 20개의 모든 브랜드의 뉴스를
 getSamsungRecent	:	날짜순으로 최근 20개의 삼성 뉴스를 가져온다.
 getLgRecent		:	날짜순으로 최근 20개의 LG 뉴스를 가져온다.
 getSkRecent		:	날짜순으로 최근 20개의 SK 뉴스를 가져온다.
-findNews/?		:	SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 검색한다.
+findNews/?		:	전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다.
 ```
 </details>
 
@@ -58,6 +58,14 @@ updateNewsKeyword		:	해당 번호의 키워드들을 수정한다.
 ```
 </details>
 
+
+<details><summary>Comment Rest Function</summary>
+
+```
+getComment/?		:	해당 번호의 뉴스의 Comment들을 가져온다.
+addComment		:	POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date)
+```
+</details>
 
 ## Crawling
 
