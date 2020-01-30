@@ -238,7 +238,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				)
 			</when>
 		</choose>
-		) AND n.DATE >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		) AND n.DATE >= DATE_SUB(NOW(), INTERVAL 30 DAY) ORDER BY n.DATE DESC
 	</select>
 
 </mapper>

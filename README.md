@@ -1,4 +1,4 @@
-# DEMO
+﻿# DEMO
 
 [DEMOSITE](http://merong.merong)
 
@@ -43,6 +43,7 @@ getLgRecent		:	날짜순으로 최근 20개의 LG 뉴스를 가져온다.
 getSkRecent		:	날짜순으로 최근 20개의 SK 뉴스를 가져온다.
 findNews/?		:	전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다.
 getUserKeyword		:	TOP 20 키워드들을 보여준다.
+getUserKeywordNews/?	:	토큰에 있는 Keyword를 전달 시 자신의 키워드에 따른 뉴스를 검색한다.
 ```
 </details>
 
