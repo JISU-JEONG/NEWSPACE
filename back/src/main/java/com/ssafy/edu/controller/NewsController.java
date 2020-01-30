@@ -5,16 +5,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.service.INewsService;
+import com.ssafy.edu.service.JwtService;
+import com.ssafy.edu.service.MemberService;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +35,12 @@ public class NewsController {
 
 	@Autowired
 	INewsService newsService;
+	
+	@Autowired
+	private JwtService jwtService;
+	
+	@Autowired
+	private MemberService memberservice;
 
 	@RequestMapping(value = "/getSamsungNews", method = RequestMethod.GET)
 	public ResponseEntity<List<NewsDTO>> getSamsungNews() throws Exception {
@@ -164,5 +178,22 @@ public class NewsController {
 		String[] keywords = newsService.getUserKeyword();
 		
 		return new ResponseEntity<String[]>(keywords, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getUserKeywordNews/{keyword}", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsDTO>> getUserKeywordNews(@PathVariable String keyword) throws Exception {
+		
+		logger.info("NewsController Excute ! getUserKeywordNews KEYWORD : " + keyword + "\t" + new Date());
+
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		List<NewsDTO> news = null;
+
+		news = newsService.getKeywordNews(keyword);
+
+		if (news == null) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsDTO>>(news, HttpStatus.OK);
 	}
 }

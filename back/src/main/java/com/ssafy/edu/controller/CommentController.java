@@ -28,7 +28,7 @@ import com.ssafy.edu.service.JwtService;
 @RestController
 public class CommentController {
 
-	private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
 	@Autowired
 	ICommentService commentService;
@@ -59,16 +59,19 @@ public class CommentController {
 
 		int member_id = (int) resultMap.get("member_id");
 
-		comment.setMember_id(member_id);
+		String member_name = (String) resultMap.get("member_name");
+	      
+        comment.setMember_id(member_id);
+        comment.setMember_name(member_name);
 
 		commentService.addComment(comment);
 	}
 
-	@RequestMapping(value = "/deleteComment", method = RequestMethod.DELETE)
-	public void deleteComment(@RequestBody int comment_id, HttpServletRequest req) throws Exception {
+	@RequestMapping(value = "/deleteComment/{comment_id}", method = RequestMethod.DELETE)
+	public void deleteComment(@PathVariable int comment_id, HttpServletRequest req) throws Exception {
 		
 		logger.info("CommentController Excute ! deleteComment :" + comment_id + "\t" + new Date());
-
+		
 		CommentDTO comment = commentService.getCommentOne(comment_id);
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -77,11 +80,19 @@ public class CommentController {
 
 		int member_id = (int) resultMap.get("member_id");
 		
+		System.out.println("===========================================");
+		
+		System.out.println(comment.toString());
+		System.out.println(member_id);
+		System.out.println(resultMap.toString() );
+		
+		System.out.println("===========================================");
+		
 		if(member_id != comment.getMember_id()) {
-			logger.error("CommentController Error ! deleteComment :" + comment_id + "\t" + new Date());
+			logger.error("CommentController Error ! deleteComment :" + comment.getComment_id() + "\t" + new Date());
 		}else {
-			commentService.deleteComment(comment_id);
+			logger.info("CommentController Delete ! comment_id : " + comment.getComment_id() + "\t" + new Date());
+			commentService.deleteComment(comment.getComment_id());
 		}
 	}
-
 }

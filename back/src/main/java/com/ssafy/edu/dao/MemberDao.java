@@ -32,4 +32,9 @@ public class MemberDao {
 		return SQL.selectList(ns+"getMember");
 	}
 
+	public Member getMember(int member_id) {
+		// TODO Auto-generated method stub
+		return SQL.selectOne(ns+"getMemberOne", member_id);
+	}
+
 }

@@ -34,4 +34,9 @@ public class MemberService {
 	public List<Member> getMember() {
 		return dao.getMember();
 	}
+
+	public Member getMember(int member_id) {
+		// TODO Auto-generated method stub
+		return dao.getMember(member_id);
+	}
 }
