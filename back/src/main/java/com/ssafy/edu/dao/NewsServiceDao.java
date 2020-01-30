@@ -119,4 +119,12 @@ public class NewsServiceDao {
 		// TODO Auto-generated method stub
 		return SQL.selectList(ns + "getNewsKeywordAll");
 	}
+
+	public List<NewsDTO> getKeywordNews(String[] keyword) {
+		// TODO Auto-generated method stub
+		
+		NewsSearch find = new NewsSearch(keyword, "ALL");
+		
+		return SQL.selectList(ns + "getKeywordNews", find);
+	}
 }

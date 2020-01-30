@@ -52,7 +52,7 @@ public class NewsService implements INewsService {
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	public static final String WEB_DRIVER_PATH = "C:\\JAVA\\selenium\\chromedriver.exe";
 
-	private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
+	private static final Logger logger = LoggerFactory.getLogger(NewsService.class);
 
 	@Override
 	public NewsDTO getNews(int news_id) {
@@ -210,9 +210,19 @@ public class NewsService implements INewsService {
 	}
 	
 	@Override
-	public String[] getUserKeyword() {
+	public List<NewsDTO> getKeywordNews(String keyword) {
 		// TODO Auto-generated method stub
 		
+		String[] str = keyword.split(" ");
+		
+		return dao.getKeywordNews(str);
+	}
+
+
+	@Override
+	public String[] getUserKeyword() {
+		// TODO Auto-generated method stub
+
 		List<NewsKeyword> list = dao.getNewsKeywordAll();
 
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -267,9 +277,6 @@ public class NewsService implements INewsService {
 
 		return keywordList;
 	}
-
-	////////////////////////////////// 스케쥴러메소드
-	////////////////////////////////// ////////////////////////////////////////////
 
 	public void samsung_Crawling1() throws IOException, ParseException {
 
@@ -836,13 +843,13 @@ public class NewsService implements INewsService {
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING1..." + "\t" + new Date());
-		samsung_Crawling1();
+//		samsung_Crawling1();
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING2..." + "\t" + new Date());
-		samsung_Crawling2();
+//		samsung_Crawling2();
 		logger.info("News Service Scheduled Action : LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-		lg_Crawling();
+//		lg_Crawling();
 		logger.info("News Service Scheduled Action : SK HYNIX CRAWLING..." + "\t" + new Date());
-		sk_Crawling();
+//		sk_Crawling();
 		logger.info("News Service Scheduled Action : NEWS KEYWORD SETTING..." + "\t" + new Date());
 		newsKeywordSet();
 	}
