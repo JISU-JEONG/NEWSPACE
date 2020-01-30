@@ -159,7 +159,6 @@ export default {
             }
           )
           .then(res => {
-            alert(res.data.member_id);
             this.username = res.data.data.name;
             this.userimg =
               "../../images/profile.png";
