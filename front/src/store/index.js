@@ -14,7 +14,6 @@ export default new Vuex.Store({
         // 이후 인자는 payload(즉, 임의의 매개변수)
         setToken(state, payload) {
             state.token = payload
-            console.log('asd',payload)
         }
     },
     actions : {
