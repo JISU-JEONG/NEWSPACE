@@ -8,6 +8,7 @@ export default new Vuex.Store({
     state: {
         token : null,
         member_id: null,
+        member_name: null
     },
     mutations : {
         // 첫번째 인자는 무조건 state
@@ -15,6 +16,7 @@ export default new Vuex.Store({
         setToken(state, payload) {
             state.token = payload.token
             state.member_id = payload.member_id
+            state.member_name = payload.member_name
         }
     },
     actions : {
@@ -25,7 +27,7 @@ export default new Vuex.Store({
             context.commit('setToken', payload)
         },
         logout(context) {
-            context.commit('setToken', {token : null, member_id: null})
+            context.commit('setToken', {token : null, member_id: null, member_name: null})
         },
     },
     modules: {
