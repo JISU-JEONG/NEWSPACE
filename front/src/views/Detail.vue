@@ -13,8 +13,13 @@
       <hr>
       <br>
       <div v-html="news.body" class="page"></div>
-      <hr> 
-      <CommentForm @commentCreate-event="CommentCreate"/>
+      <hr>
+      <div v-if="is_Authenticated">
+        <CommentForm @commentCreate-event="CommentCreate"/>
+      </div>
+      <div v-else>
+        
+      </div>
       <CommentList
       :comments=comments
       ></CommentList>
@@ -34,38 +39,20 @@ export default {
             news:[],
             keywords:[],
             comments:[],
-            member_name: '',
+            is_Authenticated : localStorage.getItem("member_id"),
         }
     },
     components: {
       CommentList,
       CommentForm,
-	  },
+    },
     methods: {
-          info(){
-            const storage = localStorage;
-          axios.post("http://192.168.31.85:8080/info",
-                    {},
-                    {
-                      headers: {
-                        "login-token": storage.getItem("login-token")
-                      }
-                    }
-                  )
-                .then(res => {
-                    this.member_name = res.data.data.name;
-                  })
-                  .catch(e => {
-                    console.log(e);
-                  });
-        },
         CommentCreate(text){
           if(text!==''){
             const storage = localStorage;
             const data ={
                 news_id: this.$route.params.id,
                 comment_text: text,
-                member_name:this.member_name,
               }
             axios.post("http://192.168.31.85:8080/addComment", data,
               {
@@ -74,6 +61,7 @@ export default {
                 }
               })
               .then(response => {
+                alert('댓글 작성이 완료되었습니다.')
                 this.CommentGet()
               })
               .catch(e => {
@@ -90,7 +78,6 @@ export default {
                 .catch(error => {
                     console.log(error)
                 })
-
         },
         CommentGet() {
           axios.get(`http://192.168.31.85:8080/getComment/${this.$route.params.id}`)
@@ -111,8 +98,8 @@ export default {
     },
     mounted(){
         this.getNews(),
-        this.CommentGet(),
-        this.info()
+        this.CommentGet()
+		    this.$store.dispatch('login',localStorage.getItem("login-token"))
     }
 }
 </script>
