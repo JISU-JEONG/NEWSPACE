@@ -1,66 +1,68 @@
  <template>
-  <v-container class="main_web">
-      <v-tabs
-        v-model="tab"
-        background-color="transparent"
-        grow
-      >
-        <v-tab>
-          all
-        </v-tab>
-        <v-tab>
-          Samsung
-        </v-tab>
-        <v-tab>
-          LG
-        </v-tab>
-        <v-tab>
-          SK
-        </v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <div class="box"
-            v-for="i in AllList.length" :key="i"
-          >
-          <News
-              :news = AllList[i-1]
+  <transition name="list">
+    <v-container class="main_web">
+        <v-tabs
+          v-model="tab"
+          background-color="transparent"
+          grow
+        >
+          <v-tab>
+            all
+          </v-tab>
+          <v-tab>
+            Samsung
+          </v-tab>
+          <v-tab>
+            LG
+          </v-tab>
+          <v-tab>
+            SK
+          </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <div class="box"
+              v-for="i in AllList.length" :key="i"
             >
-          </News>
-          </div>
-        </v-tab-item>
-        <v-tab-item>
-          <div class="box"
-            v-for="i in Samsunglist.length" :key="i"
-          >
             <News
-              :news = Samsunglist[i-1]
-            >
+                :news = AllList[i-1]
+              >
             </News>
-          </div>
-        </v-tab-item>
-        <v-tab-item>
-          <div class="box"
-            v-for="i in LGlist.length" :key="i"
-          >
-            <News
-              :news = LGlist[i-1]
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div class="box"
+              v-for="i in Samsunglist.length" :key="i"
             >
-            </News>
-          </div>
-        </v-tab-item>
-        <v-tab-item>
-          <div class="box"
-            v-for="i in SKlist.length" :key="i"
-          >
-            <News
-              :news = SKlist[i-1]
+              <News
+                :news = Samsunglist[i-1]
+              >
+              </News>
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div class="box"
+              v-for="i in LGlist.length" :key="i"
             >
-            </News>
-          </div>
-        </v-tab-item>
-      </v-tabs-items>
-  </v-container>
+              <News
+                :news = LGlist[i-1]
+              >
+              </News>
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div class="box"
+              v-for="i in SKlist.length" :key="i"
+            >
+              <News
+                :news = SKlist[i-1]
+              >
+              </News>
+            </div>
+          </v-tab-item>
+        </v-tabs-items>
+    </v-container>
+  </transition>  
 </template>
 <!--
 <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Close</v-btn>
@@ -179,4 +181,11 @@ iframe{
   background-color: white;
 }
 
+.list-enter-active {
+  transition: all 1s;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateY(30px);
+}
 </style>

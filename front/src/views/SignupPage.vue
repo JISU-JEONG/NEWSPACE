@@ -12,7 +12,7 @@
               <v-text-field :rules="passwordCheckRules" label="비밀번호 확인" v-model="passwordCheck" type="password" />
             </v-col>
             <v-col cols="6">
-              <div style="height:50%;">
+              <div style="min-height:40%;">
                 <span>선택된 아해들</span>
                 <ul @click.stop="unselectKeyword">
                   <transition-group name="list">
@@ -21,7 +21,7 @@
                 </ul>
               </div>               
               <hr>
-              <div>
+              <div style="min-height:40%;">
                 <span>선택되지 못한 아해들</span> <br>
                 <ul @click.stop="selectKeyword">
                   <transition-group name="list">
@@ -73,7 +73,7 @@ export default {
                             v => v === this.password || "비밀번호가 일치하지 않습니다."],
       userInputKeyword: '', // 가입자가 입력한 키워드
       selectedKeywords: [],
-      unselectedKeywords: ['123','44', '333'],
+      unselectedKeywords: [],
       label: "추가하고싶은 키워드",
       error: false,
       errorMessages: ''

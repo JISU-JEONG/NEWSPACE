@@ -32,6 +32,7 @@ export default {
   },
   props: {
     news : {type: Object},
+    company : {type: String}
   },
   components: {
     VClamp
@@ -56,11 +57,11 @@ export default {
     border: solid 1px gray;
     border-radius: 10px;
     box-sizing: border-box;
+    cursor: pointer;
     transition: all 0.5s ;
   }
   .cardbox:hover {
     border: solid 2px rgb(4, 0, 255);
-    cursor: pointer;
     box-sizing: border-box;
     padding: 9px 19px;
     transform: scale(1.05);
