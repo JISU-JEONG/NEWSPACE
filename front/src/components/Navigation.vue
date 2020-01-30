@@ -165,10 +165,6 @@ export default {
             this.userimg =
               "../../images/profile.png";
             this.loginStatus = true;
-            console.log("res.data.data.member_id : " + res.data.data.member_id)
-            storage.setItem("member_id", res.data.data.member_id);
-            // console.log(storage.getItem("login-token"));
-            // $store.state.token = storage.getItem("login-token");
           })
       } else {
         storage.removeItem("login-token");
@@ -190,6 +186,6 @@ export default {
   },
   beforeMount() {
     this.getInfo();
-  },
+  }
 };
 </script>
