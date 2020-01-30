@@ -34,7 +34,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              <v-btn text v-on:click="aboutme">{{username}}</v-btn>
+              <v-btn text v-on:click="aboutme">{{usernmae}}</v-btn>
               <v-btn text v-on:click="logout">로그아웃</v-btn>
             </v-list-item-title>
           </v-list-item-content>
@@ -94,17 +94,21 @@
 import store from '../store'
 import http from "../http-common";
 const storage = localStorage;
+import Info from '../services/getInfo';
+
 export default {
   name: "Navigation",
   props: {},
+  computed: {
+    usernmae() {
+      return this.$store.state.member_name
+    }
+  },
   data() {
     return {
       searchValue: "",
       drawer: false,
       dialog: false,
-      username: "",
-      userimg: "",
-      loginStatus: false,
       items: [
         // { icon: "mdi-contacts", text: "로그아웃", click: "" },
         { icon: "mdi-history", text: "혹시 게시판을 만들게 된다면" },
@@ -145,33 +149,6 @@ export default {
         .catch(err => {});
       this.searchValue = "";
     },
-    getInfo() {
-      var token = storage.getItem("login-token");
-      if (token != null) {
-        http
-          .post(
-            "/info",
-            {},
-            {
-              headers: {
-                "login-token": storage.getItem("login-token")
-              }
-            }
-          )
-          .then(res => {
-            this.username = res.data.data.name;
-            this.userimg =
-              "../../images/profile.png";
-            this.loginStatus = true;
-            storage.setItem("member_id", res.data.member_id);
-          })
-      } else {
-        storage.removeItem("login-token");
-        storage.setItem("member_id", "");
-        console.log("토큰정보가 없습니다.");
-        this.loginStatus = false;
-      }
-    },
     logout() {
       alert("로그아웃");
       this.loginStatus = false;
@@ -184,7 +161,14 @@ export default {
     }
   },
   beforeMount() {
-    this.getInfo();
-  }
+    // alert(this.username);
+    Info();
+  },
+  // watch: {
+  //   username: function (hook) {
+  //     this.username = hook;
+  //     console.log("watch : ", hook);
+  //   }
+  // }
 };
 </script>

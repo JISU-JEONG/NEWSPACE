@@ -41,6 +41,7 @@ import firebase from "firebase";
 import firebaseservice from "../services/FirebaseService";
 import http from "../http-common";
 const storage = localStorage;
+
 export default {
   name: "login",
   data() {
@@ -74,6 +75,12 @@ export default {
           .then(res => {
             if (res.data.status) {
               storage.setItem("login-token", res.headers["login-token"]);
+              const payload = {
+                token :localStorage.getItem("login-token"),
+                member_id: localStorage.getItem("member_id"),
+                member_name : this.email
+              }
+              this.$store.dispatch('login',payload);
               this.$router.push('/', () => {})
             } else {
               alert("입력 정보를 확인하세요.");
