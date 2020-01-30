@@ -17,7 +17,6 @@ import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
 const storage = sessionStorage;
 
-
 export default {
 	name: 'HomePage',
 	components: {
@@ -31,6 +30,9 @@ export default {
 		getImgUrl(img) {
 			return require('../assets/' + img)
 		}
+	},
+	mounted(){
+		this.$store.dispatch('login',localStorage.getItem("login-token"))
 	}
 	
 }

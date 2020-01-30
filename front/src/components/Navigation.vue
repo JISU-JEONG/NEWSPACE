@@ -26,10 +26,10 @@
 
     <v-navigation-drawer v-model="drawer" app right temporary>
       <!-- 로그인시 보여지는 사이드바 타이틀 -->
-      <div v-if="loginStatus">
+      <div v-if="this.$store.state.token">
         <v-list-item>
           <v-list-item-avatar>
-            <v-img :src="userimg"></v-img>
+            <!-- <v-img :src="userimg"></v-img> -->
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -90,7 +90,8 @@
 </template>
 
 <script>
-import { CHANGE_DRAWER } from "../store";
+// import store, { CHANGE_DRAWER } from "../store";
+import store from '../store'
 import http from "../http-common";
 const storage = localStorage;
 export default {
@@ -162,16 +163,16 @@ export default {
             console.log(JSON.stringify(res.data.data));
             this.username = res.data.data.name;
             this.userimg =
-              "http://upload2.inven.co.kr/upload/2019/10/17/bbs/i13117291957.jpg";
+              "../../images/profile.png";
             this.loginStatus = true;
+            console.log("res.data.data.member_id : " + res.data.data.member_id)
+            storage.setItem("member_id", res.data.data.member_id);
+            // console.log(storage.getItem("login-token"));
+            // $store.state.token = storage.getItem("login-token");
           })
-          .catch(e => {
-            storage.removeItem("login-token");
-            this.loginStatus = false;
-            console.log(e);
-          });
       } else {
         storage.removeItem("login-token");
+        storage.setItem("member_id", "");
         console.log("토큰정보가 없습니다.");
         this.loginStatus = false;
       }
@@ -180,6 +181,8 @@ export default {
       alert("로그아웃");
       this.loginStatus = false;
       storage.removeItem("login-token");
+      storage.setItem("member_id", "");
+      this.$store.dispatch('logout')
     },
     aboutme() {
       alert("이거만 구현하면 마지막일까?");
@@ -187,6 +190,6 @@ export default {
   },
   beforeMount() {
     this.getInfo();
-  }
+  },
 };
 </script>

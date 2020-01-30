@@ -65,8 +65,7 @@ export default {
     login() {
       if (this.$refs.loginForm.validate()) {
         // 로그인 폼이 유효한지 확인
-        http
-          .post("/member/signin", {
+        http.post("/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -75,8 +74,9 @@ export default {
           .then(res => {
             if (res.data.status) {
               storage.setItem("login-token", res.headers["login-token"]);
+              console.log('이것은 토큰이다.')
+              console.log(storage.getItem("login-token"))
               this.$router.push("/");
-              location.reload();
             } else {
               alert("입력 정보를 확인하세요.");
             }
