@@ -146,7 +146,6 @@ export default {
       this.searchValue = "";
     },
     getInfo() {
-      console.log("login-token: " + storage.getItem("login-token"));
       var token = storage.getItem("login-token");
       if (token != null) {
         http
@@ -160,7 +159,6 @@ export default {
             }
           )
           .then(res => {
-            console.log(JSON.stringify(res.data.data));
             this.username = res.data.data.name;
             this.userimg =
               "../../images/profile.png";
