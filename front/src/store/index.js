@@ -7,13 +7,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         token : null,
-        // member_id: null,
+        member_id: null,
     },
     mutations : {
         // 첫번째 인자는 무조건 state
         // 이후 인자는 payload(즉, 임의의 매개변수)
         setToken(state, payload) {
-            state.token = payload
+            state.token = payload.token
+            state.member_id = payload.member_id
         }
     },
     actions : {
@@ -24,7 +25,7 @@ export default new Vuex.Store({
             context.commit('setToken', payload)
         },
         logout(context) {
-            context.commit('setToken', null)
+            context.commit('setToken', {token : null, member_id: null})
         },
     },
     modules: {

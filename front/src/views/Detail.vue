@@ -93,7 +93,12 @@ export default {
     mounted(){
         this.getNews(),
         this.CommentGet()
-		    this.$store.dispatch('login',localStorage.getItem("login-token"))
+        console.log(localStorage.getItem("member_id"))
+		    const payload = {
+          token :localStorage.getItem("login-token"),
+          member_id: localStorage.getItem("member_id")
+		}
+		this.$store.dispatch('login',payload)
     }
 }
 </script>

@@ -27,7 +27,11 @@ export default {
 		}
 	},
 	mounted(){
-		this.$store.dispatch('login',localStorage.getItem("login-token"))
+		const payload = {
+			token :localStorage.getItem("login-token"),
+			member_id: localStorage.getItem("member_id")
+		}
+		this.$store.dispatch('login',payload)
 	}
 	
 }

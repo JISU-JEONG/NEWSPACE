@@ -7,7 +7,7 @@
               </v-card-title>
               <v-card-text class="commentdate">
                 {{comment.comment_date}}
-                <button v-if="comment.member_id==member_id" @click="deleteComment(comment)">X</button>
+                <button v-if="comment.member_id==$store.state.member_id" @click="deleteComment(comment)">X</button>
               </v-card-text>
               <v-card-text class="commentbody black--text" >
                 <strong>{{comment.comment_text}}</strong>
@@ -55,7 +55,11 @@ export default {
         },
     },
     mounted() {
-        // this.member_id = localStorage.getItem("member_id")
+        const payload = {
+			token :localStorage.getItem("login-token"),
+			member_id: localStorage.getItem("member_id")
+		}
+		this.$store.dispatch('login',payload)
     }
 }
 </script>
