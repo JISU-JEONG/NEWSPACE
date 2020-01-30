@@ -1,25 +1,26 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="6">
+      <v-col cols="12" sm="12">
         <v-card raised>
           <v-card-title>로그인</v-card-title>
           <v-container>
-            <v-form ref="loginForm" @submit.prevent="login" v-model="loginValid" >
+            <v-form ref="loginForm" @submit.prevent="login" v-model="loginValid">
               <v-container>
-                <v-text-field 
-                  label="이메일"
-                  type="email"
-                  v-model="email"
-                  :rules="emailRules"
-                />
-                <v-text-field 
+                <v-text-field label="이메일" type="email" v-model="email" :rules="emailRules" />
+                <v-text-field
                   label="비밀번호"
                   type="password"
                   v-model="password"
                   :rules="passwordRules"
                 />
-                <v-btn :disabled="!loginValid" color="blue lighten-2" type="submit" class="white--text mt-3">로그인</v-btn>
+                <v-btn
+                  :disabled="!loginValid"
+                  color="blue lighten-2"
+                  type="submit"
+                  class="white--text mt-3"
+                  v-on:click="login"
+                >로그인</v-btn>
               </v-container>
             </v-form>
             <v-divider></v-divider>
@@ -37,9 +38,9 @@
 
 <script>
 import firebase from "firebase";
-import http from "../http-common"
+import firebaseservice from "../services/FirebaseService";
+import http from "../http-common";
 const storage = localStorage;
-
 export default {
   name: "login",
   data() {
@@ -49,47 +50,45 @@ export default {
       username: "",
       duplicationflag: 0,
       type: "",
-
       //로그인 폼 양식 확인
       loginValid: false,
       infoValid: false,
       emailRules: [
-        v => !!v || '이메일을 입력하세요',
-        v => /.+@+./.test(v) || '이메일 형식이 아닙니다.'
+        v => !!v || "이메일을 입력하세요",
+        v => !!/.+@+./.test(v) || "이메일 형식이 아닙니다."
       ],
-      passwordRules: [v => !!v || '비밀번호를 입력하세요'],
-      emptyRules: [v => !!v || '값을 입력해주세요']
+      passwordRules: [v => !!v || "비밀번호를 입력하세요"],
+      emptyRules: [v => !!v || "값을 입력해주세요"]
     };
   },
   methods: {
     login() {
-      if (this.$refs.loginForm.validate()){ // 로그인 폼이 유효한지 확인
+      if (this.$refs.loginForm.validate()) {
+        // 로그인 폼이 유효한지 확인
         http
-        .post("/member/signin", {
-          email: this.email,
-          password: this.password,
-          type: "nomal"
-        })
-        .then(res => {
-          if (res.data.status) {
-            storage.setItem("login-token", res.headers["login-token"]);
-            storage.setItem("login-session-time", res.data.exp);
-            this.$router.push("/");
-          } else {
-            alert("입력 정보를 확인하세요.");
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        });
+          .post("/member/signin", {
+            email: this.email,
+            password: this.password,
+            type: "nomal",
+            tokenname: "login-token"
+          })
+          .then(res => {
+            if (res.data.status) {
+              storage.setItem("login-token", res.headers["login-token"]);
+              this.$router.push("/");
+              location.reload();
+            } else {
+              alert("입력 정보를 확인하세요.");
+            }
+          })
+          .catch(e => {
+            console.log(e);
+          });
       }
     },
-
     logout() {
       storage.removeItem("login-token");
-      storage.removeItem("login-session-time");
     },
-
     FacebookLogin() {
       const provider = new firebase.auth.FacebookAuthProvider();
       const parentFunc = this;
@@ -115,7 +114,6 @@ export default {
         this.duplicationCheck();
       });
     },
-
     GoogleLogin() {
       const provider = new firebase.auth.GoogleAuthProvider();
       const parentFunc = this;
@@ -141,11 +139,9 @@ export default {
         this.duplicationCheck();
       });
     },
-
     duplicationCheck() {
       const parentFunc = this;
       storage.setItem("login-token", "");
-
       //아이디 중복체크
       var _promise = function() {
         return new Promise(function(resolve) {
@@ -166,7 +162,6 @@ export default {
             });
         });
       };
-
       _promise().then(() => {
         var _promise2 = function() {
           return new Promise(function(resolve) {
@@ -188,28 +183,21 @@ export default {
             this.$router.push("/SocialSignup");
           } else {
             //이미 로그인한적이 있을시 홈으루
-            this.$$router.push("/");
+            parentFunc.$router.push("/");
+            location.reload();
           }
         });
       });
     },
-
-    SessionStatus() {
-      var exptime = storage.getItem("login-session-time");
-      var time = new Date().getTime().toString();
-      var timesub = time.substring(0, time.length - 3);
-      console.log(exptime);
-      console.log(timesub);
-      if (exptime < timesub) {
-        console.log("세션이 만료되었습니다.");
-      } else {
-        console.log("로그인 유지상태");
+    init() {
+      if (storage.getItem("login-token") != null) {
         this.$router.push("/");
+        // location.reload();
       }
     }
   },
-  mounted() {
-    this.SessionStatus();
+  beforeMount() {
+    this.init();
   }
 };
 </script>

@@ -7,7 +7,7 @@ import SearchPage from './views/SearchPage.vue'
 import Detail from './views/Detail.vue'
 import SignupPage from './views/SignupPage.vue'
 import LoginPage from './views/LoginPage.vue'
-import SocialSignup from './views/login/Social-Signup.vue'
+import SocialSignup from './views/SocialSignupPage.vue'
 
 Vue.use(Router)
 
