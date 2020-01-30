@@ -15,7 +15,6 @@ import PortfolioList from '../components/PortfolioList'
 import PostList from '../components/PostList'
 import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
-const storage = sessionStorage;
 
 export default {
 	name: 'HomePage',

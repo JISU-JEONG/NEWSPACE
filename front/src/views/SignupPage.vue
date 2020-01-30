@@ -12,21 +12,33 @@
               <v-text-field :rules="passwordCheckRules" label="비밀번호 확인" v-model="passwordCheck" type="password" />
             </v-col>
             <v-col cols="6">
-              <span>선택된 아해들</span>
+              <div style="height:50%;">
+                <span>선택된 아해들</span>
                 <ul @click.stop="unselectKeyword">
-                  <li v-for="keyword in selectedKeywords" :key="keyword">{{keyword}}</li>
-                </ul>               
-              <span>선택되지 못한 아해들</span> <br>
-              <ul @click.stop="selectKeyword">
-                <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
-              </ul>
+                  <transition-group name="list">
+                    <li v-for="keyword in selectedKeywords" :key="keyword">{{keyword}}</li>
+                  </transition-group>
+                </ul>
+              </div>               
+              <hr>
+              <div>
+                <span>선택되지 못한 아해들</span> <br>
+                <ul @click.stop="selectKeyword">
+                  <transition-group name="list">
+                    <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
+                  </transition-group>
+                </ul>
+              </div>
+              <!-- 한글자, 특수문자, 숫자 같이 쓰레기 넣었을 때 못하게 하고싶다. -->
               <v-text-field 
-                label="추가하고 싶은 키워드"
+                :label="label"
                 v-model="userInputKeyword"
                 append-icon="mdi-plus"
                 @click:append="userInputKeywordToList"
                 @keyup.enter.stop="userInputKeywordToList"
-                hide-details
+                :error="error"
+                :error-messages="errorMessages"
+                @input="inputKeyword"
               />
             </v-col>
           </v-row>
@@ -61,8 +73,14 @@ export default {
                             v => v === this.password || "비밀번호가 일치하지 않습니다."],
       userInputKeyword: '', // 가입자가 입력한 키워드
       selectedKeywords: [],
-      unselectedKeywords: ['AI', 'TV', '빅스비', '스마트폰', '가전', '냉장고', 'SSD'],
+      unselectedKeywords: ['123','44', '333'],
+      label: "추가하고싶은 키워드",
+      error: false,
+      errorMessages: ''
     };
+  },
+  mounted() {
+    this.keywordSetting()
   },
   methods: {
     Signup() {
@@ -80,7 +98,7 @@ export default {
               alert("아이디가 중복됩니다.");
             } else {
               alert("가입 성공!!");
-              this.$router.push("/Login");
+              this.$router.push("/login");
             }
           })
           .catch(e => {
@@ -88,12 +106,19 @@ export default {
           })
       }
     },
+    keywordSetting() {
+      http.get("/getUserKeyword")
+        .then(response => {
+          this.unselectedKeywords = response.data
+        })
+    },
     selectKeyword(event) {
       if (event.target.tagName === "LI") {
         const keyword = event.target.innerText
         const index = this.unselectedKeywords.findIndex(v => v === keyword)
-
-        this.selectedKeywords.push(keyword)
+        if (this.selectedKeywords.findIndex(v => v === keyword) < 0) {
+          this.selectedKeywords.push(keyword)
+        }
         this.unselectedKeywords.splice(index, 1)
       }
     },
@@ -101,19 +126,33 @@ export default {
       if (event.target.tagName === "LI") {
         const keyword = event.target.innerText
         const index = this.selectedKeywords.findIndex(v => v === keyword)
-
-        this.unselectedKeywords.push(keyword)
+        if (this.unselectedKeywords.findIndex(v => v === keyword) < 0) {
+          this.unselectedKeywords.push(keyword)
+        }
         this.selectedKeywords.splice(index, 1)
       }
     },
+    inputKeyword(value) {
+      if (value.length) {
+        this.error = false
+        this.errorMessages = ''
+      } 
+    },
     userInputKeywordToList() {
-      if (this.selectedKeywords.findIndex(v => v === this.userInputKeyword) < 0 ) {
-        this.selectedKeywords.push(this.userInputKeyword)
-      }
+      if (this.userInputKeyword.length < 2) {
+        this.error = true
+        this.errorMessages = "두글자 이상을 입력해주세요"
+      } else {
+          if (this.selectedKeywords.findIndex(v => v === this.userInputKeyword) < 0 ) {
+            this.selectedKeywords.push(this.userInputKeyword)
+          } else {
+            this.error = true
+            this.errorMessages = '이미 추가된 키워드입니다.'
+          }
+        }
       this.userInputKeyword = ''
     }
-
-  }
+  },
 };
 </script>
 
@@ -123,5 +162,15 @@ export default {
     display: inline-block;
     margin-left: 10px;
     cursor: pointer;
+  }
+  li:hover {
+    transform: scale(1.2);
+  }
+  .list-enter-active{
+    transition: all 1s;
+  }
+  .list-enter {
+    opacity: 0;
+    transform: translateY(30px);
   }
 </style>
