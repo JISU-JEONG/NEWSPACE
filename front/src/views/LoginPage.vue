@@ -74,9 +74,7 @@ export default {
           .then(res => {
             if (res.data.status) {
               storage.setItem("login-token", res.headers["login-token"]);
-              console.log('이것은 토큰이다.')
-              console.log(storage.getItem("login-token"))
-              this.$router.push("/");
+              this.$router.push('/', () => {})
             } else {
               alert("입력 정보를 확인하세요.");
             }
@@ -87,7 +85,7 @@ export default {
       }
     },
     logout() {
-      storage.removeItem("login-token");
+      localStorage.removeItem("login-token");
     },
     FacebookLogin() {
       const provider = new firebase.auth.FacebookAuthProvider();
@@ -98,7 +96,7 @@ export default {
             .auth()
             .signInWithPopup(provider)
             .then(res => {
-              console.log(res.user);
+              // console.log(res.user);
               parentFunc.username = res.user.displayName;
               parentFunc.email = res.user.uid;
               parentFunc.type = "facebook";
@@ -191,8 +189,7 @@ export default {
     },
     init() {
       if (storage.getItem("login-token") != null) {
-        this.$router.push("/");
-        // location.reload();
+        router.push('/').catch(err =>{});
       }
     }
   },
