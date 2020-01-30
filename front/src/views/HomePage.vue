@@ -11,8 +11,6 @@
 
 <script>
 import ImgBanner from '../components/ImgBanner'
-import PortfolioList from '../components/PortfolioList'
-import PostList from '../components/PostList'
 import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
 
@@ -20,8 +18,6 @@ export default {
 	name: 'HomePage',
 	components: {
 		ImgBanner,
-		PortfolioList,
-		PostList,
     	RepositoryList,
     	NewsList,
 	},
