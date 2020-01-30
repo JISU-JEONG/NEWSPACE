@@ -28,10 +28,6 @@
       <!-- 로그인시 보여지는 사이드바 타이틀 -->
       <div v-if="this.$store.state.token">
         <v-list-item>
-          <v-list-item-avatar>
-            <!-- <v-img :src="userimg"></v-img> -->
-          </v-list-item-avatar>
-
           <v-list-item-content>
             <v-list-item-title>
               <v-btn text v-on:click="aboutme">{{username}}</v-btn>

@@ -1,11 +1,6 @@
 <template>
   <div>
-      <!-- NewsList -->
-      <v-layout my-5>
-        <v-flex xs12>
-          <NewsList></NewsList>
-        </v-flex>
-      </v-layout>
+    <NewsList></NewsList>
   </div>
 </template>
 
@@ -37,3 +32,7 @@ export default {
 	
 }
 </script>
+
+<style scoped>
+
+</style>
