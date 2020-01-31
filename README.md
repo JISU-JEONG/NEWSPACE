@@ -6,7 +6,7 @@
 ## 개발환경
 
 > OS
--  Windows
+-  Windows (개발환경)
 -  Ubuntu (배포환경 AWS)
 
 > Language
