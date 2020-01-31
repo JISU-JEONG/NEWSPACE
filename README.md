@@ -6,19 +6,24 @@
 ## 개발환경
 
 > OS
->> Windows
+- Windows
+- Ubuntu (배포환경 AWS)
 
 > Language
->> JAVA, Vue, CSS, JS
+- JAVA
+- Vue
+- CSS
+- JS
 
 > IDE
->> VS CODE, Eclipse, WorkBench
+- VS CODE
+- Eclipse
 
 ## 기술역할 분담
 
 김태우 | 정지수 | 정영길 | 정영훈
 ------- | ------- | ------- | -------
- Front | Front | Back | Back
+ Front | Front | Web Master | Back
 
 # front-end
 
@@ -43,6 +48,7 @@ getLgRecent		:	날짜순으로 최근 20개의 LG 뉴스를 가져온다.
 getSkRecent		:	날짜순으로 최근 20개의 SK 뉴스를 가져온다.
 findNews/?		:	전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다.
 getUserKeyword		:	TOP 20 키워드들을 보여준다.
+getUserKeywordNews/?	:	토큰에 있는 Keyword를 전달 시 자신의 키워드에 따른 뉴스를 검색한다.
 ```
 </details>
 
@@ -219,3 +225,83 @@ for (NewsDTO n : list) {
 
 ```
 
+
+## 검색 동적쿼리
+
+```xml
+<select id="검색을 하자!"
+	parameterType="서치타입"
+	resultType="뉴스타입">
+	SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+	k.KEYWORD, n.URL, n.BODYTEXT
+	FROM NEWS n JOIN NEWSKEYWORD k
+	WHERE
+	n.NEWS_ID = k.NEWS_ID
+	<!-- 기사 별로 정리된 키워드 테이블과, 뉴스 테이블을 조인한다. -->
+	AND BRAND LIKE #{brand}
+	<!-- 서치타입에 들어있는 검색하고자 하는 브랜드로 미리 분류한다. -->
+	AND (
+	<choose>
+		<when test="search.length != 0">
+			<!-- 서치타입에 들어있는 search(배열형태)의 길이 만큼 반복한다. -->
+			(
+			<foreach collection="search" item="word" index="index"
+				separator="AND ">
+				n.TITLE LIKE CONCAT('%',#{word},'%')
+				<!-- 타이틀에 해당 워드가 존재하는지 확인한다. -->
+			</foreach>
+			<!-- 타이틀 같은경우 검색하고자 하는 워드들이 모두 포함되어 있어야만 한다. separator = AND
+			ex) "삼성 전기"로 검색 시 타이틀에 삼성과 전기가 모두 포함되어 있어야 한다.-->
+			)
+		</when>
+	</choose>
+	OR
+	<!-- 위 타이틀 검색결과와 OR를 이용하여 검색을 위해 입력한 키워드가 포함된 결과도 보여준다. -->
+	<choose>
+		<when test="search.length != 0">
+			(
+			<foreach collection="search" item="word" index="index"
+				separator="OR ">
+				k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				<!-- 키워드에 검색어에 입력한 워드가 포함되는지 확인한다. -->
+			</foreach>
+			<!-- 키워드의 경우 separator를 OR로 놓고, 입력한 워드중 하나라도 포함되면 검색되도록 한다. -->
+			)
+		</when>
+	</choose>
+	) ORDER BY DATE DESC
+</select>	
+
+-------------------------------------------------------------------------------
+
+<select id="유저별 추천 뉴스"
+	parameterType="서치타입">
+	resultType="뉴스타입"
+	SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+	k.KEYWORD, n.URL, n.BODYTEXT
+	FROM NEWS n JOIN NEWSKEYWORD k
+	WHERE n.NEWS_ID = k.NEWS_ID
+	AND (
+	<choose>
+		<when test="search.length != 0">
+			(
+			<foreach collection="search" item="word" index="index"
+				separator="OR ">
+				k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				<!-- 유저별 추천뉴스의 경우 선택해놓은 키워드만 통해 검색한다. -->
+			</foreach>
+			)
+		</when>
+	</choose>
+	) AND n.DATE >= DATE_SUB(NOW(), INTERVAL 30 DAY) ORDER BY n.DATE DESC
+	<!-- 검색한 결과들의 날짜가 현재 날짜에서 30일 이상 벗어난 자료는 제외한다. -->
+</select>
+```
+
+
+## JWT
+```java
+
+
+
+```
