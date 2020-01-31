@@ -5,14 +5,13 @@
 </template>
 
 <script>
-import ImgBanner from '../components/ImgBanner'
+
 import NewsList from '../components/NewsList'
 import Info from '../services/getInfo';
 
 export default {
 	name: 'HomePage',
 	components: {
-		ImgBanner,
     	NewsList,
 	},
 	methods: {
