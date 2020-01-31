@@ -678,7 +678,7 @@ public class NewsService implements INewsService {
 
 					long diffSec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
 					long diffDay = diffSec / (24 * 60 * 60);
-
+					
 					if (diffDay > 7) {
 						flag = false;
 					}
@@ -725,7 +725,6 @@ public class NewsService implements INewsService {
 			for (int i = 0; i < bodyEle.size(); i++) {
 				body += bodyEle.get(i);
 			}
-
 			String bodytext = doc.getElementsByClass("post").text();
 
 			String keyword = "";
@@ -843,13 +842,13 @@ public class NewsService implements INewsService {
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING1..." + "\t" + new Date());
-//		samsung_Crawling1();
+		samsung_Crawling1();
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING2..." + "\t" + new Date());
-//		samsung_Crawling2();
+		samsung_Crawling2();
 		logger.info("News Service Scheduled Action : LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-//		lg_Crawling();
+		lg_Crawling();
 		logger.info("News Service Scheduled Action : SK HYNIX CRAWLING..." + "\t" + new Date());
-//		sk_Crawling();
+		sk_Crawling();
 		logger.info("News Service Scheduled Action : NEWS KEYWORD SETTING..." + "\t" + new Date());
 		newsKeywordSet();
 	}

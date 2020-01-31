@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" sm="12">
+    <v-row class="justify-center">
+      <v-col cols="7">
         <v-card raised>
           <v-alert color="error" icon="warning" v-show="this.$store.state.error">로그인 정보를 확인해주세요</v-alert>
           <v-card-title>로그인</v-card-title>
