@@ -80,14 +80,6 @@ public class CommentController {
 
 		int member_id = (int) resultMap.get("member_id");
 		
-		System.out.println("===========================================");
-		
-		System.out.println(comment.toString());
-		System.out.println(member_id);
-		System.out.println(resultMap.toString() );
-		
-		System.out.println("===========================================");
-		
 		if(member_id != comment.getMember_id()) {
 			logger.error("CommentController Error ! deleteComment :" + comment.getComment_id() + "\t" + new Date());
 		}else {
