@@ -67,7 +67,6 @@ export default {
   methods: {
     Signup() {
       if (this.selectedKeywords.length > 0 || this.trySignup) {
-        console.log('asdasdasdasdasd')
         http
           .post("/member/signup", {
             email: localStorage.getItem("member_email"),
