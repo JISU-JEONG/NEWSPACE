@@ -1,4 +1,4 @@
-﻿# DEMO
+# DEMO
 
 [DEMOSITE](http://merong.merong)
 
@@ -6,18 +6,18 @@
 ## 개발환경
 
 > OS
--  Windows (개발환경)
--  Ubuntu (배포환경 AWS)
+>> Windows
+>> Ubuntu (배포환경 AWS)
 
 > Language
--  JAVA
--  Vue
--  CSS
--  JS
+>> JAVA
+>> Vue
+>> CSS
+>> JS
 
 > IDE
--  VS CODE
--  Eclipse
+>> VS CODE
+>> Eclipse
 
 ## 기술역할 분담
 
@@ -226,8 +226,46 @@ for (NewsDTO n : list) {
 ```
 
 
-## 정영길 추가하라 오바
+## 검색 동적쿼리
 
-```java
-	
+```XML
+<select id="검색을 하자!"
+	parameterType="서치타입"
+	resultType="뉴스타입">
+	SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+	k.KEYWORD, n.URL, n.BODYTEXT
+	FROM NEWS n JOIN NEWSKEYWORD k
+	WHERE
+	n.NEWS_ID = k.NEWS_ID
+	<!-- 기사 별로 정리된 키워드 테이블과, 뉴스 테이블을 조인한다. -->
+	AND BRAND LIKE #{brand}
+	<!-- 서치타입에 들어있는 검색하고자 하는 브랜드로 미리 분류한다. -->
+	AND (
+	<choose>
+		<when test="search.length != 0">
+			<!-- 서치타입에 들어있는 search(배열형태)의 길이 만큼 반복한다. -->
+			(
+			<foreach collection="search" item="word" index="index"
+				separator="AND ">
+				n.TITLE LIKE CONCAT('%',#{word},'%')
+				<!-- 타이틀에 해당 워드가 존재하는지 확인한다. -->
+			</foreach>
+			<!-- 타이틀 같은경우 검색하고자 하는 워드들이 모두 포함되어 있어야만 한다. 
+			ex) "삼성 전기"로 검색 시 타이틀에 삼성과 전기가 모두 포함되어 있어야 한다.-->
+			)
+		</when>
+	</choose>
+	OR
+	<choose>
+		<when test="search.length != 0">
+			(
+			<foreach collection="search" item="word" index="index"
+				separator="OR ">
+				k.KEYWORD LIKE CONCAT('%',#{word},'%')
+			</foreach>
+			)
+		</when>
+	</choose>
+	) ORDER BY DATE DESC
+</select>	
 ```
