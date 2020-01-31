@@ -6,7 +6,6 @@
 
 <script>
 import ImgBanner from '../components/ImgBanner'
-import RepositoryList from '../components/RepositoryList'
 import NewsList from '../components/NewsList'
 import Info from '../services/getInfo';
 
@@ -14,7 +13,6 @@ export default {
 	name: 'HomePage',
 	components: {
 		ImgBanner,
-    	RepositoryList,
     	NewsList,
 	},
 	methods: {
