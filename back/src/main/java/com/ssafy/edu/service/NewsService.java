@@ -50,7 +50,7 @@ public class NewsService implements INewsService {
 
 	// Properties
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	public static final String WEB_DRIVER_PATH = "C:\\JAVA\\selenium\\chromedriver.exe";
+	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe";
 
 	private static final Logger logger = LoggerFactory.getLogger(NewsService.class);
 
@@ -208,16 +208,15 @@ public class NewsService implements INewsService {
 
 		return list;
 	}
-	
+
 	@Override
 	public List<NewsDTO> getKeywordNews(String keyword) {
 		// TODO Auto-generated method stub
-		
+
 		String[] str = keyword.split(" ");
-		
+
 		return dao.getKeywordNews(str);
 	}
-
 
 	@Override
 	public String[] getUserKeyword() {
@@ -332,7 +331,7 @@ public class NewsService implements INewsService {
 						String keyword = "";
 						String txt = "";
 
-						Komoran komoran = new Komoran("C:\\KOMORAN\\models");
+						Komoran komoran = new Komoran("lib/komoran/models");
 						List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
 						for (List<Pair<String, String>> eojeolResult : result) {
 							for (Pair<String, String> wordMorph : eojeolResult) {
@@ -435,7 +434,7 @@ public class NewsService implements INewsService {
 						String keyword = "";
 						String txt = "";
 
-						Komoran komoran = new Komoran("C:\\KOMORAN\\models");
+						Komoran komoran = new Komoran("lib/komoran/models");
 						List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
 						for (List<Pair<String, String>> eojeolResult : result) {
 							for (Pair<String, String> wordMorph : eojeolResult) {
@@ -500,8 +499,11 @@ public class NewsService implements INewsService {
 		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
 		// Driver SetUp
-		driver = new ChromeDriver();
+		ChromeOptions option = new ChromeOptions();
 
+		option.setHeadless(true);
+
+		driver = new ChromeDriver(option);
 		driver.get(url);
 
 		int tempy = 0;
@@ -581,7 +583,7 @@ public class NewsService implements INewsService {
 			String keyword = "";
 			String txt = "";
 
-			Komoran komoran = new Komoran("C:\\KOMORAN\\models");
+			Komoran komoran = new Komoran("lib/komoran/models");
 			List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
 			for (List<Pair<String, String>> eojeolResult : result) {
 				for (Pair<String, String> wordMorph : eojeolResult) {
@@ -628,8 +630,6 @@ public class NewsService implements INewsService {
 
 		String url = "http://mediask.co.kr/category/news/%eb%b3%b4%eb%8f%84%ec%9e%90%eb%a3%8c-news-2";
 
-		// http://mediask.co.kr/category/news/%eb%b3%b4%eb%8f%84%ec%9e%90%eb%a3%8c-news-2
-
 		Calendar now = Calendar.getInstance();
 		now.setTime(new Date());
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -639,7 +639,11 @@ public class NewsService implements INewsService {
 		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
 		// Driver SetUp
-		driver = new ChromeDriver();
+		ChromeOptions option = new ChromeOptions();
+
+		option.setHeadless(true);
+
+		driver = new ChromeDriver(option);
 
 		driver.get(url);
 
@@ -678,7 +682,7 @@ public class NewsService implements INewsService {
 
 					long diffSec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
 					long diffDay = diffSec / (24 * 60 * 60);
-					
+
 					if (diffDay > 7) {
 						flag = false;
 					}
@@ -730,7 +734,7 @@ public class NewsService implements INewsService {
 			String keyword = "";
 			String txt = "";
 
-			Komoran komoran = new Komoran("C:\\KOMORAN\\models");
+			Komoran komoran = new Komoran("lib/komoran/models");
 			List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
 			for (List<Pair<String, String>> eojeolResult : result) {
 				for (Pair<String, String> wordMorph : eojeolResult) {
