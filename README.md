@@ -6,18 +6,18 @@
 ## 개발환경
 
 > OS
->> Windows
->> Ubuntu (배포환경 AWS)
+- Windows
+- Ubuntu (배포환경 AWS)
 
 > Language
->> JAVA
->> Vue
->> CSS
->> JS
+- JAVA
+- Vue
+- CSS
+- JS
 
 > IDE
->> VS CODE
->> Eclipse
+- VS CODE
+- Eclipse
 
 ## 기술역할 분담
 
@@ -256,13 +256,16 @@ for (NewsDTO n : list) {
 		</when>
 	</choose>
 	OR
+	<!-- 위 타이틀 검색결과와 OR를 이용하여 검색을 위해 입력한 키워드가 포함된 결과도 보여준다. -->
 	<choose>
 		<when test="search.length != 0">
 			(
 			<foreach collection="search" item="word" index="index"
 				separator="OR ">
 				k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				<!-- 키워드에 검색어에 입력한 워드가 포함되는지 확인한다. -->
 			</foreach>
+			<!-- 키워드의 경우 separator를 OR로 놓고, 입력한 워드중 하나라도 포함되면 검색되도록 한다. -->
 			)
 		</when>
 	</choose>
