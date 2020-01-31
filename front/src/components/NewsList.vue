@@ -80,7 +80,6 @@ export default {
   },
   components: {
     News,
-    VClamp,
   },
   data() {
     return {

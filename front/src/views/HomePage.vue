@@ -11,7 +11,6 @@ import Info from '../services/getInfo';
 export default {
 	name: 'HomePage',
 	components: {
-		ImgBanner,
     	NewsList,
 	},
 	methods: {

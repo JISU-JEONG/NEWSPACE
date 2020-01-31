@@ -12,7 +12,6 @@
             {{news.date}}
           </div>
         </div>
-        </div>
         <div class="tagfont">
           <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
             #{{key}}
@@ -34,9 +33,6 @@ export default {
   props: {
     news : {type: Object},
     company : {type: String}
-  },
-  components: {
-    VClamp
   },
   methods: {
     goDetail(id) {

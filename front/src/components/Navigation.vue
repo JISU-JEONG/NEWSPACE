@@ -137,7 +137,6 @@ export default {
   methods: {
     changeDrawer() {
       this.drawer = !this.drawer;
-      console.log(this.drawer);
     },
     onSubmit(searchValue) {
       this.$router
