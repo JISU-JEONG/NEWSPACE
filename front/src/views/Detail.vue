@@ -129,4 +129,8 @@ export default {
   display: block !important;
   margin: 0px auto !important;
 }
+.page >>> div {
+  display: block !important;
+  margin: 0px auto !important;
+}
 </style>

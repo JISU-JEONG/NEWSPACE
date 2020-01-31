@@ -10,14 +10,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
-import lineClamp from 'vue-line-clamp'
 import VModal from 'vue-js-modal'
 
 Vue.config.productionTip = false
 
 Vue.use(VueSimplemde)
 Vue.use(Vuetify)
-Vue.use(lineClamp)
 Vue.use(VModal, { dynamic: true })
 
 new Vue({
