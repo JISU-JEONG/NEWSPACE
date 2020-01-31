@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar color="blue lighten-2" dark app>
+    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
       </v-btn>
@@ -24,7 +24,13 @@
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app right temporary>
+    <v-navigation-drawer 
+      v-model="drawer" 
+      app 
+      right
+      :disable-resize-watcher="true"
+      :clipped="$vuetify.breakpoint.smAndUp"
+    >
       <!-- 로그인시 보여지는 사이드바 타이틀 -->
       <div v-if="this.$store.state.token">
         <v-list-item>

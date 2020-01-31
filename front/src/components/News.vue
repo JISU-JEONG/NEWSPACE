@@ -11,7 +11,7 @@
         </div>
         </div>
         <div class="tagfont">
-          <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;">
+          <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
             #{{key}}
           </span>
         </div>
