@@ -2,7 +2,8 @@
   <v-container>
     <v-card>
       <v-card-title>회원가입</v-card-title>
-      <v-form ref="form" v-model="valid" @submit.prevent="Signup">
+      <v-divider></v-divider>
+      <v-form ref="form" v-model="valid" @submit.prevent="Signup" style="min-height:376px;">
         <v-container>
           <v-row>
             <v-col cols="6">
@@ -12,23 +13,29 @@
               <v-text-field :rules="passwordCheckRules" label="비밀번호 확인" v-model="passwordCheck" type="password" />
             </v-col>
             <v-col cols="6">
-              <div style="min-height:40%;">
+              <v-card style="min-height:45%;">
                 <span>선택된 아해들</span>
-                <ul @click.stop="unselectKeyword">
-                  <transition-group name="list">
-                    <li v-for="keyword in selectedKeywords" :key="keyword">{{keyword}}</li>
-                  </transition-group>
-                </ul>
-              </div>               
+                <v-divider></v-divider>
+                <v-container>
+                  <ul @click.stop="unselectKeyword">
+                    <transition-group name="list">
+                      <li v-for="keyword in selectedKeywords" :key="keyword" class="text--darken-3">{{keyword}}</li>
+                    </transition-group>
+                  </ul>
+                </v-container>
+              </v-card>
               <hr>
-              <div style="min-height:40%;">
+              <v-card style="min-height:45%;" class="mt-3" >
                 <span>선택되지 못한 아해들</span> <br>
-                <ul @click.stop="selectKeyword">
-                  <transition-group name="list">
-                    <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
-                  </transition-group>
-                </ul>
-              </div>
+                <v-divider></v-divider>
+                <v-container>
+                  <ul @click.stop="selectKeyword">
+                    <transition-group name="list" id="selectedSpan">
+                      <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
+                    </transition-group>
+                  </ul>
+                </v-container>
+              </v-card>
               <!-- 한글자, 특수문자, 숫자 같이 쓰레기 넣었을 때 못하게 하고싶다. -->
               <v-text-field 
                 :label="label"
@@ -75,6 +82,8 @@ export default {
       selectedKeywords: [],
       unselectedKeywords: [],
       label: "추가하고싶은 키워드",
+      textColor: "red--text",
+      textColorList: ["red--text", "purple--text", "blue--text", "teal--text", "lime--text", "yellow--text", "brown--text", "grey--text"],
       error: false,
       errorMessages: ''
     };
@@ -139,24 +148,33 @@ export default {
       } 
     },
     userInputKeywordToList() {
+      let errorKeyword = ''
       if (this.userInputKeyword.length < 2) {
         this.error = true
         this.errorMessages = "두글자 이상을 입력해주세요"
       } else {
-          if (this.selectedKeywords.findIndex(v => v === this.userInputKeyword) < 0 ) {
-            this.selectedKeywords.push(this.userInputKeyword)
-          } else {
+          this.userInputKeyword.split(' ').forEach( value => {
+            if (this.selectedKeywords.findIndex(v => v === value) < 0 && value.length > 1 ) {
+              this.selectedKeywords.push(value)
+            } else {
+              errorKeyword = errorKeyword.concat(` ${value}`)
+              console.log(errorKeyword)
+            }
+          })
+          if (errorKeyword) {
             this.error = true
-            this.errorMessages = '이미 추가된 키워드입니다.'
+            this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`
           }
         }
       this.userInputKeyword = ''
+
     }
   },
 };
 </script>
 
 <style scoped>
+
   li {
     list-style: none;
     display: inline-block;
