@@ -69,9 +69,8 @@
 -->         
 
 <script>
-import VClamp from "vue-clamp";
+
 import http from "../http-common";
-import json from "@/components/getNews"
 import News from "./News"
 
 export default {
@@ -82,7 +81,6 @@ export default {
   },
   components: {
     News,
-    VClamp,
   },
   data() {
     return {

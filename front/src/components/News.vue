@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import VClamp from 'vue-clamp'
+
 import router from '../router'
 
 export default {
@@ -37,7 +37,6 @@ export default {
     company : {type: String}
   },
   components: {
-    VClamp
   },
   methods: {
     goDetail(id) {
