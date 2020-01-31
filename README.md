@@ -23,7 +23,7 @@
 
 김태우 | 정지수 | 정영길 | 정영훈
 ------- | ------- | ------- | -------
- Front | Front | Back | Back
+ Front | Front | Web Master | Back
 
 # front-end
 
@@ -250,7 +250,7 @@ for (NewsDTO n : list) {
 				n.TITLE LIKE CONCAT('%',#{word},'%')
 				<!-- 타이틀에 해당 워드가 존재하는지 확인한다. -->
 			</foreach>
-			<!-- 타이틀 같은경우 검색하고자 하는 워드들이 모두 포함되어 있어야만 한다. 
+			<!-- 타이틀 같은경우 검색하고자 하는 워드들이 모두 포함되어 있어야만 한다. separator = AND
 			ex) "삼성 전기"로 검색 시 타이틀에 삼성과 전기가 모두 포함되어 있어야 한다.-->
 			)
 		</when>
