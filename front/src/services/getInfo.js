@@ -1,4 +1,4 @@
-import http from "../http-common";
+import http from "./http-common"
 import store from "../store";
 function getinfo() {
   var token = localStorage.getItem("login-token");

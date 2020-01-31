@@ -41,7 +41,7 @@
 <script>
 import firebase from "firebase";
 import firebaseservice from "../services/FirebaseService";
-import http from "../http-common";
+import http from "../services/http-common"
 
 export default {
   name: "login",

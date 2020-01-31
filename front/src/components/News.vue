@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import VClamp from 'vue-clamp'
 import router from '../router'
 
 export default {

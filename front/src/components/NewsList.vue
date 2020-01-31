@@ -69,9 +69,7 @@
 -->         
 
 <script>
-import VClamp from "vue-clamp";
-import http from "../http-common";
-import json from "@/components/getNews"
+import http from "../services/http-common"
 import News from "./News"
 
 export default {

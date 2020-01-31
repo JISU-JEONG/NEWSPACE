@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import ImgBanner from '../components/ImgBanner'
 import NewsList from '../components/NewsList'
 import Info from '../services/getInfo';
 
@@ -16,9 +15,7 @@ export default {
     	NewsList,
 	},
 	methods: {
-		getImgUrl(img) {
-			return require('../assets/' + img)
-		},
+
 	},
 	beforeMount() {
 		Info();
