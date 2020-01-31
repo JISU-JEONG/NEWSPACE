@@ -1,58 +1,65 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-title>회원가입</v-card-title>
-      <v-divider></v-divider>
-      <v-form ref="form" v-model="valid" @submit.prevent="Signup" style="min-height:376px;">
-        <v-container>
-          <v-row>
-            <v-col cols="6">
+  <v-container >
+    <v-row>
+      <v-col cols="6">
+        <v-card>
+          <v-container style="min-height:430px;">
+            <v-card-title>회원가입</v-card-title>
+            <v-divider></v-divider>
+            <v-form ref="form" v-model="valid" @submit.prevent="Signup">
               <v-text-field :rules="nameRules" label="이름" v-model="name" type="text" />
               <v-text-field :rules="emailRules" label="이메일" v-model="email" type="text" />
               <v-text-field :rules="passwordRules" label="비밀번호" v-model="password" type="password" />
               <v-text-field :rules="passwordCheckRules" label="비밀번호 확인" v-model="passwordCheck" type="password" />
-            </v-col>
-            <v-col cols="6">
-              <v-card style="min-height:45%;">
-                <span>선택된 아해들</span>
-                <v-divider></v-divider>
-                <v-container>
-                  <ul @click.stop="unselectKeyword">
-                    <transition-group name="list">
-                      <li v-for="keyword in selectedKeywords" :key="keyword" class="text--darken-3">{{keyword}}</li>
-                    </transition-group>
-                  </ul>
-                </v-container>
-              </v-card>
-              <hr>
-              <v-card style="min-height:45%;" class="mt-3" >
-                <span>선택되지 못한 아해들</span> <br>
-                <v-divider></v-divider>
-                <v-container>
-                  <ul @click.stop="selectKeyword">
-                    <transition-group name="list" id="selectedSpan">
-                      <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
-                    </transition-group>
-                  </ul>
-                </v-container>
-              </v-card>
-              <!-- 한글자, 특수문자, 숫자 같이 쓰레기 넣었을 때 못하게 하고싶다. -->
-              <v-text-field 
-                :label="label"
-                v-model="userInputKeyword"
-                append-icon="mdi-plus"
-                @click:append="userInputKeywordToList"
-                @keyup.enter.stop="userInputKeywordToList"
-                :error="error"
-                :error-messages="errorMessages"
-                @input="inputKeyword"
-              />
-            </v-col>
-          </v-row>
-          <v-btn id="signupBtn" :disabled="!valid" color="blue lighten-2" class="mt-3 white--text" type="submit">가입하기</v-btn>
-        </v-container>
-      </v-form>
-    </v-card>
+              <v-btn id="signupBtn" :disabled="!valid" color="blue lighten-2" class="mt-3 white--text" type="submit">가입하기</v-btn>
+            </v-form>
+          </v-container>
+        </v-card>
+      </v-col>
+      <v-col cols="6">
+        <v-card>
+          <v-container style="min-height:430px;">
+            <v-card-title>관심 키워드 등록</v-card-title>
+            <v-divider></v-divider>
+            
+            <v-card style="min-height:120px;">
+              <span>선택된 아해들</span>
+              <v-divider></v-divider>
+              <v-container>
+                <ul @click.stop="unselectKeyword">
+                  <transition-group name="list">
+                    <li v-for="keyword in selectedKeywords" :key="keyword" class="text--darken-3">{{keyword}}</li>
+                  </transition-group>
+                </ul>
+              </v-container>
+            </v-card>
+            <hr>
+            <v-card style="min-height:120px;" class="mt-3" >
+              <span>선택되지 못한 아해들</span> <br>
+              <v-divider></v-divider>
+              <v-container>
+                <ul @click.stop="selectKeyword">
+                  <transition-group name="list" id="selectedSpan">
+                    <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
+                  </transition-group>
+                </ul>
+              </v-container>
+            </v-card>
+            <v-text-field 
+              style="margin-top:16px;"
+              :label="label"
+              v-model="userInputKeyword"
+              append-icon="mdi-plus"
+              @click:append="userInputKeywordToList"
+              @keyup.enter.stop="userInputKeywordToList"
+              :error="error"
+              :error-messages="errorMessages"
+              @input="inputKeyword"
+            />
+          </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -85,7 +92,8 @@ export default {
       textColor: "red--text",
       textColorList: ["red--text", "purple--text", "blue--text", "teal--text", "lime--text", "yellow--text", "brown--text", "grey--text"],
       error: false,
-      errorMessages: ''
+      errorMessages: '',
+      trySignup: false,
     };
   },
   mounted() {
@@ -94,25 +102,30 @@ export default {
   methods: {
     Signup() {
       if (this.$refs.form.validate()) {
-        http
-          .post("/member/signup", {
-            email: this.email,
-            password: this.password,
-            name: this.name,
-            inputkeyword: this.selectedKeywords,
-            type: "nomal"
-          })
-          .then(res => {
-            if (res.data == 0) {
-              alert("아이디가 중복됩니다.");
-            } else {
-              alert("가입 성공!!");
-              this.$router.push("/login");
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          })
+        if (this.selectedKeywords.length > 0 || this.trySignup) {
+          http
+            .post("/member/signup", {
+              email: this.email,
+              password: this.password,
+              name: this.name,
+              inputkeyword: this.selectedKeywords,
+              type: "nomal"
+            })
+            .then(res => {
+              if (res.data == 0) {
+                alert("아이디가 중복됩니다.");
+              } else {
+                alert("가입 성공!!");
+                this.$router.push("/login");
+              }
+            })
+            .catch(e => {
+              console.log(e);
+            })
+        } else {
+          alert('관심 키워드를 등록하시면 더 많은 정보를 받아보실 수 있습니다.')
+          this.trySignup = true
+        }
       }
     },
     keywordSetting() {
@@ -161,6 +174,7 @@ export default {
               console.log(errorKeyword)
             }
           })
+          errorKeyword = errorKeyword.trim()
           if (errorKeyword) {
             this.error = true
             this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`
