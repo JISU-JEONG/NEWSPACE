@@ -49,7 +49,7 @@
               />
             </v-col>
           </v-row>
-          <v-btn :disabled="!valid" color="blue lighten-2" class="mt-3 white--text" type="submit">가입하기</v-btn>
+          <v-btn id="signupBtn" :disabled="!valid" color="blue lighten-2" class="mt-3 white--text" type="submit">가입하기</v-btn>
         </v-container>
       </v-form>
     </v-card>
