@@ -59,6 +59,7 @@ public class MemberRestController {
 
 			res.setHeader("login-token", token);
 			resultMap.put("status", true);
+			resultMap.put("member_name", loginUser.getName());
 			status = HttpStatus.ACCEPTED;
 		} catch (RuntimeException e) {
 			log.error("로그인 실패", e);
