@@ -12,6 +12,7 @@
 import '@mdi/font/css/materialdesignicons.css'
 import Navigation from './components/Navigation'
 import AppFooter from './components/AppFooter'
+
 export default {
 	name: 'App',
 	data() {

@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" sm="12">
+    <v-row class="justify-center">
+      <v-col cols="7">
         <v-card raised>
           <v-card-title>로그인</v-card-title>
           <v-container>
