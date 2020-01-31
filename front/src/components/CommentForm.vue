@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import info from "../services/getInfo"
+
 export default {
     name: 'commentForm',
     data(){
@@ -45,6 +47,9 @@ export default {
             this.$emit('commentCreate-event', this.text)
             this.text = ''
         }
+    },
+    beforeMount(){
+        info();
     }
 }
 </script>

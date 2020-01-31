@@ -23,11 +23,10 @@ export default {
 		},
 	},
 	beforeMount() {
-   		Info();
-  	}
+		Info();
+	}
 }
 </script>
 
 <style scoped>
-
 </style>

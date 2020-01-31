@@ -30,25 +30,22 @@
 
 <script>
 import http from "../http-common";
-const storage = localStorage;
+import info from "../services/getInfo";
 export default {
   name: "SignupPage",
   data() {
     return {
-      keyword: [],
-      email: "",
-      name: "",
-      type: ""
+      keyword: []
     };
   },
   methods: {
     Signup() {
       http
         .post("/member/signup", {
-          email: this.email,
-          name: this.name,
+          email: localStorage.getItem("member_email"),
+          name: localStorage.getItem("member_name"),
           inputkeyword: this.keyword,
-          type: this.type
+          type: localStorage.getItem("member_type")
         })
         .then(() => {
           alert("가입성공!!");
@@ -58,60 +55,36 @@ export default {
           console.log(e);
         });
     },
-    getInfo() {
-      console.log("login-token: " + storage.getItem("login-token"));
-      var token = storage.getItem("login-token");
-      if (token != null) {
-        http
-          .post(
-            "/info",
-            {},
-            {
-              headers: {
-                "login-token": storage.getItem("login-token")
-              }
-            }
-          )
-          .then(res => {
-            console.log(JSON.stringify(res.data.data));
-            this.email = res.data.data.email;
-            this.name = res.data.data.name;
-            this.type = res.data.data.type;
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      } else {
-        console.log("토큰정보가 없습니다.");
-        this.loginStatus = false;
-      }
-    },
     logintoken() {
-      console.log(this.email);
       const parentFunc = this;
-      storage.setItem("login-token", "");
       var _promise = function() {
         return new Promise(function(resolve) {
           http
             .post("/member/socialtoken", {
-              email: parentFunc.email,
-              name: parentFunc.name,
-              type: parentFunc.type
+              email: localStorage.getItem("member_email"),
+              name: localStorage.getItem("member_email"),
+              type: localStorage.getItem("member_type")
             })
             .then(res => {
-              storage.setItem("login-token", res.headers["login-token"]);
+              localStorage.setItem("login-token", res.headers["login-token"]);
               resolve("ㄲ");
             });
         });
       };
       _promise().then(() => {
-        this.$router.push("/");
-        location.reload();
+        localStorage.setItem("loginStatus", parentFunc.name);
+        const payload = {
+          token: localStorage.getItem("login-token"),
+          member_id: "",
+          member_name: localStorage.getItem("member_name")
+        };
+        this.$store.dispatch("login", payload);
+        this.$router.push("/", () => {});
       });
     }
   },
-  mounted() {
-    this.getInfo();
+  beforeMount() {
+    info();
   }
 };
 </script>
