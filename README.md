@@ -7,12 +7,17 @@
 
 > OS
 >> Windows
+>> Ubuntu (배포환경 AWS)
 
 > Language
->> JAVA, Vue, CSS, JS
+>> JAVA
+>> Vue
+>> CSS
+>> JS
 
 > IDE
->> VS CODE, Eclipse, WorkBench
+>> VS CODE
+>> Eclipse
 
 ## 기술역할 분담
 
@@ -220,3 +225,9 @@ for (NewsDTO n : list) {
 
 ```
 
+
+## 정영길 추가하라 오바
+
+```java
+	
+```
