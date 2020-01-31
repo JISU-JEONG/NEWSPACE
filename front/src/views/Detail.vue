@@ -6,124 +6,127 @@
       </div>
       <div class="tagfont">
         <!-- for i in keywords.length에서 바꿨읍니다. -->
-        <span v-for="key in keywords" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;">
-          #{{ key }}
-        </span>
+        <span
+          v-for="key in keywords"
+          :key="key"
+          @click="onClickKeyword(key)"
+          style="cursor: pointer;"
+        >#{{ key }}</span>
       </div>
-      <hr>
-      <br>
+      <hr />
+      <br />
       <div v-html="news.body" class="page"></div>
-      <hr>
-        <CommentForm @commentCreate-event="CommentCreate"/>
-      <CommentList
-      :comments=comments
-      ></CommentList>
+      <hr />
+      <CommentForm @commentCreate-event="CommentCreate" />
+      <CommentList :comments="comments"></CommentList>
     </v-container>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import CommentList from '../components/CommentList'
-import CommentForm from '../components/CommentForm'
-
+import axios from "axios";
+import CommentList from "../components/CommentList";
+import CommentForm from "../components/CommentForm";
+import info from "../services/getInfo"
 export default {
-    name : "detail",
-    data(){
-        return {
-            news:[],
-            keywords:[],
-            comments:[],
-        }
+  name: "detail",
+  data() {
+    return {
+      news: [],
+      keywords: [],
+      comments: []
+    };
+  },
+  components: {
+    CommentList,
+    CommentForm
+  },
+  methods: {
+    CommentCreate(text) {
+      if (text !== "") {
+        const storage = localStorage;
+        const data = {
+          news_id: this.$route.params.id,
+          comment_text: text
+        };
+        axios
+          .post("http://192.168.31.85:8080/addComment", data, {
+            headers: {
+              "login-token": storage.getItem("login-token")
+            }
+          })
+          .then(response => {
+            alert("댓글 작성이 완료되었습니다.");
+            this.CommentGet();
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
     },
-    components: {
-      CommentList,
-      CommentForm,
+    getNews() {
+      axios
+        .get(`http://192.168.31.85:8080/getNews/${this.$route.params.id}`)
+        .then(response => {
+          this.news = response.data;
+          this.keywords = this.news.keyword.split(" ");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    methods: {
-        CommentCreate(text){
-          if(text!==''){
-            const storage = localStorage;
-            const data ={
-                news_id: this.$route.params.id,
-                comment_text: text,
-              }
-            axios.post("http://192.168.31.85:8080/addComment", data,
-              {
-                headers: {
-                  "login-token": storage.getItem("login-token")
-                }
-              })
-              .then(response => {
-                alert('댓글 작성이 완료되었습니다.')
-                this.CommentGet()
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          }
-        },
-        getNews() {
-            axios.get(`http://192.168.31.85:8080/getNews/${this.$route.params.id}`)
-                .then(response => {
-                    this.news = response.data
-                    this.keywords = this.news.keyword.split(' ')
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        },
-        CommentGet() {
-          axios.get(`http://192.168.31.85:8080/getComment/${this.$route.params.id}`)
-                .then(response => {
-                    this.comments = response.data
-                    console.log(this.comments)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        },
-      onClickKeyword(key){
-        this.$router.push({ 
-        name: 'search',
-        params: { searchValue: key }
-        }).catch(err =>{})
-      },
+    CommentGet() {
+      axios
+        .get(`http://192.168.31.85:8080/getComment/${this.$route.params.id}`)
+        .then(response => {
+          this.comments = response.data;
+          console.log(this.comments);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    mounted(){
-        this.getNews(),
-        this.CommentGet()
-        console.log(localStorage.getItem("member_id"))
-		    const payload = {
-          token :localStorage.getItem("login-token"),
-          member_id: localStorage.getItem("member_id")
-		}
-		this.$store.dispatch('login',payload)
+    onClickKeyword(key) {
+      this.$router
+        .push({
+          name: "search",
+          params: { searchValue: key }
+        })
+        .catch(err => {});
     }
-}
+  },
+  beforeMount(){
+    info();
+  },
+  mounted() {
+    this.getNews();
+    this.CommentGet();
+
+    console.log(localStorage.getItem("member_id"));
+  }
+};
 </script>
 
 <style scoped>
-.newsbody{
+.newsbody {
   border: solid 2px black;
-  padding : 3vw 3vw 5vw;
+  padding: 3vw 3vw 5vw;
   margin: 50px auto;
-  background-color : #FFF;
+  background-color: #fff;
   border-radius: 50px;
 }
-.tagfont{
+.tagfont {
   font-size: 20px;
-  color : blue;
+  color: blue;
   margin-bottom: 10px;
   margin-top: 10px;
 }
-.page{
+.page {
   padding-bottom: 20px;
 }
-.page >>> img { 
-  width:50vw !important;
+.page >>> img {
+  width: 50vw !important;
   display: block !important;
-  margin: 0px auto !important; 
-  }
-
+  margin: 0px auto !important;
+}
 </style>

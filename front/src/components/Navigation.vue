@@ -31,9 +31,9 @@
           <v-list-item-content>
             <v-list-item-title>
               <v-btn text v-on:click="aboutme">{{usernmae}}</v-btn>
-              <v-btn text v-on:click="logout">로그아웃</v-btn>
             </v-list-item-title>
           </v-list-item-content>
+          <v-btn text v-on:click="logout">로그아웃</v-btn>
         </v-list-item>
       </div>
       <!-- 비로그인시 보여지는 사이드바 타이틀 -->
@@ -76,7 +76,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title @click.stop="logout()">{{ item.text }}</v-list-item-title>
+              <v-list-item-title>{{ item.text }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -86,19 +86,15 @@
 </template>
 
 <script>
-
-// import store, { CHANGE_DRAWER } from "../store";
-import store from '../store'
+import store from "../store";
 import http from "../http-common";
-const storage = localStorage;
-import Info from '../services/getInfo';
-
+import Info from "../services/getInfo";
 export default {
   name: "Navigation",
   props: {},
   computed: {
     usernmae() {
-      return this.$store.state.member_name
+      return this.$store.state.member_name;
     }
   },
   data() {
@@ -147,25 +143,34 @@ export default {
       this.searchValue = "";
     },
     logout() {
-      alert("로그아웃");
-      this.loginStatus = false;
-      storage.removeItem("login-token");
-      storage.setItem("member_id", "");
-      this.$store.dispatch('logout')
+      localStorage.removeItem("login-token");
+      localStorage.removeItem("member_id");
+      localStorage.removeItem("member_name");
+      localStorage.removeItem("loginStatus");
+      this.$store.dispatch("logout");
     },
     aboutme() {
       alert("이거만 구현하면 마지막일까?");
+    },
+    init() {
+      if (
+        localStorage.getItem("loginStatus") != null &&
+        localStorage.getItem("login-token") != null
+      ) {
+        const payload = {
+          token: localStorage.getItem("login-token"),
+          member_id: localStorage.getItem("member_id"),
+          member_name: localStorage.getItem("loginStatus")
+        };
+        this.$store.dispatch("login", payload);
+      }
     }
   },
   beforeMount() {
-    // alert(this.username);
     Info();
   },
-  // watch: {
-  //   username: function (hook) {
-  //     this.username = hook;
-  //     console.log("watch : ", hook);
-  //   }
-  // }
+  mounted() {
+    this.init();
+  }
 };
 </script>

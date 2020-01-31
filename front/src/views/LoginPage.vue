@@ -3,6 +3,7 @@
     <v-row class="justify-center">
       <v-col cols="7">
         <v-card raised>
+          <v-alert color="error" icon="warning" v-show="this.$store.state.error">로그인 정보를 확인해주세요</v-alert>
           <v-card-title>로그인</v-card-title>
           <v-container>
             <v-form ref="loginForm" @submit.prevent="login" v-model="loginValid">
@@ -27,6 +28,7 @@
           </v-container>
           <v-subheader>소셜 로그인</v-subheader>
           <v-container d-flex justify-space-around>
+            <input type="hidden" v-model="socialemail" />
             <v-btn dark color="indigo darken-2" @click="FacebookLogin">Facebook 로그인</v-btn>
             <v-btn dark color="red darken-2" @click="GoogleLogin">Google 로그인</v-btn>
           </v-container>
@@ -40,17 +42,22 @@
 import firebase from "firebase";
 import firebaseservice from "../services/FirebaseService";
 import http from "../http-common";
-const storage = localStorage;
 
 export default {
   name: "login",
+  computed: {
+    error() {
+      return this.$store.state.error;
+    }
+  },
   data() {
     return {
+      type: "",
       email: "",
       password: "",
       username: "",
+      socialemail: "",
       duplicationflag: 0,
-      type: "",
       //로그인 폼 양식 확인
       loginValid: false,
       infoValid: false,
@@ -66,7 +73,8 @@ export default {
     login() {
       if (this.$refs.loginForm.validate()) {
         // 로그인 폼이 유효한지 확인
-        http.post("/member/signin", {
+        http
+          .post("/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -74,25 +82,25 @@ export default {
           })
           .then(res => {
             if (res.data.status) {
-              storage.setItem("login-token", res.headers["login-token"]);
+              localStorage.setItem("login-token", res.headers["login-token"]);
+              localStorage.setItem("loginStatus", res.data.name);
               const payload = {
-                token :localStorage.getItem("login-token"),
-                member_id: localStorage.getItem("member_id"),
-                member_name : this.email
-              }
-              this.$store.dispatch('login',payload);
-              this.$router.push('/', () => {})
+                token: localStorage.getItem("login-token"),
+                member_id: "",
+                member_name: res.data.member_name
+              };
+              this.$store.dispatch("login", payload);
+              this.$router.push("/", () => {});
             } else {
-              alert("입력 정보를 확인하세요.");
+              this.$store.dispatch("error");
+              // alert("입력 정보를 확인하세요.");
             }
           })
           .catch(e => {
+            this.$store.dispatch("error");
             console.log(e);
           });
       }
-    },
-    logout() {
-      localStorage.removeItem("login-token");
     },
     FacebookLogin() {
       const provider = new firebase.auth.FacebookAuthProvider();
@@ -105,7 +113,7 @@ export default {
             .then(res => {
               // console.log(res.user);
               parentFunc.username = res.user.displayName;
-              parentFunc.email = res.user.uid;
+              parentFunc.socialemail = res.user.uid;
               parentFunc.type = "facebook";
               resolve("ㄲ");
             })
@@ -130,7 +138,7 @@ export default {
             .then(res => {
               console.log(res.user);
               parentFunc.username = res.user.displayName;
-              parentFunc.email = res.user.uid;
+              parentFunc.socialemail = res.user.uid;
               parentFunc.type = "google";
               resolve("ㄲ");
             })
@@ -146,13 +154,12 @@ export default {
     },
     duplicationCheck() {
       const parentFunc = this;
-      storage.setItem("login-token", "");
       //아이디 중복체크
       var _promise = function() {
         return new Promise(function(resolve) {
           http
             .post("/member/signupcheck", {
-              email: parentFunc.email
+              email: parentFunc.socialemail
             })
             .then(res => {
               console.log(res.data);
@@ -172,12 +179,13 @@ export default {
           return new Promise(function(resolve) {
             http
               .post("/member/socialtoken", {
-                email: parentFunc.email,
+                email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type
               })
               .then(res => {
-                storage.setItem("login-token", res.headers["login-token"]);
+                localStorage.setItem("login-token", res.headers["login-token"]);
+                localStorage.setItem("loginStatus", parentFunc.username);
                 resolve("ㄲ");
               });
           });
@@ -185,18 +193,27 @@ export default {
         _promise2().then(() => {
           if (parentFunc.duplicationflag == 1) {
             //처음 로그인시 키워드 선택
-            this.$router.push("/SocialSignup");
+            this.$router.push("/SocialSignup", () => {});
           } else {
             //이미 로그인한적이 있을시 홈으루
-            parentFunc.$router.push("/");
-            location.reload();
+            const payload = {
+              token: localStorage.getItem("login-token"),
+              member_id: "",
+              member_name: localStorage.getItem("loginStatus")
+            };
+            this.$store.dispatch("login", payload);
+            this.$router.push("/", () => {});
           }
         });
       });
     },
     init() {
-      if (storage.getItem("login-token") != null) {
-        router.push('/').catch(err =>{});
+      if (
+        localStorage.getItem("loginStatus") != null &&
+        localStorage.getItem("login-token") != null
+      ) {
+        alert("이미 로그인하셨습니다.");
+        this.$router.push("/").catch(err => {});
       }
     }
   },
