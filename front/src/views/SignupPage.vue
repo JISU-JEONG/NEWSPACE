@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import http from "../http-common";
+import http from "../services/http-common"
 
 export default {
   name: "SignupPage",

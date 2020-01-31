@@ -50,10 +50,10 @@
 </template>
 
 <script>
-import http from "../http-common";
+import http from "../services/http-common"
 import info from "../services/getInfo";
 export default {
-  name: "SignupPage",
+  name: "SocialSignpPage",
   data() {
     return {
       userInputKeyword: '', // 가입자가 입력한 키워드
@@ -156,7 +156,6 @@ export default {
               this.selectedKeywords.push(value)
             } else {
               errorKeyword = errorKeyword.concat(` ${value}`)
-              console.log(errorKeyword)
             }
           })
           errorKeyword = errorKeyword.trim()

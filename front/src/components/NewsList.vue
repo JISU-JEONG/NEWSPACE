@@ -69,8 +69,7 @@
 -->         
 
 <script>
-
-import http from "../http-common";
+import http from "../services/http-common"
 import News from "./News"
 
 export default {

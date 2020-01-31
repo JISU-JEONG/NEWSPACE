@@ -39,7 +39,7 @@
 
 <script>
 import News from "../components/News"
-import http from '../http-common'
+import http from "../services/http-common"
 
 export default {
   components: {

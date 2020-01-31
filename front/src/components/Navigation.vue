@@ -93,7 +93,7 @@
 
 <script>
 import store from "../store";
-import http from "../http-common";
+import http from "../services/http-common"
 import Info from "../services/getInfo";
 export default {
   name: "Navigation",
