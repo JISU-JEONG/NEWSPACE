@@ -271,4 +271,29 @@ for (NewsDTO n : list) {
 	</choose>
 	) ORDER BY DATE DESC
 </select>	
+
+-------------------------------------------------------------------------------
+
+<select id="유저별 추천 뉴스"
+	parameterType="서치타입">
+	resultType="뉴스타입"
+	SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+	k.KEYWORD, n.URL, n.BODYTEXT
+	FROM NEWS n JOIN NEWSKEYWORD k
+	WHERE n.NEWS_ID = k.NEWS_ID
+	AND (
+	<choose>
+		<when test="search.length != 0">
+			(
+			<foreach collection="search" item="word" index="index"
+				separator="OR ">
+				k.KEYWORD LIKE CONCAT('%',#{word},'%')
+				<!-- 유저별 추천뉴스의 경우 선택해놓은 키워드만 통해 검색한다. -->
+			</foreach>
+			)
+		</when>
+	</choose>
+	) AND n.DATE >= DATE_SUB(NOW(), INTERVAL 30 DAY) ORDER BY n.DATE DESC
+	<!-- 검색한 결과들의 날짜가 현재 날짜에서 30일 이상 벗어난 자료는 제외한다. -->
+</select>
 ```
