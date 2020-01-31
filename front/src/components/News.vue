@@ -10,6 +10,7 @@
           <div class="head_font">{{news.title}}</div>
           <div class="box">
             {{news.date}}
+          </div>
         </div>
         <div class="tagfont">
           <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
@@ -17,7 +18,6 @@
           </span>
         </div>
       </div>
-    </div>  
   </v-container>
 </template>
 

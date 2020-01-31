@@ -47,7 +47,7 @@
             </v-card>
             <v-text-field 
               style="margin-top:16px;"
-              :label="label"
+              label="추가하고싶은 키워드"
               v-model="userInputKeyword"
               append-icon="mdi-plus"
               @click:append="userInputKeywordToList"
@@ -88,7 +88,6 @@ export default {
       userInputKeyword: '', // 가입자가 입력한 키워드
       selectedKeywords: [],
       unselectedKeywords: [],
-      label: "추가하고싶은 키워드",
       textColor: "red--text",
       textColorList: ["red--text", "purple--text", "blue--text", "teal--text", "lime--text", "yellow--text", "brown--text", "grey--text"],
       error: false,
