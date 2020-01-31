@@ -1,14 +1,15 @@
 <template>
   <v-container>
-      <div class="cardbox">
+      <div class="cardbox" :class="news.brand">
         <div  @click="goDetail(news.news_id)">
-          <div class="Samsung_font" v-if="news.brand === 'SAMSUNG'" >{{news.brand}}<hr></div>
-          <div class="LG_font" v-else-if="news.brand === 'LG'">{{news.brand}} Electronics<hr></div>
-          <div class="SK_font" v-else>{{news.brand}} Hynix<hr></div>
+          <div class="brand-title">
+            <span v-if="news.brand === 'LG'">{{news.brand}} Electronics</span>
+            <span v-else-if="news.brand === 'SK'">{{news.brand}} Hynix</span>
+            <span v-else>{{news.brand}}</span>
+          </div>
           <div class="head_font">{{news.title}}</div>
           <div class="box">
             {{news.date}}
-        </div>
         </div>
         <div class="tagfont">
           <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
@@ -16,7 +17,7 @@
           </span>
         </div>
       </div>
-      
+    </div>  
   </v-container>
 </template>
 
@@ -60,12 +61,6 @@ export default {
     cursor: pointer;
     transition: all 0.5s ;
   }
-  .cardbox:hover {
-    border: solid 2px rgb(4, 0, 255);
-    box-sizing: border-box;
-    padding: 9px 19px;
-    transform: scale(1.05);
-  }
   .tagfont{
   width: 100%;
   font-size: 18px;
@@ -82,19 +77,37 @@ export default {
     font-size:15px;
     color: gray;
   }
-  .Samsung_font{
+  .SAMSUNG:hover {
+    border: solid 2px #1428A0;
+    box-sizing: border-box;
+    padding: 9px 19px;
+    transform: scale(1.05);    
+  }
+  .SAMSUNG .brand-title {
     width: 100%;
     font-size:30px;
     color: #1428A0;
     margin-bottom: 10px;
   }
-  .LG_font{
+  .LG:hover {
+    border: solid 2px #A50034;
+    box-sizing: border-box;
+    padding: 9px 19px;
+    transform: scale(1.05);    
+  }
+  .LG .brand-title{
     width: 100%;
     font-size:30px;
     color: #A50034;
     margin-bottom: 10px;
   }
-  .SK_font{
+  .SK:hover {
+    border: solid 2px #DB1026;
+    box-sizing: border-box;
+    padding: 9px 19px;
+    transform: scale(1.05);    
+  }
+  .SK .brand-title{
     width: 100%;
     font-size:30px;
     color: #DB1026;
