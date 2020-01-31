@@ -228,7 +228,7 @@ for (NewsDTO n : list) {
 
 ## 검색 동적쿼리
 
-```XML
+```xml
 <select id="검색을 하자!"
 	parameterType="서치타입"
 	resultType="뉴스타입">
