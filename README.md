@@ -6,18 +6,18 @@
 ## 개발환경
 
 > OS
->> Windows
->> Ubuntu (배포환경 AWS)
+-  Windows
+-  Ubuntu (배포환경 AWS)
 
 > Language
->> JAVA
->> Vue
->> CSS
->> JS
+-  JAVA
+-  Vue
+-  CSS
+-  JS
 
 > IDE
->> VS CODE
->> Eclipse
+-  VS CODE
+-  Eclipse
 
 ## 기술역할 분담
 
