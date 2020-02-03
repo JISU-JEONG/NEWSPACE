@@ -161,14 +161,17 @@ export default {
         this.error = true;
         this.errorMessages = "두글자 이상을 입력해주세요";
       } else {
-        this.userInputKeyword.split(" ").forEach(value => {
-          if (
-            this.selectedKeywords.findIndex(v => v === value) < 0 &&
-            value.length > 1
-          ) {
-            this.selectedKeywords.push(value);
-          } else {
-            errorKeyword = errorKeyword.concat(` ${value}`);
+          this.userInputKeyword.split(' ').forEach( value => {
+            if (this.selectedKeywords.findIndex(v => v === value) < 0 && value.length > 1 ) {
+              this.selectedKeywords.push(value)
+            } else {
+              errorKeyword = errorKeyword.concat(` ${value}`)
+            }
+          })
+          errorKeyword = errorKeyword.trim()
+          if (errorKeyword) {
+            this.error = true
+            this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`
           }
         };
       this.userInputKeyword = "";
