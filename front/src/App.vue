@@ -2,7 +2,7 @@
   <v-app>
     <Navigation />
     <v-content class="background">
-      <router-view />
+    <router-view />
     </v-content>
     <AppFooter />
   </v-app>

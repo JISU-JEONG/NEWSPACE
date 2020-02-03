@@ -85,11 +85,13 @@ export default {
             if (res.data.status) {
               localStorage.setItem("login-token", res.headers["login-token"]);
               localStorage.setItem("loginStatus", res.data.name);
+              console.log(res.data)
               const payload = {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
-                member_name: res.data.member_name
+                member_name: res.data.member_name,
               };
+              console.log(payload)
               this.$store.dispatch("login", payload);
               this.$router.push("/", () => {});
             } else {
@@ -208,18 +210,6 @@ export default {
         });
       });
     },
-    init() {
-      if (
-        localStorage.getItem("loginStatus") != null &&
-        localStorage.getItem("login-token") != null
-      ) {
-        alert("이미 로그인하셨습니다.");
-        this.$router.push("/").catch(err => {});
-      }
-    }
   },
-  beforeMount() {
-    this.init();
-  }
 };
 </script>

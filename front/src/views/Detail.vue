@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-container class="newsbody">
+      {{member_keywords}}
       <div>
         <h1>{{ news.title }}</h1>
       </div>
@@ -19,6 +20,18 @@
       <hr />
       <CommentForm @commentCreate-event="CommentCreate" />
       <CommentList :comments="comments"></CommentList>
+      <v-snackbar
+        v-model="snackbar"
+        bottom
+        right
+        color="blue lighten-2 text--white" 
+        :timeout=timeout
+      >
+        {{snackbarInnerText}}
+        <v-btn text @click="snackbar=false">
+          닫기
+        </v-btn>
+      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -34,7 +47,11 @@ export default {
     return {
       news: [],
       keywords: [],
-      comments: []
+      member_keywords: localStorage.getItem("member_keyword"),
+      comments: [],
+      snackbar: false,
+      timeout: 2000,
+      snackbarInnerText: '',
     };
   },
   components: {
@@ -56,7 +73,8 @@ export default {
             }
           })
           .then(response => {
-            alert("댓글 작성이 완료되었습니다.");
+            this.snackbar = true
+            this.snackbarInnerText = "댓글이 등록되었습니다."
             this.CommentGet();
           })
           .catch(e => {
@@ -93,6 +111,17 @@ export default {
           params: { searchValue: key }
         })
         .catch(err => {});
+    },
+    getkeyword(){
+      axios
+        .get(`http://192.168.31.85:8080/getUserKeywordNews/`+localStorage.getItem("member_keyword"))
+        .then(response => {
+          this.comments = response.data;
+          console.log(this.comments);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   beforeMount() {
@@ -101,6 +130,7 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
+    this.getkeyword();
 
     console.log(localStorage.getItem("member_id"));
   }

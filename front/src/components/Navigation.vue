@@ -3,6 +3,7 @@
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
+        <p>{{member_keywords}}</p>
       </v-btn>
       <v-btn to="/" icon v-else>
         <v-icon>mdi-home</v-icon>
@@ -100,7 +101,10 @@ export default {
   props: {},
   computed: {
     usernmae() {
-      return this.$store.state.member_name;
+      return this.$store.state.member_name
+    },
+    member_keywords() {
+      return this.$store.state.member_keywords
     }
   },
   data() {
@@ -157,25 +161,9 @@ export default {
     aboutme() {
       alert("이거만 구현하면 마지막일까?");
     },
-    init() {
-      if (
-        localStorage.getItem("loginStatus") != null &&
-        localStorage.getItem("login-token") != null
-      ) {
-        const payload = {
-          token: localStorage.getItem("login-token"),
-          member_id: localStorage.getItem("member_id"),
-          member_name: localStorage.getItem("loginStatus")
-        };
-        this.$store.dispatch("login", payload);
-      }
-    }
   },
   beforeMount() {
     Info();
   },
-  mounted() {
-    this.init();
-  }
 };
 </script>
