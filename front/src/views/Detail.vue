@@ -27,7 +27,7 @@
 import axios from "axios";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
-import info from "../services/getInfo"
+import info from "../services/getInfo";
 export default {
   name: "detail",
   data() {
@@ -50,7 +50,7 @@ export default {
           comment_text: text
         };
         axios
-          .post("http://192.168.31.85:8080/addComment", data, {
+          .post("http://192.168.31.85:8080/api/comment", data, {
             headers: {
               "login-token": storage.getItem("login-token")
             }
@@ -66,7 +66,7 @@ export default {
     },
     getNews() {
       axios
-        .get(`http://192.168.31.85:8080/getNews/${this.$route.params.id}`)
+        .get(`http://192.168.31.85:8080/api/getNews/${this.$route.params.id}`)
         .then(response => {
           this.news = response.data;
           this.keywords = this.news.keyword.split(" ");
@@ -77,7 +77,7 @@ export default {
     },
     CommentGet() {
       axios
-        .get(`http://192.168.31.85:8080/getComment/${this.$route.params.id}`)
+        .get(`http://192.168.31.85:8080/api/comment/${this.$route.params.id}`)
         .then(response => {
           this.comments = response.data;
           console.log(this.comments);
@@ -95,7 +95,7 @@ export default {
         .catch(err => {});
     }
   },
-  beforeMount(){
+  beforeMount() {
     info();
   },
   mounted() {

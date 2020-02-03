@@ -64,7 +64,8 @@
 </template>
 
 <script>
-import http from "../services/http-common"
+import http from "../services/http-common";
+import axios from "axios";
 
 export default {
   name: "SignupPage",

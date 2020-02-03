@@ -30,8 +30,10 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsKeywordCounter;
 
-import kr.co.shineware.nlp.komoran.core.analyzer.Komoran;
-import kr.co.shineware.util.common.model.Pair;
+import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
+import kr.co.shineware.nlp.komoran.core.Komoran;
+import kr.co.shineware.nlp.komoran.model.KomoranResult;
+import kr.co.shineware.nlp.komoran.model.Token;
 
 @Service
 public class NewsService implements INewsService {
@@ -326,23 +328,34 @@ public class NewsService implements INewsService {
 						String keyword = "";
 						String txt = "";
 
-						Komoran komoran = new Komoran("lib/komoran/models");
-						List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
-						for (List<Pair<String, String>> eojeolResult : result) {
-							for (Pair<String, String> wordMorph : eojeolResult) {
-								if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW")
-										|| wordMorph.getSecond().equals("SL")) {
-									txt += wordMorph.getFirst();
-								}
-								if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
-									keyword += wordMorph.getFirst() + " ";
-								}
-							}
-						}
-
-						String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV",
-								"빌트인", "인공지능", "바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션",
-								"하이닉스", "유튜브" };
+//						Komoran komoran = new Komoran("lib/komoran/models");
+//						List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
+//						for (List<Pair<String, String>> eojeolResult : result) {
+//							for (Pair<String, String> wordMorph : eojeolResult) {
+//								if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW")
+//										|| wordMorph.getSecond().equals("SL")) {
+//									txt += wordMorph.getFirst();
+//								}
+//								if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
+//									keyword += wordMorph.getFirst() + " ";
+//								}
+//							}
+//						}
+						
+						Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+						KomoranResult analyzeResultList = komoran.analyze(bodytext);
+						List<Token> tokenList = analyzeResultList.getTokenList();
+				        for (Token token : tokenList) {
+				        	if(token.getPos().equals("SN") || token.getPos().equals("SW")
+				        			|| token.getPos().equals("SL")) {
+				        		txt += token.getMorph();
+				        	}
+				        	if(token.getPos().equals("NNG") || token.getPos().equals("NNP")) {
+				        		keyword += token.getMorph()+" ";
+				        	}
+				        }
+				        
+				        String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "Auto", "webOS"};
 						int[] count = new int[countString.length];
 
 						for (int c = 0; c < count.length; c++) {
@@ -359,6 +372,7 @@ public class NewsService implements INewsService {
 						NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext);
 						check = getNewsOne(news.getUrl());
 						if (check == null) {
+							logger.info("Added News : " + news.getUrl());
 							addNews(news);
 						} else {
 							page = false;
@@ -429,23 +443,20 @@ public class NewsService implements INewsService {
 						String keyword = "";
 						String txt = "";
 
-						Komoran komoran = new Komoran("lib/komoran/models");
-						List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
-						for (List<Pair<String, String>> eojeolResult : result) {
-							for (Pair<String, String> wordMorph : eojeolResult) {
-								if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW")
-										|| wordMorph.getSecond().equals("SL")) {
-									txt += wordMorph.getFirst();
-								}
-								if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
-									keyword += wordMorph.getFirst() + " ";
-								}
-							}
-						}
+						Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+						KomoranResult analyzeResultList = komoran.analyze(bodytext);
+						List<Token> tokenList = analyzeResultList.getTokenList();
+				        for (Token token : tokenList) {
+				        	if(token.getPos().equals("SN") || token.getPos().equals("SW")
+				        			|| token.getPos().equals("SL")) {
+				        		txt += token.getMorph();
+				        	}
+				        	if(token.getPos().equals("NNG") || token.getPos().equals("NNP")) {
+				        		keyword += token.getMorph()+" ";
+				        	}
+				        }
 
-						String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV",
-								"빌트인", "인공지능", "바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션",
-								"하이닉스", "유튜브" };
+				        String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "Auto", "webOS"};
 						int[] count = new int[countString.length];
 
 						for (int c = 0; c < count.length; c++) {
@@ -462,6 +473,7 @@ public class NewsService implements INewsService {
 						NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext);
 						check = getNewsOne(news.getUrl());
 						if (check == null) {
+							logger.info("Added News : " + news.getUrl());
 							addNews(news);
 						} else {
 							page = false;
@@ -562,6 +574,7 @@ public class NewsService implements INewsService {
 		}
 
 		driver.close();
+		driver.quit();
 
 		for (NewsDTO n : list) {
 
@@ -572,28 +585,27 @@ public class NewsService implements INewsService {
 			String brand = n.getBrand();
 			String cate = n.getCategory();
 			String newsurl = n.getUrl();
-			String body = doc.getElementsByClass("single_cont").toString();
+			String body = doc.getElementsByClass("sin"
+					+ "gle_cont").toString();
 			String bodytext = doc.getElementsByClass("single_cont").text();
 
 			String keyword = "";
 			String txt = "";
 
-			Komoran komoran = new Komoran("lib/komoran/models");
-			List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
-			for (List<Pair<String, String>> eojeolResult : result) {
-				for (Pair<String, String> wordMorph : eojeolResult) {
-					if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW")
-							|| wordMorph.getSecond().equals("SL")) {
-						txt += wordMorph.getFirst();
-					}
-					if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
-						keyword += wordMorph.getFirst() + " ";
-					}
-				}
-			}
+			Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+			KomoranResult analyzeResultList = komoran.analyze(bodytext);
+			List<Token> tokenList = analyzeResultList.getTokenList();
+	        for (Token token : tokenList) {
+	        	if(token.getPos().equals("SN") || token.getPos().equals("SW")
+	        			|| token.getPos().equals("SL")) {
+	        		txt += token.getMorph();
+	        	}
+	        	if(token.getPos().equals("NNG") || token.getPos().equals("NNP")) {
+	        		keyword += token.getMorph()+" ";
+	        	}
+	        }
 
-			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "빌트인", "인공지능",
-					"바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션", "하이닉스", "유튜브" };
+	        String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "Auto", "webOS"};
 			int[] count = new int[countString.length];
 
 			for (int c = 0; c < count.length; c++) {
@@ -610,6 +622,7 @@ public class NewsService implements INewsService {
 			NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, newsurl, bodytext);
 			check = getNewsOne(news.getUrl());
 			if (check == null) {
+				logger.info("Added News : " + news.getUrl());
 				addNews(news);
 			} else {
 				break;
@@ -710,6 +723,7 @@ public class NewsService implements INewsService {
 			}
 		}
 		driver.close();
+		driver.quit();
 
 		for (String s : list) {
 			Document doc = Jsoup.connect(s).get();
@@ -729,22 +743,20 @@ public class NewsService implements INewsService {
 			String keyword = "";
 			String txt = "";
 
-			Komoran komoran = new Komoran("lib/komoran/models");
-			List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
-			for (List<Pair<String, String>> eojeolResult : result) {
-				for (Pair<String, String> wordMorph : eojeolResult) {
-					if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW")
-							|| wordMorph.getSecond().equals("SL")) {
-						txt += wordMorph.getFirst();
-					}
-					if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
-						keyword += wordMorph.getFirst() + " ";
-					}
-				}
-			}
+			Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+			KomoranResult analyzeResultList = komoran.analyze(bodytext);
+			List<Token> tokenList = analyzeResultList.getTokenList();
+	        for (Token token : tokenList) {
+	        	if(token.getPos().equals("SN") || token.getPos().equals("SW")
+	        			|| token.getPos().equals("SL")) {
+	        		txt += token.getMorph();
+	        	}
+	        	if(token.getPos().equals("NNG") || token.getPos().equals("NNP")) {
+	        		keyword += token.getMorph()+" ";
+	        	}
+	        }
 
-			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "빌트인", "인공지능",
-					"바이톤", "쎄렌스", "Auto", "webOS", "메리디안", "어워드", "전기레인지", "식기세척기", "이노베이션", "하이닉스", "유튜브" };
+			String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "Auto", "webOS"};
 			int[] count = new int[countString.length];
 
 			for (int c = 0; c < count.length; c++) {
@@ -762,6 +774,7 @@ public class NewsService implements INewsService {
 			check = getNewsOne(news.getUrl());
 
 			if (check == null) {
+				logger.info("Added News : " + news.getUrl());
 				addNews(news);
 			} else {
 				break;
@@ -838,7 +851,7 @@ public class NewsService implements INewsService {
 	}
 
 //	@Scheduled(cron = "0 31 10 * * *")
-	@Scheduled(fixedDelay = 1800000)
+	@Scheduled(fixedDelay = 3600000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING1..." + "\t" + new Date());
 		samsung_Crawling1();

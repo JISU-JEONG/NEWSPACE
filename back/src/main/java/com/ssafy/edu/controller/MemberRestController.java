@@ -70,7 +70,7 @@ public class MemberRestController {
 	}
 
 	// 토큰 정보획득
-	@PostMapping("/info")
+	@PostMapping("/api/info")
 	public ResponseEntity<Map<String, Object>> getInfo(HttpServletRequest req, @RequestBody Member member) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
@@ -130,8 +130,11 @@ public class MemberRestController {
 	@PostMapping("/member/socialtoken")
 	public ResponseEntity<Map<String, Object>> socialtoken(@RequestBody Member member, HttpServletResponse res) {
 		log.info("\"MemberRestController Excute ! socialtoken " + member);
-
+		
 		Map<String, Object> resultMap = new HashMap<>();
+		
+		member.setMember_id( (memberservice.getEmail(member.getEmail())).getMember_id());
+		
 		String token = jwtService.create(member);
 		res.setHeader("login-token", token);
 		resultMap.put("status", true);
