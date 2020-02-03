@@ -1,12 +1,14 @@
 <template>
-  <nav>
-    <!-- 상단 nav bar -->
+  <nav v-if="$route.name !== 'Admin'">
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
       </v-btn>
       <v-btn to="/" icon v-else>
         <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn to="/Admin" text v-if="this.$store.state.auth">
+        <span>Admin</span>
       </v-btn>
       <v-spacer />
       <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)">
@@ -160,6 +162,8 @@ export default {
       localStorage.removeItem("member_name");
       localStorage.removeItem("member_keyword")
       localStorage.removeItem("loginStatus");
+      localStorage.removeItem("auth");
+      this.auth = 0
       this.$store.dispatch("logout");
     },
     init() {
@@ -170,7 +174,8 @@ export default {
         const payload = {
           token: localStorage.getItem("login-token"),
           member_id: localStorage.getItem("member_id"),
-          member_name: localStorage.getItem("loginStatus")
+          member_name: localStorage.getItem("loginStatus"),
+          auth : localStorage.getItem("auth")
         };
         this.$store.dispatch("login", payload);
       }

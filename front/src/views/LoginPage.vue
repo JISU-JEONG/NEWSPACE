@@ -90,6 +90,7 @@ export default {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
                 member_name: res.data.member_name,
+                auth : localStorage.removeItem("auth"),
                 member_keyword: res.data.member_keyword,
               };
               console.log(payload)
@@ -203,7 +204,8 @@ export default {
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",
-              member_name: localStorage.getItem("loginStatus")
+              member_name: localStorage.getItem("loginStatus"),
+              auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
             this.$router.push("/", () => {});

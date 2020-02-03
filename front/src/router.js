@@ -7,6 +7,7 @@ import SignupPage from './views/SignupPage.vue'
 import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
+import Admin from './views/Admin.vue'
 
 Vue.use(Router)
 
@@ -60,7 +61,12 @@ const routes = [
   	path: "/Profile",
   	name: "Profile",
   	component: Profile
-  }
+  },
+  {
+  	path: "/Admin",
+  	name: "Admin",
+  	component: Admin
+  },
 ]
 
 const scrollBehavior = function (to, from, savedPosition) {
@@ -82,8 +88,8 @@ const router = new Router({
 
 
 function blockAuthUser(to, from, next) {
-  if (localStorage.getItem("loginStatus") != null &&
-      localStorage.getItem("login-token") != null) {
+  if (localStorage.getItem("loginStatus") !== null &&
+      localStorage.getItem("login-token") !== null) {
         next('/') // 로그인된 유저는 접근 불가, 메인으로 이동
   } else {
     next() // 로그인 안된 유저는 해당 페이지로 이동.

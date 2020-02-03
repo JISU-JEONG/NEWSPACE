@@ -2,7 +2,7 @@ import http from "./http-common"
 import store from "../store";
 function getinfo() {
   var token = localStorage.getItem("login-token");
-  if (token != null) {
+  if (token !== null) {
     http
       .post(
         "/info",
@@ -21,11 +21,13 @@ function getinfo() {
         localStorage.setItem("member_email", res.data.data.email);
         localStorage.setItem("member_keyword", res.data.data.keyword);
         localStorage.setItem("member_type", res.data.data.type);
+        localStorage.setItem("auth", res.data.data.auth);
 
         const payload = {
           token: localStorage.getItem("login-token"),
           member_id: localStorage.getItem("member_id"),
           member_name: localStorage.getItem("member_name"),
+          auth: localStorage.getItem("auth"),
           member_keyword: localStorage.getItem("member_keyword")
         };
         store.dispatch("login", payload);
@@ -44,6 +46,7 @@ function getinfo() {
         localStorage.removeItem("member_keyword")
         localStorage.removeItem("member_type");
         localStorage.removeItem("loginStatus");
+        localStorage.removeItem("auth");
         store.dispatch("logout");
       });
   } else {

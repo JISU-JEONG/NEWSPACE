@@ -1,20 +1,30 @@
 <template>
-  <div>
+  <div v-if="user !== null">
 		<v-container>
 			<div class= "header_box">
 					<div class="header_name">
-						"{{user.name}}"님 환영합니다.
+						"{{user.member.name}}"님 환영합니다.
 					</div>
 					<div class="header_email">
-						{{user.email}}
+						{{user.member.email}}
 					</div>
+			</div>
+			<div class="comment_font">
+				<div>
+					<h1>
+						{{user.count}}
+					</h1>
+				</div>
+				<div>
+					<p>comments</p>
+				</div>
 			</div>
 			<v-card>
 				<v-card-title>
-					"{{user.name}}"님이 선택한 키워드
+					"{{user.member.name}}"님이 선택한 키워드
 				</v-card-title>
 				<v-card-text>
-					<span v-for="k in user.keyword.split(' ')" :key="k">
+					<span v-for="k in user.member.keyword.split(' ')" :key="k">
 						#{{ k }}
 					</span>
 				</v-card-text>
@@ -23,11 +33,13 @@
 		<v-container>
 			<div class="body_box">
 				<div class ="newsbody">
-						{{user.name}}'s NEWS ROOM
+						{{user.member.name}}'s NEWS ROOM
 				</div>
 			</div>
 		</v-container>
   </div>
+	<div v-else>
+	</div>
 </template>
 <script>
 import http from '../services/http-common.js'
@@ -36,9 +48,7 @@ export default {
   name: 'Profile',
   data(){
       return{
-          user: {
-						keyword:'',
-					},
+          user: null,
       }
   },
   methods: {
@@ -83,5 +93,9 @@ export default {
 }
 .newsbody{
 	font-size: 30px;
+}
+.comment_font{
+	text-align: center;
+	margin: 30px
 }
 </style>
