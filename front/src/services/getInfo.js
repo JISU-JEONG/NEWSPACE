@@ -25,7 +25,8 @@ function getinfo() {
         const payload = {
           token: localStorage.getItem("login-token"),
           member_id: localStorage.getItem("member_id"),
-          member_name: localStorage.getItem("member_name")
+          member_name: localStorage.getItem("member_name"),
+          member_keyword: localStorage.getItem("member_keyword")
         };
         store.dispatch("login", payload);
 
@@ -40,6 +41,7 @@ function getinfo() {
         localStorage.removeItem("member_id");
         localStorage.removeItem("member_name");
         localStorage.removeItem("member_email");
+        localStorage.removeItem("member_keyword")
         localStorage.removeItem("member_type");
         localStorage.removeItem("loginStatus");
         store.dispatch("logout");

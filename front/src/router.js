@@ -23,13 +23,17 @@ const routes = [
 	{
 		path: '/detail/:id',
 		name: 'detail',
-		component: Detail
+    component: Detail,
+    meta: {
+      scrollToTop: true
+    }
 	},
   {
     path: "/signup",
     name: "signup",
     component: SignupPage,
     meta: {
+      scrollToTop: true,
       needBlockAuthUser: true
     }
   },
@@ -38,6 +42,7 @@ const routes = [
     name: "login",
     component: LoginPage,
     meta: {
+      scrollToTop: true,
       needBlockAuthUser: true
     }
   },
@@ -46,16 +51,29 @@ const routes = [
     name: "SocialSignup",
     component: SocialSignup,
     meta: {
+      scrollToTop: true,
       needBlockAuthUser: true
     }
   }
 ]
 
+const scrollBehavior = function (to, from, savedPosition) {
+  if (savedPosition) {
+    console.log('savedPosition', savedPosition)
+    return savedPosition
+  } else if (savedPosition === null) {
+    console.log('null일때!!')
+    return {x:0, y:0}    
+  }
+}
+
 const router = new Router({
   mode: 'history',
   routes,
+  scrollBehavior,
   base: process.env.BASE_URL,
 })
+
 
 function blockAuthUser(to, from, next) {
   if (localStorage.getItem("loginStatus") != null &&

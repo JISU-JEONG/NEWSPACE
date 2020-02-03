@@ -1,9 +1,9 @@
 <template>
   <nav>
+    <!-- 상단 nav bar -->
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
-        <p>{{member_keywords}}</p>
       </v-btn>
       <v-btn to="/" icon v-else>
         <v-icon>mdi-home</v-icon>
@@ -24,7 +24,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </v-app-bar>
-
+    <!-- 사이드바 -->
     <v-navigation-drawer 
       v-model="drawer" 
       app 
@@ -103,9 +103,6 @@ export default {
     usernmae() {
       return this.$store.state.member_name
     },
-    member_keywords() {
-      return this.$store.state.member_keywords
-    }
   },
   data() {
     return {
@@ -139,10 +136,10 @@ export default {
     };
   },
   methods: {
-    changeDrawer() {
+    changeDrawer() { // 사이드바 
       this.drawer = !this.drawer;
     },
-    onSubmit(searchValue) {
+    onSubmit(searchValue) { // 검색
       this.$router
         .push({
           name: "search",
@@ -151,10 +148,15 @@ export default {
         .catch(err => {});
       this.searchValue = "";
     },
+    // userKeywordNews() {
+    //   http
+    //     .get(`/getUserKeywordNews/${}`)
+    // },
     logout() {
       localStorage.removeItem("login-token");
       localStorage.removeItem("member_id");
       localStorage.removeItem("member_name");
+      localStorage.removeItem("member_keyword")
       localStorage.removeItem("loginStatus");
       this.$store.dispatch("logout");
     },
@@ -165,5 +167,6 @@ export default {
   beforeMount() {
     Info();
   },
+
 };
 </script>

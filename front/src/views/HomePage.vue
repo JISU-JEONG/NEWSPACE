@@ -7,6 +7,7 @@
 <script>
 import NewsList from '../components/NewsList'
 import Info from '../services/getInfo';
+import store from "../store";
 
 export default {
 	name: 'HomePage',

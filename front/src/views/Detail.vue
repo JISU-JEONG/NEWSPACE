@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-container class="newsbody">
-      {{member_keywords}}
       <div>
         <h1>{{ news.title }}</h1>
       </div>
@@ -47,7 +46,6 @@ export default {
     return {
       news: [],
       keywords: [],
-      member_keywords: localStorage.getItem("member_keyword"),
       comments: [],
       snackbar: false,
       timeout: 2000,
@@ -111,17 +109,6 @@ export default {
           params: { searchValue: key }
         })
         .catch(err => {});
-    },
-    getkeyword(){
-      axios
-        .get(`http://192.168.31.85:8080/getUserKeywordNews/`+localStorage.getItem("member_keyword"))
-        .then(response => {
-          this.comments = response.data;
-          console.log(this.comments);
-        })
-        .catch(error => {
-          console.log(error);
-        });
     }
   },
   beforeMount() {
@@ -130,7 +117,6 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
-    this.getkeyword();
 
     console.log(localStorage.getItem("member_id"));
   }
@@ -147,7 +133,7 @@ export default {
 }
 .tagfont {
   font-size: 20px;
-  color: blue;
+  color : #42A5F5;
   margin-bottom: 10px;
   margin-top: 10px;
 }
