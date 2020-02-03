@@ -103,8 +103,8 @@ export default {
     Signup() {
       if (this.$refs.form.validate()) {
         if (this.selectedKeywords.length > 0 || this.trySignup) {
-          http
-            .post("/member/signup", {
+          axios
+            .post("http://192.168.31.85:8080/member/signup", {
               email: this.email,
               password: this.password,
               name: this.name,
