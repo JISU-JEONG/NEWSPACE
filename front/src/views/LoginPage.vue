@@ -88,7 +88,8 @@ export default {
               const payload = {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
-                member_name: res.data.member_name
+                member_name: res.data.member_name,
+                auth : localStorage.removeItem("auth")
               };
               this.$store.dispatch("login", payload);
               this.$router.push("/", () => {});
@@ -200,7 +201,8 @@ export default {
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",
-              member_name: localStorage.getItem("loginStatus")
+              member_name: localStorage.getItem("loginStatus"),
+              auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
             this.$router.push("/", () => {});

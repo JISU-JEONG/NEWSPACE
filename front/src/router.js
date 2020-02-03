@@ -7,6 +7,7 @@ import SignupPage from './views/SignupPage.vue'
 import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
+import Admin from './views/Admin.vue'
 
 Vue.use(Router)
 
@@ -48,6 +49,11 @@ export default new Router({
 		  	path: "/Profile",
 		  	name: "Profile",
 		  	component: Profile
-		  }
+		  },
+		  {
+		  	path: "/Admin",
+		  	name: "Admin",
+		  	component: Admin
+		  },
 	]
 })
