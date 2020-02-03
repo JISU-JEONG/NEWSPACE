@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
+import com.ssafy.edu.help.MemberNewsHelp;
+import com.ssafy.edu.help.UserKeywordNews;
+import com.ssafy.edu.service.ICommentService;
+import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
 
@@ -37,6 +42,12 @@ public class MemberRestController {
 
 	@Autowired
 	private MemberService memberservice;
+
+	@Autowired
+	INewsService newsService;
+	
+	@Autowired
+	ICommentService commentService;
 
 	// 일반 로그인
 	@PostMapping("/member/signin")
@@ -60,6 +71,7 @@ public class MemberRestController {
 			res.setHeader("login-token", token);
 			resultMap.put("status", true);
 			resultMap.put("member_name", loginUser.getName());
+			resultMap.put("member_keyword", loginUser.getKeyword());
 			status = HttpStatus.ACCEPTED;
 		} catch (RuntimeException e) {
 			log.error("로그인 실패", e);
@@ -103,7 +115,7 @@ public class MemberRestController {
 		if (search(member.getEmail()).equals("Notexist")) {
 			member.setKeyword(member.getInputkeyword().toString());
 			String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",",
-					" ");
+					"");
 			member.setKeyword(keyword);
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			digest.reset();
@@ -130,16 +142,58 @@ public class MemberRestController {
 	@PostMapping("/member/socialtoken")
 	public ResponseEntity<Map<String, Object>> socialtoken(@RequestBody Member member, HttpServletResponse res) {
 		log.info("\"MemberRestController Excute ! socialtoken " + member);
-		
+
 		Map<String, Object> resultMap = new HashMap<>();
-		
-		member.setMember_id( (memberservice.getEmail(member.getEmail())).getMember_id());
-		
+
+		member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
+
 		String token = jwtService.create(member);
 		res.setHeader("login-token", token);
 		resultMap.put("status", true);
 		HttpStatus status = HttpStatus.ACCEPTED;
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+
+	@PostMapping("/api/profile")
+	public Member profile(@RequestBody Member member, HttpServletRequest req) {
+		log.info("MemberRestController Excute ! profile : " + member);
+		Member login = null;
+		Map<String, Object> resultMap = new HashMap<>();
+		System.out.println();
+		login = memberservice.getMember(member.getMember_id());
+		System.out.println(login);
+//	      try {
+//	         // 사용자에게 전달할 정보이다.
+//	         // 보너스로 토큰에 담긴 정보도 전달해보자. 서버에서 토큰을 사용하는 방법임을 알 수 있다.
+//	         resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+//	         System.out.println(resultMap);
+//	         login = memberservice.getMember(member_id);
+//	         System.out.println(login);
+//	      } catch (RuntimeException e) {
+//	         log.error("정보조회 실패", e.getMessage());
+//	         resultMap.put("message", e.getMessage());
+//	      }
+		return login;
+	}
+
+	@PostMapping("/api/profile2")
+	public ResponseEntity<MemberNewsHelp> profile2(@RequestBody Member member) {
+		log.info("MemberRestController Excute ! profileNews : " + member.getMember_id());
+		
+		MemberNewsHelp result = new MemberNewsHelp();
+
+		result.setMember(memberservice.getMember(member.getMember_id()));
+		result.setList(newsService.getMeberNews(member.getMember_id()));
+		result.setCount(commentService.getCount(member.getMember_id()));
+
+		System.out.println(result.getMember());
+		System.out.println(result.getCount());
+		
+		if(result.getList().size() <= 0) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<MemberNewsHelp>(result, HttpStatus.OK);
+		
 	}
 
 }

@@ -14,4 +14,6 @@ public interface ICommentService {
 
 	void deleteComment(int comment_id);
 
+	int getCount(int member_id);
+
 }

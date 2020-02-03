@@ -6,6 +6,7 @@ import Detail from './views/Detail.vue'
 import SignupPage from './views/SignupPage.vue'
 import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
+import Profile from './views/Profile.vue'
 
 Vue.use(Router)
 
@@ -54,6 +55,11 @@ const routes = [
       scrollToTop: true,
       needBlockAuthUser: true
     }
+  },
+  {
+  	path: "/Profile",
+  	name: "Profile",
+  	component: Profile
   }
 ]
 
