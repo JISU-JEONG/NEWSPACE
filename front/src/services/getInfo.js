@@ -19,12 +19,14 @@ function getinfo() {
         localStorage.setItem("member_id", res.data.member_id);
         localStorage.setItem("member_name", res.data.data.name);
         localStorage.setItem("member_email", res.data.data.email);
+        localStorage.setItem("member_keyword", res.data.data.keyword);
         localStorage.setItem("member_type", res.data.data.type);
 
         const payload = {
           token: localStorage.getItem("login-token"),
           member_id: localStorage.getItem("member_id"),
-          member_name: localStorage.getItem("member_name")
+          member_name: localStorage.getItem("member_name"),
+          member_keyword: localStorage.getItem("member_keyword")
         };
         store.dispatch("login", payload);
 
@@ -39,6 +41,7 @@ function getinfo() {
         localStorage.removeItem("member_id");
         localStorage.removeItem("member_name");
         localStorage.removeItem("member_email");
+        localStorage.removeItem("member_keyword")
         localStorage.removeItem("member_type");
         localStorage.removeItem("loginStatus");
         store.dispatch("logout");

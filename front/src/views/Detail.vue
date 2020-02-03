@@ -19,6 +19,18 @@
       <hr />
       <CommentForm @commentCreate-event="CommentCreate" />
       <CommentList :comments="comments"></CommentList>
+      <v-snackbar
+        v-model="snackbar"
+        bottom
+        right
+        color="blue lighten-2 text--white" 
+        :timeout=timeout
+      >
+        {{snackbarInnerText}}
+        <v-btn text @click="snackbar=false">
+          닫기
+        </v-btn>
+      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -34,7 +46,10 @@ export default {
     return {
       news: [],
       keywords: [],
-      comments: []
+      comments: [],
+      snackbar: false,
+      timeout: 2000,
+      snackbarInnerText: '',
     };
   },
   components: {
@@ -56,7 +71,8 @@ export default {
             }
           })
           .then(response => {
-            alert("댓글 작성이 완료되었습니다.");
+            this.snackbar = true
+            this.snackbarInnerText = "댓글이 등록되었습니다."
             this.CommentGet();
           })
           .catch(e => {
@@ -117,7 +133,7 @@ export default {
 }
 .tagfont {
   font-size: 20px;
-  color: blue;
+  color : #42A5F5;
   margin-bottom: 10px;
   margin-top: 10px;
 }
