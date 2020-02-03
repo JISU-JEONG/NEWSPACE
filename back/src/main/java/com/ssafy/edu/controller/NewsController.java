@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.UserKeywordNews;
 import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -182,19 +185,53 @@ public class NewsController {
 	}
 	
 	@RequestMapping(value = "/getUserKeywordNews/{keyword}", method = RequestMethod.GET)
-	public ResponseEntity<List<NewsDTO>> getUserKeywordNews(@PathVariable String keyword) throws Exception {
+	public ResponseEntity<List<UserKeywordNews>> getUserKeywordNews(@PathVariable String keyword) throws Exception {
 		
 		logger.info("NewsController Excute ! getUserKeywordNews KEYWORD : " + keyword + "\t" + new Date());
 
 		Map<String, Object> resultMap = new HashMap<>();
 		
 		List<NewsDTO> news = null;
-
+		
+		List<UserKeywordNews> list = null;
+		
 		news = newsService.getKeywordNews(keyword);
-
+		
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		for(NewsDTO n : news) {
+			if(list.size() != 0) {
+				for(int i=0; i<list.size(); i++) {
+					UserKeywordNews ukn = list.get(i);
+					
+				}
+			}
+			
+			System.out.println(n.getDate());
+			
+			Calendar cal = Calendar.getInstance();
+			
+			Date newsDate = formatter.parse(n.getDate());
+			
+			cal.setTime(newsDate);
+			
+			long diffsec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
+			long diffday = diffsec / (24*60*60);
+			System.out.println(diffday);
+			
+			if(diffday < 7) {
+				
+			}
+			
+		}
+		
+		
 		if (news == null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<NewsDTO>>(news, HttpStatus.OK);
+		return new ResponseEntity<List<UserKeywordNews>>(list, HttpStatus.OK);
 	}
 }

@@ -47,8 +47,11 @@ public class NewsService implements INewsService {
 
 	// Properties
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe";
-
+	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; //윈도우 서버
+//	public static final String WEB_DRIVER_PATH = "/usr/bin/chromedriver";	//AWS
+	
+//	public static final String WEB_DRIVER_PATH = "C:\\JAVA\\selenium\\chromedriver.exe";
+	
 	private static final Logger logger = LoggerFactory.getLogger(NewsService.class);
 
 	@Override
@@ -272,6 +275,13 @@ public class NewsService implements INewsService {
 		}
 
 		return keywordList;
+	}
+	
+	
+	@Override
+	public List<NewsDTO> getMeberNews(int member_id) {
+		// TODO Auto-generated method stub
+		 return dao.getMeberNews(member_id);
 	}
 
 	public void samsung_Crawling1() throws IOException, ParseException {
@@ -504,11 +514,16 @@ public class NewsService implements INewsService {
 		/////////////////////////////////////////////////////////////
 
 		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-
+		
 		// Driver SetUp
 		ChromeOptions option = new ChromeOptions();
-
-		option.setHeadless(true);
+		
+//		option.setBinary("/usr/bin/google-chrome");
+		
+//		option.setHeadless(true);
+		
+		option.addArguments("headless");
+//		option.setBinary("");
 
 		driver = new ChromeDriver(option);
 		driver.get(url);
@@ -648,8 +663,8 @@ public class NewsService implements INewsService {
 
 		// Driver SetUp
 		ChromeOptions option = new ChromeOptions();
-
-		option.setHeadless(true);
+		
+		option.addArguments("headless");
 
 		driver = new ChromeDriver(option);
 
@@ -854,15 +869,14 @@ public class NewsService implements INewsService {
 	@Scheduled(fixedDelay = 3600000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING1..." + "\t" + new Date());
-		samsung_Crawling1();
+//		samsung_Crawling1();
 		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING2..." + "\t" + new Date());
-		samsung_Crawling2();
+//		samsung_Crawling2();
 		logger.info("News Service Scheduled Action : LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-		lg_Crawling();
+//		lg_Crawling();
 		logger.info("News Service Scheduled Action : SK HYNIX CRAWLING..." + "\t" + new Date()); 
-		sk_Crawling();
+//		sk_Crawling();
 		logger.info("News Service Scheduled Action : NEWS KEYWORD SETTING..." + "\t" + new Date());
-		newsKeywordSet();
+//		newsKeywordSet();
 	}
-
 }

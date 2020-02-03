@@ -24,7 +24,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<delete id="deleteComment" parameterType="java.lang.Integer">
-		DELETE FROM COMMENT WHERE COMMENT_ID = #{comment_id}
+		DELETE FROM COMMENT
+		WHERE COMMENT_ID = #{comment_id}
 	</delete>
+
+	<select id="getCount" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(*) from comment where member_id = #{member_id}
+	</select>
 
 </mapper>

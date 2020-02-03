@@ -32,5 +32,10 @@ public class CommentServiceDao {
 		// TODO Auto-generated method stub
 		SQL.delete(ns + "deleteComment", comment_id);
 	}
+
+	public int getCount(int member_id) {
+		// TODO Auto-generated method stub
+		return SQL.selectOne(ns + "getCount", member_id);
+	}
 	
 }
