@@ -39,10 +39,10 @@ public class NewsController {
 
 	@Autowired
 	INewsService newsService;
-	
+
 	@Autowired
 	private JwtService jwtService;
-	
+
 	@Autowired
 	private MemberService memberservice;
 
@@ -136,7 +136,7 @@ public class NewsController {
 		List<NewsDTO> skList = new ArrayList<>();
 
 		String[] str = search.split(" ");
-		
+
 		allList = newsService.findNewsAll(str);
 		samsungList = newsService.findNewsSamsung(str);
 		lgList = newsService.findNewsLg(str);
@@ -152,7 +152,7 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<List<NewsDTO>>>(list, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getAllNews", method = RequestMethod.GET)
 	public ResponseEntity<List<NewsDTO>> getAllNews() throws Exception {
 		logger.info("NewsController Excute ! getAllNews \t" + new Date());
@@ -163,7 +163,7 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getAllNewsRecent", method = RequestMethod.GET)
 	public ResponseEntity<List<NewsDTO>> getAllNewsRecent() throws Exception {
 		logger.info("NewsController Excute ! getAllNewsRecent \t" + new Date());
@@ -174,64 +174,41 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getUserKeyword", method = RequestMethod.GET)
-	public ResponseEntity<String[]> getUserKeyword() throws Exception{
+	public ResponseEntity<String[]> getUserKeyword() throws Exception {
 		logger.info("NewsController Excute ! getUserKeyword \t" + new Date());
-		
+
 		String[] keywords = newsService.getUserKeyword();
-		
+
 		return new ResponseEntity<String[]>(keywords, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getUserKeywordNews/{keyword}", method = RequestMethod.GET)
 	public ResponseEntity<List<UserKeywordNews>> getUserKeywordNews(@PathVariable String keyword) throws Exception {
-		
+
 		logger.info("NewsController Excute ! getUserKeywordNews KEYWORD : " + keyword + "\t" + new Date());
 
-		Map<String, Object> resultMap = new HashMap<>();
-		
 		List<NewsDTO> news = null;
-		
-		List<UserKeywordNews> list = null;
-		
 		news = newsService.getKeywordNews(keyword);
-		
-		Calendar now = Calendar.getInstance();
-		now.setTime(new Date());
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
-		for(NewsDTO n : news) {
-			if(list.size() != 0) {
-				for(int i=0; i<list.size(); i++) {
-					UserKeywordNews ukn = list.get(i);
-					
-				}
-			}
-			
-			System.out.println(n.getDate());
-			
-			Calendar cal = Calendar.getInstance();
-			
-			Date newsDate = formatter.parse(n.getDate());
-			
-			cal.setTime(newsDate);
-			
-			long diffsec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
-			long diffday = diffsec / (24*60*60);
-			System.out.println(diffday);
-			
-			if(diffday < 7) {
-				
-			}
-			
-		}
-		
-		
+
+		List<UserKeywordNews> list = new ArrayList<>();
+
 		if (news == null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+		Calendar cal = Calendar.getInstance();
+		
+		
+		
+		
+		for (NewsDTO n : news) {
+			System.out.println(n.getDate());
+		}
+
 		return new ResponseEntity<List<UserKeywordNews>>(list, HttpStatus.OK);
 	}
 }

@@ -155,30 +155,8 @@ public class MemberRestController {
 	}
 
 	@PostMapping("/api/profile")
-	public Member profile(@RequestBody Member member, HttpServletRequest req) {
-		log.info("MemberRestController Excute ! profile : " + member);
-		Member login = null;
-		Map<String, Object> resultMap = new HashMap<>();
-		System.out.println();
-		login = memberservice.getMember(member.getMember_id());
-		System.out.println(login);
-//	      try {
-//	         // 사용자에게 전달할 정보이다.
-//	         // 보너스로 토큰에 담긴 정보도 전달해보자. 서버에서 토큰을 사용하는 방법임을 알 수 있다.
-//	         resultMap.putAll(jwtService.get(req.getHeader("login-token")));
-//	         System.out.println(resultMap);
-//	         login = memberservice.getMember(member_id);
-//	         System.out.println(login);
-//	      } catch (RuntimeException e) {
-//	         log.error("정보조회 실패", e.getMessage());
-//	         resultMap.put("message", e.getMessage());
-//	      }
-		return login;
-	}
-
-	@PostMapping("/api/profile2")
-	public ResponseEntity<MemberNewsHelp> profile2(@RequestBody Member member) {
-		log.info("MemberRestController Excute ! profileNews : " + member.getMember_id());
+	public ResponseEntity<MemberNewsHelp> profile(@RequestBody Member member) {
+		log.info("MemberRestController Excute ! profile : " + member.getMember_id());
 		
 		MemberNewsHelp result = new MemberNewsHelp();
 
@@ -186,14 +164,13 @@ public class MemberRestController {
 		result.setList(newsService.getMeberNews(member.getMember_id()));
 		result.setCount(commentService.getCount(member.getMember_id()));
 
-		System.out.println(result.getMember());
-		System.out.println(result.getCount());
+//		System.out.println(result.getMember());
+//		System.out.println(result.getCount());
 		
 		if(result.getList().size() <= 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<MemberNewsHelp>(result, HttpStatus.OK);
-		
 	}
 
 }
