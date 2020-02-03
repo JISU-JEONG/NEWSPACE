@@ -36,7 +36,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              <v-btn text v-on:click="aboutme">{{usernmae}}</v-btn>
+              <v-btn text to="/Profile">{{usernmae}}</v-btn>
             </v-list-item-title>
           </v-list-item-content>
           <v-btn text v-on:click="logout">로그아웃</v-btn>
@@ -95,6 +95,8 @@
 import store from "../store";
 import http from "../services/http-common"
 import Info from "../services/getInfo";
+import router from '../router'
+
 export default {
   name: "Navigation",
   props: {},
@@ -153,9 +155,6 @@ export default {
       localStorage.removeItem("member_name");
       localStorage.removeItem("loginStatus");
       this.$store.dispatch("logout");
-    },
-    aboutme() {
-      alert("이거만 구현하면 마지막일까?");
     },
     init() {
       if (

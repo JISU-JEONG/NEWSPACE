@@ -6,6 +6,7 @@ import Detail from './views/Detail.vue'
 import SignupPage from './views/SignupPage.vue'
 import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
+import Profile from './views/Profile.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
 			path: "/SocialSignup",
 			name: "SocialSignup",
 			component: SocialSignup
+		  },
+		  {
+		  	path: "/Profile",
+		  	name: "Profile",
+		  	component: Profile
 		  }
 	]
 })
