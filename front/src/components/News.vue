@@ -34,7 +34,7 @@ export default {
     news : {type: Object},
     company : {type: String}
   },
-  methods: {
+  methods: {  
     goDetail(id) {
       router.push({ name: 'detail', params: { id: id }})
     },

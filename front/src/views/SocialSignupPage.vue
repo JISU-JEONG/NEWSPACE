@@ -173,13 +173,7 @@ export default {
             this.error = true
             this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`
           }
-        });
-        errorKeyword = errorKeyword.trim();
-        if (errorKeyword) {
-          this.error = true;
-          this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`;
-        }
-      }
+        };
       this.userInputKeyword = "";
     }
   },
