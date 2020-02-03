@@ -26,6 +26,7 @@ import com.ssafy.edu.service.JwtService;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
+@RequestMapping("/api")
 public class CommentController {
 
 	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
@@ -36,7 +37,7 @@ public class CommentController {
 	@Autowired
 	private JwtService jwtService;
 
-	@RequestMapping(value = "/getComment/{news_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/comment/{news_id}", method = RequestMethod.GET)
 	public ResponseEntity getComment(@PathVariable int news_id) throws Exception {
 		logger.info("CommentController Excute ! getComment :" + news_id + "\t" + new Date());
 
@@ -48,7 +49,7 @@ public class CommentController {
 		return new ResponseEntity<List<CommentDTO>>(comments, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/addComment", method = RequestMethod.POST)
+	@RequestMapping(value = "/comment", method = RequestMethod.POST)
 	public void addComment(@RequestBody CommentDTO comment, HttpServletRequest req) throws Exception {
 		
 		logger.info("CommentController Excute ! addComment :" + comment.toString() + "\t" + new Date());
@@ -63,11 +64,15 @@ public class CommentController {
 	      
         comment.setMember_id(member_id);
         comment.setMember_name(member_name);
-
-		commentService.addComment(comment);
+        
+        if(comment.getMember_id() != 0) {
+        	commentService.addComment(comment);
+        }else {
+        	logger.error("CommentControler Error ! member_id load faild"); 	
+        }
 	}
 
-	@RequestMapping(value = "/deleteComment/{comment_id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/comment/{comment_id}", method = RequestMethod.DELETE)
 	public void deleteComment(@PathVariable int comment_id, HttpServletRequest req) throws Exception {
 		
 		logger.info("CommentController Excute ! deleteComment :" + comment_id + "\t" + new Date());

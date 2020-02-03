@@ -1,6 +1,6 @@
 # DEMO
 
-[DEMOSITE](http://merong.merong)
+[DEMOSITE](https://52.79.249.4:8080)
 
 
 ## 개발환경
@@ -32,36 +32,70 @@
 
 ## function
 
-### REST 명령어 뒤에 ?는 검색하고자 하는 검색명
+---
 
-<details><summary>News Rest Function</summary>
+리소스 | GET | POST | PUT | DELETE
+------- | ------- | ------- | ------- | -------
+news/1 | 해당 번호의 뉴스 조회 | Error | Error | Error
 
-```
-getNews/?		:	해당 번호의 뉴스를 가져온다.
-getAllNews		:	모든 뉴스를 가져온다.(DataBase에 저장된 순서대로)
-getSamsungNews		:	날짜순으로 삼성의 모든 뉴스를 가져온다.
-getLgNews		:	날짜순으로 LG의 모든 뉴스를 가져온다.
-getSkNews		:	날짜순으로 SK의 모든 뉴스를 가져온다.
-getAllNewsRecent	:	날짜순으로 최근 20개의 모든 브랜드의 뉴스를 가져온다.
-getSamsungRecent	:	날짜순으로 최근 20개의 삼성 뉴스를 가져온다.
-getLgRecent		:	날짜순으로 최근 20개의 LG 뉴스를 가져온다.
-getSkRecent		:	날짜순으로 최근 20개의 SK 뉴스를 가져온다.
-findNews/?		:	전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다.
-getUserKeyword		:	TOP 20 키워드들을 보여준다.
-getUserKeywordNews/?	:	토큰에 있는 Keyword를 전달 시 자신의 키워드에 따른 뉴스를 검색한다.
-```
-</details>
+### NEWS REST FUNCTION DESCRIPTION
 
----------------------------------------------------------------------------------------
+> getNews/?
+>> 해당 번호의 뉴스를 가져온다.
 
-<details><summary>Comment Rest Function</summary>
+> getAllNews
+>> 모든 뉴스를 가져온다.(DataBase에 저장된 순서대로)
 
-```
-getComment/?		:	해당 번호의 뉴스의 Comment들을 가져온다.
-addComment		:	POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date)
-deleteComment		:	DELETE로 comment_id를 넘겨주면 삭제된다. (세션 유저의 member_id 값과 comment에 저장된 member_id 값이 같아야 지워짐)
-```
-</details>
+> getSamsungNews
+>> 날짜순으로 삼성의 모든 뉴스를 가져온다.
+
+>getLgNews
+>> 날짜순으로 LG의 모든 뉴스를 가져온다.
+
+>getSkNews
+>> 날짜순으로 SK의 모든 뉴스를 가져온다.
+
+>getAllNewsRecent
+>> 날짜순으로 최근 20개의 모든 브랜드의 뉴스를 가져온다.
+
+>getSamsungRecent
+>> 날짜순으로 최근 20개의 삼성 뉴스를 가져온다.
+
+>getLgRecent
+>> 날짜순으로 최근 20개의 LG 뉴스를 가져온다.
+
+>getSkRecent
+>> 날짜순으로 최근 20개의 SK 뉴스를 가져온다.
+
+>getUserKeyword
+>> TOP 20 키워드들을 보여준다.
+
+>getUserKeywordNews/?
+>> 토큰에 있는 Keyword를 전달 시 자신의 키워드에 따른 뉴스를 검색한다.
+
+>findNews/?
+>> 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다.
+
+---
+
+| 리소스 | GET | POST | PUT | DELETE |
+| ------- | ------- | ------- | ------- | ------- |
+| /comment| Error | comment 등록 | Error | comment 삭제 |
+| /comment/1 | news_id 값의 comment 조회 | Error | Error | Error |
+
+
+### COMMENT REST FUNCTION DESCRIPTION
+
+> comment/?
+>> 해당 번호의 뉴스의 Comment들을 가져온다.
+
+> comment
+>> POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date)
+
+> comment
+>> DELETE로 comment_id를 넘겨주면 삭제된다. (세션 유저의 member_id 값과 comment에 저장된 member_id 값이 같아야 지워짐)
+
+---
 
 ## Crawling
 

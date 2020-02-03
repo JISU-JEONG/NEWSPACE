@@ -33,12 +33,11 @@ public class JwtService {
         // JWT Token = Header + Payload + Signagure
 
         builder.setHeaderParam("typ", "JWT");// 토큰의 타입으로 고정 값
-
+        
         // Payload 설정 - claim 정보 포함
         builder.setSubject(member.getTokenname())// 토큰 제목 설정
 //                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * expireMin)))// 유효기간
         		.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin))// 유효기간
-
                 .claim("data", member)
                 .claim("member_id", member.getMember_id())
         		.claim("member_name", member.getName ())

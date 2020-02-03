@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
+@RequestMapping("/api")
 @RestController
 public class NewsController {
 

@@ -27,6 +27,7 @@ import com.ssafy.edu.service.MemberService;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
+@RequestMapping("/api")
 public class MainController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);

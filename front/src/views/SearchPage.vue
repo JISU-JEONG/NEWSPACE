@@ -39,7 +39,7 @@
 
 <script>
 import News from "../components/News"
-import http from '../http-common'
+import http from "../services/http-common"
 
 export default {
   components: {
@@ -72,7 +72,7 @@ export default {
       this.loading = true
       this.empty = null
       this.searchValue = this.$route.params.searchValue
-      http.get(`http://192.168.31.85:8080/findNews/${this.$route.params.searchValue}`)
+      http.get(`/findNews/${this.$route.params.searchValue}`)
         .then((response) => {
           if (response.data.some(list => list.length > 0)) {
             this.loading = false
