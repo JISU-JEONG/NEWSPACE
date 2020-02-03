@@ -101,8 +101,8 @@ export default {
   },
   methods: {
     Signup() {
-      if (this.$refs.form.validate()) {
-        if (this.selectedKeywords.length > 0 || this.trySignup) {
+      if (this.$refs.form.validate()) { // 회원가입 폼 확인
+        if (this.selectedKeywords.length > 0 || this.trySignup) { // 관심 키워드 빈칸인지 확인
           axios
             .post("http://192.168.31.85:8080/member/signup", {
               email: this.email,
@@ -128,6 +128,7 @@ export default {
         }
       }
     },
+    // 관심 키워드 등록
     keywordSetting() {
       http.get("/getUserKeyword")
         .then(response => {

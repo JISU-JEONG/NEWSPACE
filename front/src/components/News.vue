@@ -60,7 +60,7 @@ export default {
   .tagfont{
   width: 100%;
   font-size: 18px;
-  color : blue;
+  color : #42A5F5;
   margin-top: 10px;
   }
   .head_font{
@@ -75,6 +75,7 @@ export default {
   }
   .SAMSUNG:hover {
     border: solid 2px #1428A0;
+    box-shadow: 1px 1px 3px 0.1px #1428A0;
     box-sizing: border-box;
     padding: 9px 19px;
     transform: scale(1.05);    
@@ -87,6 +88,7 @@ export default {
   }
   .LG:hover {
     border: solid 2px #A50034;
+    box-shadow: 1px 1px 3px 0.1px #A50034;
     box-sizing: border-box;
     padding: 9px 19px;
     transform: scale(1.05);    
@@ -99,6 +101,7 @@ export default {
   }
   .SK:hover {
     border: solid 2px #DB1026;
+    box-shadow: 1px 1px 3px 0.1px #DB1026;
     box-sizing: border-box;
     padding: 9px 19px;
     transform: scale(1.05);    

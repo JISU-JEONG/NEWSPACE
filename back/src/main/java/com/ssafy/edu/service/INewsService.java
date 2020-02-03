@@ -23,4 +23,5 @@ public interface INewsService {
 	List<NewsDTO> findNewsAll(String[] str);
 	String[] getUserKeyword();
 	List<NewsDTO> getKeywordNews(String keyword);
+	List<NewsDTO> getMeberNews(int member_id);
 }

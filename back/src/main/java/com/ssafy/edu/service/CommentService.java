@@ -36,5 +36,11 @@ public class CommentService implements ICommentService {
 		// TODO Auto-generated method stub
 		dao.deleteComment(comment_id);
 	}
+
+	@Override
+	public int getCount(int member_id) {
+		// TODO Auto-generated method stub
+		return dao.getCount(member_id);
+	}
 	
 }

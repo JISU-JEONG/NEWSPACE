@@ -1,5 +1,7 @@
 package com.ssafy.edu.dto;
 
+import java.util.Arrays;
+
 public class Member {
 
 	private String email;
@@ -10,6 +12,15 @@ public class Member {
 	private String type;
 	private String tokenname;
 	private int member_id;
+	private int auth;
+
+	public int getAuth() {
+		return auth;
+	}
+
+	public void setAuth(int auth) {
+		this.auth = auth;
+	}
 
 	public int getMember_id() {
 		return member_id;
@@ -92,10 +103,24 @@ public class Member {
 		this.tokenname = tokenname;
 	}
 
+	public Member(String email, String password, String name, String[] inputkeyword, String keyword, String type,
+			String tokenname, int member_id, int auth) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.inputkeyword = inputkeyword;
+		this.keyword = keyword;
+		this.type = type;
+		this.tokenname = tokenname;
+		this.auth = auth;
+	}
+
 	@Override
 	public String toString() {
-		return "Member [email=" + email + ", password=" + password + ", name=" + name + ", keyword=" + keyword
-				+ ", type=" + type + ", tokenname=" + tokenname + "]";
+		return "Member [email=" + email + ", password=" + password + ", name=" + name + ", inputkeyword="
+				+ Arrays.toString(inputkeyword) + ", keyword=" + keyword + ", type=" + type + ", tokenname=" + tokenname
+				+ ", member_id=" + member_id + ", auth=" + auth + "]";
 	}
 
 }

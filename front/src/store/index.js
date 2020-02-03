@@ -10,6 +10,7 @@ export default new Vuex.Store({
     member_id: null,
     member_name: null,
     auth: null,
+    member_keyword: null,
     error: false
   },
   mutations: {
@@ -20,6 +21,7 @@ export default new Vuex.Store({
       state.auth = payload.auth;
       state.member_id = payload.member_id;
       state.member_name = payload.member_name;
+      state.member_keyword = payload.member_keyword
     },
     setError(state) {
       state.error = true;
@@ -37,7 +39,8 @@ export default new Vuex.Store({
         token: null,
         member_id: null,
         member_name: null,
-        auth: null
+        auth: null,
+        member_keyword: null,
       });
     },
     error(context) {
