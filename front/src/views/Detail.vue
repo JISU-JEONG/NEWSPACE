@@ -82,9 +82,9 @@ export default {
     },
     getNews() {
       axios
-        .get(`http://192.168.31.85:8080/api/getNews/${this.$route.params.id}`)
+        .get(`http://192.168.31.85:8080/api/news/${this.$route.params.id}`)
         .then(response => {
-          this.news = response.data;
+          this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
         })
         .catch(error => {
@@ -117,10 +117,13 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
-
     console.log(localStorage.getItem("member_id"));
-  }
-};
+  },
+  watch: {
+    '$route': 'getNews',
+    '$route': 'CommentGet'
+  },
+  };
 </script>
 
 <style scoped>
