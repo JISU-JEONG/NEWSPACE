@@ -105,36 +105,91 @@ doc = Jsoup.connect("https://news.samsung.com/kr/category/%ea%b8%b0%ec%97%85/" +
 						+ pageIndex++).get();
 //index 증가를 통해 페이지 이동
 
-long diffSec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
-long diffDay = diffSec / (24 * 60 * 60);
-
-//해당 기사의 날짜를 기반으로 최근 7일간의 데이터를 크롤링
-
-//BODYTEXT 내용을 토대로
-
-Komoran komoran = new Komoran("C:\\KOMORAN\\models");
-List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
-for (List<Pair<String, String>> eojeolResult : result) {
-	for (Pair<String, String> wordMorph : eojeolResult) {
-		if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW") || wordMorph.getSecond().equals("SL")) {
-			txt += wordMorph.getFirst();
+Document ele1Doc = Jsoup.connect(ele1.get(j).attr("href")).get();
+if (doc.getElementsByClass("page_404").isEmpty()) {
+	// 삼성 뉴스룸의 경우 뉴스 맨 마지막 페이지를 넘어가면 page_404라는 Class를 배출한다.
+	// 이를 토대로 해당 클래스가 없을경우 계속해서 동작하도록 한다.
+	Elements ele1 = doc.getElementsByClass("item").get(0).getElementsByTag("a");
+	for (int j = 0; j < ele1.size(); j++) {
+		Document ele1Doc = Jsoup.connect(ele1.get(j).attr("href")).get();
+		String title = ele1Doc.getElementsByClass("title").text().substring(0, ele1Doc.getElementsByClass("title").text().length() - 4);
+		String date = ele1Doc.getElementsByClass("meta").text();
+		String body = ele1Doc.getElementsByClass("text_cont").toString();
+		String brand = "SAMSUNG";
+		String cate = category[i];
+		String url = ele1.get(j).attr("href");
+		String bodytext = ele1Doc.getElementsByClass("text_cont").text();
+		date = date.replaceAll("/", "-");
+		date = date.substring(0, 10);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date newsDate = formatter.parse(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(newsDate);
+	
+		long diffSec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
+		long diffDay = diffSec / (24 * 60 * 60);
+		if (diffDay > 7) {
+			page = false;
+			pageIndex = 1;
+			break;
 		}
-		if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
-			keyword += wordMorph.getFirst() + " ";
+		// 설정해둔 최대 허용치 날짜는 7일
+	
+		/*
+		 *
+		 * KOMORAN
+		 *
+		 */
+	
+		NewsDTO check = null;
+		NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext);
+		check = getNewsOne(news.getUrl());
+		if (check == null) {
+			logger.info("Added News : " + news.getUrl());
+			addNews(news);
+		} else {
+			page = false;
+			pageIndex = 1;
+			break;
 		}
 	}
+	doc = null;
+}
+// 위 코드를 while를 통해 pageIndex를 이동시켜, page_404 Class 또는 설정해둔 날짜가 나올 때 까지 반복하도록한다.
+
+```
+
+## Komoran
+### 문장 안에서 형태소를 분석하기 위한 라이브러리
+
+```java
+
+Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+KomoranResult analyzeResultList = komoran.analyze(bodytext);
+// 크롤링을 통해 얻게된 BODYTEXT의 내용을 대입한다.
+List<Token> tokenList = analyzeResultList.getTokenList();
+// tokenList = bodytext를 토대로 만들어진 단어들의 리스트
+for (Token token : tokenList) {
+	if(token.getPos().equals("SN") || token.getPos().equals("SW") || token.getPos().equals("SL")) {
+		txt += token.getMorph();
+	}
+	// 영어 단어는 txt 변수에 따로 저장한다.
+
+	if(token.getPos().equals("NNG") || token.getPos().equals("NNP")) {
+		keyword += token.getMorph()+" ";
+	}
+	// 한글로된 명사는 바로 Keyword에 구분한다.
 }
 
-//KOMORAN에 대입하여, KEYWORD들을 추출
+String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV", "Auto", "webOS"};
+// 위에서 걸러진 영어단어들 중 위 선언된 단어들은 따로 분리하여, 가져온다.
 
-//KOMORAN을 통해 나타나지 않는 영단어 키워드들은 따로 지정하여 추가한다.
-
-String[] countString = { "5G", "SW", "AI", "SSAFY", "LTE", "4G", "QLED", "OLED", "SSD", "TV" };
 int[] count = new int[countString.length];
 
 for (int c = 0; c < count.length; c++) {
 	count[c] = StringUtils.countMatches(txt, countString[c]);
 }
+
 for (int c = 0; c < count.length; c++) {
 	for (int index = 0; index < count[c]; index++) {
 		keyword += countString[c] + " ";
@@ -145,15 +200,31 @@ for (int c = 0; c < count.length; c++) {
 
 
 ## Selenium
-### 무한 스크롤링 페이지를 크롤링 하기 위해 사용
+### 무한 스크롤링 페이지를 크롤링 하기 위한 라이브러리
 
 ```java
 
+public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
+// DRIVER_ID를 설정한다.
+// public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; 
+// WINDOWS 상에서 서버를 돌릴때의 ChromeDriver Path
+public static final String WEB_DRIVER_PATH = "/usr/bin/chromedriver";	
+// AWS LINUX 상에서 서버를 돌릴때의 ChromeDriver Path
+
 System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
-// Driver SetUp
-driver = new ChromeDriver();
+// ------ Start Driver Setup ------
+ChromeOptions option = new ChromeOptions();
+		
+option.setBinary("/usr/bin/google-chrome");
+// WINDOWS 상에서 Selenium 동작시엔 Binary를 설정할 필요가 없다.
+
+option.addArguments("headless");
+// 백그라운드에서 Chrome이 동작하도록한다.
+
+driver = new ChromeDriver(option);
 driver.get(url);
+// ------ End Driver Setup ------
 
 //URL은 크롤링 하고자 하는 URL
 
@@ -215,7 +286,10 @@ for (NewsDTO n : list) {
 			|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
 			|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
 			|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")
-			|| s.equals("그니") || s.equals("그랑")) {
+			|| s.equals("그니") || s.equals("그랑") || s.equals("튜브") || s.equals("빌리") || s.equals("이노")
+			|| s.equals("베이") || s.equals("방식") || s.equals("빌트") || s.equals("프리") || s.equals("제품")
+			|| s.equals("레드") || s.equals("하이") || s.equals("기능") || s.equals("상배") || s.equals("양사")
+			|| s.equals("바이") || s.equals("인공") || s.equals("지능")) {
 			continue;
 			//위 문자들을 키워드 리스트에서 제외한다.
 		}
