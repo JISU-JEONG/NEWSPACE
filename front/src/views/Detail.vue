@@ -1,18 +1,29 @@
 <template>
-  <div>
-    <button @click="newspick()">pick</button>
-    <v-container class="newsbody">
+  <v-container>
+    <div class="newsbody">
       <div>
         <h1>{{ news.title }}</h1>
       </div>
-      <div class="tagfont">
-        <!-- for i in keywords.length에서 바꿨읍니다. -->
-        <span
-          v-for="key in keywords"
-          :key="key"
-          @click="onClickKeyword(key)"
-          style="cursor: pointer;"
-        >#{{ key }}</span>
+      <div class="tagfont d-flex justify-space-between align-end">
+          <span>
+            <span
+              v-for="key in keywords"
+              :key="key"
+              @click="onClickKeyword(key)"
+              style="cursor: pointer;"
+            >#{{ key }} </span>
+          </span>
+        <span v-if="is_like===true && $store.state.token" class="like" @click="like()">
+            <v-icon size=40px color="yellow">
+              mdi-star
+            </v-icon>
+        </span>
+        <span v-else class="like" @click="like()">
+            <v-icon size=40px color="yellow">
+              mdi-star-outline
+            </v-icon>
+        </span>
+        <!-- </div> -->
       </div>
       <hr />
       <br />
@@ -20,8 +31,20 @@
       <hr />
       <CommentForm @commentCreate-event="CommentCreate" />
       <CommentList :comments="comments"></CommentList>
-    </v-container>
-  </div>
+      <v-snackbar
+        v-model="snackbar"
+        bottom
+        right
+        color="blue lighten-2 text--white" 
+        :timeout=timeout
+      >
+        {{snackbarInnerText}}
+        <v-btn text @click="snackbar=false">
+          닫기
+        </v-btn>
+      </v-snackbar>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -37,7 +60,11 @@ export default {
     return {
       news: [],
       keywords: [],
-      comments: []
+      comments: [],
+      snackbar: false,
+      timeout: 2000,
+      snackbarInnerText: '',
+      is_like : false,
     };
   },
   components: {
@@ -53,13 +80,14 @@ export default {
           comment_text: text
         };
         axios
-          .post("http://192.168.31.85:8080/api/comment", data, {
+          .post("http://52.79.249.4:8080/api/comment", data, {
             headers: {
               "login-token": storage.getItem("login-token")
             }
           })
           .then(response => {
-            alert("댓글 작성이 완료되었습니다.");
+            this.snackbar = true
+            this.snackbarInnerText = "댓글이 등록되었습니다."
             this.CommentGet();
           })
           .catch(e => {
@@ -68,17 +96,20 @@ export default {
       }
     },
     getNews() {
+      const storage = localStorage;
       const token = {
-        headers: {
-          "login-token": localStorage.getItem("login-token")
+            headers: {
+              "login-token": storage.getItem("login-token"),
         }
-      };
+      }
       axios
-        .get(`http://192.168.31.85:8080/api/getNews/${this.$route.params.id}`, token)
+        .get(`http://192.168.31.85:8080/api/news/${this.$route.params.id}`,token)
         .then(response => {
+          console.log(response.data)
           this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
-          console.log("===>" + response.data.is_like);
+          this.is_like = response.data.is_like
+          console.log(response.data.is_like)
         })
         .catch(error => {
           console.log(error);
@@ -86,7 +117,7 @@ export default {
     },
     CommentGet() {
       axios
-        .get(`http://192.168.31.85:8080/api/comment/${this.$route.params.id}`)
+        .get(`http://52.79.249.4:8080/api/comment/${this.$route.params.id}`)
         .then(response => {
           this.comments = response.data;
           console.log(this.comments);
@@ -103,51 +134,32 @@ export default {
         })
         .catch(err => {});
     },
-    newspick(){
-      alert(this.$route.params.id);
-       const data = {
-          news_id: this.$route.params.id
+    like(){
+      if(this.$store.state.token !== null)
+      {
+        const storage = localStorage;
+        const data = {
+          news_id: this.$route.params.id,
         };
-      const token = {
-        headers: {
-          "login-token": localStorage.getItem("login-token")
-        }
-      };
-      axios
-        .post(`http://192.168.31.85:8080/api/news/`,
-          data,token
-        )
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    },
-    newsnopick(){
-      alert("nopick");
-      const token = {
-        headers: {
-          "login-token": localStorage.getItem("login-token")
-        }
-      };
-      http
-        .delete(
-          "/news/",
-          {
-            member_id: this.$store.state.member_id
-          },
-          token
-        )
-        .then(response => {
-          this.user = response.data;
-          console.log(this.user);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+        axios
+          .post("http://192.168.31.85:8080/api/news", data, {
+            headers: {
+              "login-token": storage.getItem("login-token")
+            }
+          })
+          .then(response => {
+              this.is_like=response.data
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
+      else{
+        alert("로그인을 해주세요")
+      }
 
+
+    },
   },
   beforeMount() {
     info();
@@ -155,10 +167,12 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
-
     console.log(localStorage.getItem("member_id"));
-  }
-};
+  },
+  watch: {
+    '$route': ['getNews', 'CommentGet']
+  },
+  };
 </script>
 
 <style scoped>
@@ -170,8 +184,9 @@ export default {
   border-radius: 50px;
 }
 .tagfont {
+  width: 100%;
   font-size: 20px;
-  color: blue;
+  color : #42A5F5;
   margin-bottom: 10px;
   margin-top: 10px;
 }
@@ -187,4 +202,9 @@ export default {
   display: block !important;
   margin: 0px auto !important;
 }
+.like{
+  align-content: right;
+  margin-right: 20px;
+}
+
 </style>

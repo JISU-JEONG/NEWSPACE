@@ -45,7 +45,7 @@ export default {
       console.log(storage.getItem("login-token"));
       axios
         .delete(
-          `http://192.168.31.85:8080/api/comment/${comment.comment_id}`,
+          `http://52.79.249.4:8080/api/comment/${comment.comment_id}`,
           token
         )
         .then(response => {

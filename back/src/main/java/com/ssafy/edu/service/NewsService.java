@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.edu.dao.NewsServiceDao;
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsKeywordCounter;
 
@@ -47,10 +48,8 @@ public class NewsService implements INewsService {
 
 	// Properties
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; //윈도우 서버
-//	public static final String WEB_DRIVER_PATH = "/usr/bin/chromedriver";	//AWS
-	
-//	public static final String WEB_DRIVER_PATH = "C:\\JAVA\\selenium\\chromedriver.exe";
+//	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; //윈도우 서버
+	public static final String WEB_DRIVER_PATH = "/usr/bin/chromedriver";	//AWS
 	
 	private static final Logger logger = LoggerFactory.getLogger(NewsService.class);
 
@@ -282,6 +281,23 @@ public class NewsService implements INewsService {
 	public List<NewsDTO> getMeberNews(int member_id) {
 		// TODO Auto-generated method stub
 		 return dao.getMeberNews(member_id);
+	}
+	
+	@Override
+	public void addLikeNews(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		dao.addLikeNews(nih);
+	}
+	
+	@Override
+	public void deleteLikeNews(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		dao.deleteLikeNews(nih);
+	}
+	
+	@Override
+	public boolean checkLikeNews(NewsInsertHelp nih) {
+		return dao.checkLikeNews(nih);
 	}
 
 	public void samsung_Crawling1() throws IOException, ParseException {
@@ -518,12 +534,9 @@ public class NewsService implements INewsService {
 		// Driver SetUp
 		ChromeOptions option = new ChromeOptions();
 		
-//		option.setBinary("/usr/bin/google-chrome");
-		
-//		option.setHeadless(true);
+		option.setBinary("/usr/bin/google-chrome");
 		
 		option.addArguments("headless");
-//		option.setBinary("");
 
 		driver = new ChromeDriver(option);
 		driver.get(url);
@@ -663,6 +676,8 @@ public class NewsService implements INewsService {
 
 		// Driver SetUp
 		ChromeOptions option = new ChromeOptions();
+		
+		option.setBinary("/usr/bin/google-chrome");
 		
 		option.addArguments("headless");
 
@@ -868,15 +883,15 @@ public class NewsService implements INewsService {
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 3600000)
 	public void Scheduler() throws IOException, ParseException {
-		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING1..." + "\t" + new Date());
+		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
 //		samsung_Crawling1();
-		logger.info("News Service Scheduled Action : SAMSUNG CRAWLING2..." + "\t" + new Date());
+		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
 //		samsung_Crawling2();
-		logger.info("News Service Scheduled Action : LG ELECTRONICS CRAWLING..." + "\t" + new Date());
+		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
 //		lg_Crawling();
-		logger.info("News Service Scheduled Action : SK HYNIX CRAWLING..." + "\t" + new Date()); 
+		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date()); 
 //		sk_Crawling();
-		logger.info("News Service Scheduled Action : NEWS KEYWORD SETTING..." + "\t" + new Date());
+		logger.info("NEWS KEYWORD SETTING..." + "\t" + new Date());
 //		newsKeywordSet();
 	}
 }

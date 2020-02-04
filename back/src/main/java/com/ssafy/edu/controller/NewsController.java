@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.MemberNewsHelp;
+import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.UserKeywordNews;
+import com.ssafy.edu.help.getNewsHelp;
 import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
@@ -39,10 +42,10 @@ public class NewsController {
 
 	@Autowired
 	INewsService newsService;
-	
+
 	@Autowired
 	private JwtService jwtService;
-	
+
 	@Autowired
 	private MemberService memberservice;
 
@@ -112,16 +115,47 @@ public class NewsController {
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/getNews/{news_id}", method = RequestMethod.GET)
-	public ResponseEntity getNews(@PathVariable int news_id) throws Exception {
+	@RequestMapping(value = "/news/{news_id}", method = RequestMethod.GET)
+	public ResponseEntity<getNewsHelp> getNews(@PathVariable int news_id, HttpServletRequest req) throws Exception {
 		logger.info("NewsController Excute ! getNews :" + news_id + "\t" + new Date());
 
-		NewsDTO news = newsService.getNews(news_id);
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		if(req.getHeader("login-token") != null && req.getHeader("login-token").length() > 20) {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+			
+			int member_id = (int) resultMap.get("member_id");
+			
+			NewsInsertHelp nih = new NewsInsertHelp();
+			
+			nih.setMember_id(member_id);
+			nih.setNews_id(news_id);
+			
+			boolean checkMyList = newsService.checkLikeNews(nih);
+			
+			getNewsHelp news = new getNewsHelp();
+			news.setNews(newsService.getNews(news_id));
+			
+			if(checkMyList) {
+				news.setIs_like(true);
+			}else {
+				news.setIs_like(false);
+			}
+			
+			if (news.getNews() == null) {
+				return new ResponseEntity(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<getNewsHelp>(news, HttpStatus.OK);
+		}else {
+			getNewsHelp news = new getNewsHelp();
+			news.setNews(newsService.getNews(news_id));
+			news.setIs_like(false);
 
-		if (news == null) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			if (news.getNews() == null) {
+				return new ResponseEntity(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<getNewsHelp>(news, HttpStatus.OK);
 		}
-		return new ResponseEntity<NewsDTO>(news, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/findNews/{search}", method = RequestMethod.GET)
@@ -136,7 +170,7 @@ public class NewsController {
 		List<NewsDTO> skList = new ArrayList<>();
 
 		String[] str = search.split(" ");
-		
+
 		allList = newsService.findNewsAll(str);
 		samsungList = newsService.findNewsSamsung(str);
 		lgList = newsService.findNewsLg(str);
@@ -152,7 +186,7 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<List<NewsDTO>>>(list, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getAllNews", method = RequestMethod.GET)
 	public ResponseEntity<List<NewsDTO>> getAllNews() throws Exception {
 		logger.info("NewsController Excute ! getAllNews \t" + new Date());
@@ -163,7 +197,7 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getAllNewsRecent", method = RequestMethod.GET)
 	public ResponseEntity<List<NewsDTO>> getAllNewsRecent() throws Exception {
 		logger.info("NewsController Excute ! getAllNewsRecent \t" + new Date());
@@ -174,64 +208,80 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<NewsDTO>>(list, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getUserKeyword", method = RequestMethod.GET)
-	public ResponseEntity<String[]> getUserKeyword() throws Exception{
+	public ResponseEntity<String[]> getUserKeyword() throws Exception {
 		logger.info("NewsController Excute ! getUserKeyword \t" + new Date());
-		
+
 		String[] keywords = newsService.getUserKeyword();
-		
+
 		return new ResponseEntity<String[]>(keywords, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getUserKeywordNews/{keyword}", method = RequestMethod.GET)
 	public ResponseEntity<List<UserKeywordNews>> getUserKeywordNews(@PathVariable String keyword) throws Exception {
-		
+
 		logger.info("NewsController Excute ! getUserKeywordNews KEYWORD : " + keyword + "\t" + new Date());
 
-		Map<String, Object> resultMap = new HashMap<>();
-		
 		List<NewsDTO> news = null;
-		
-		List<UserKeywordNews> list = null;
-		
 		news = newsService.getKeywordNews(keyword);
-		
-		Calendar now = Calendar.getInstance();
-		now.setTime(new Date());
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
-		for(NewsDTO n : news) {
-			if(list.size() != 0) {
-				for(int i=0; i<list.size(); i++) {
-					UserKeywordNews ukn = list.get(i);
-					
-				}
-			}
-			
-			System.out.println(n.getDate());
-			
-			Calendar cal = Calendar.getInstance();
-			
-			Date newsDate = formatter.parse(n.getDate());
-			
-			cal.setTime(newsDate);
-			
-			long diffsec = (now.getTimeInMillis() - cal.getTimeInMillis()) / 1000;
-			long diffday = diffsec / (24*60*60);
-			System.out.println(diffday);
-			
-			if(diffday < 7) {
-				
-			}
-			
-		}
-		
-		
+
+		List<UserKeywordNews> list = new ArrayList<>();
+
 		if (news == null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+		Calendar cal = Calendar.getInstance();
+
+		for (int i = 0; i < 7; i++) {
+			list.add(new UserKeywordNews(df.format(cal.getTime()), new ArrayList<NewsDTO>()));
+			cal.add(cal.DATE, -1);
+		}
+
+		for (NewsDTO n : news) {
+			for (UserKeywordNews ukn : list) {
+				if (n.getDate().equals(ukn.getDate())) {
+					ukn.getList().add(n);
+				}
+			}
+		}
+
 		return new ResponseEntity<List<UserKeywordNews>>(list, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/news", method = RequestMethod.POST)
+	public boolean pickNews(@RequestBody NewsDTO news, HttpServletRequest req) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		
+		NewsInsertHelp nih = new NewsInsertHelp();
+		
+		int member_id = (int) resultMap.get("member_id");
+
+		nih.setNews_id(news.getNews_id());
+		nih.setMember_id(member_id);
+		
+		if(nih.getNews_id() != 0 && nih.getMember_id() != 0) {
+			
+			boolean checkMyList = newsService.checkLikeNews(nih);
+			
+			if(checkMyList) {
+				logger.error("NewsRestController Excute ! DELETE NEWS : " + news.getNews_id() + " " + member_id);
+				newsService.deleteLikeNews(nih);
+				return false;
+			}else {
+				logger.info("NewsRestController Excute ! INSERT NEWS : " + news.getNews_id() + " " + member_id);
+				newsService.addLikeNews(nih);
+				return true;
+			}
+			
+		}else {
+			logger.error("NewsRestController Error ! " + news.getNews_id() + " " + member_id);
+			return false;
+		}
 	}
 }

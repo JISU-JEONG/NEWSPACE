@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <p>{{preRouter}}</p>
     <v-row class="justify-center">
       <v-col cols="7">
         <v-card raised>
@@ -67,7 +68,8 @@ export default {
         v => !!/.+@+./.test(v) || "이메일 형식이 아닙니다."
       ],
       passwordRules: [v => !!v || "비밀번호를 입력하세요"],
-      emptyRules: [v => !!v || "값을 입력해주세요"]
+      emptyRules: [v => !!v || "값을 입력해주세요"],
+      preRouter: '',
     };
   },
   methods: {
@@ -83,15 +85,18 @@ export default {
           })
           .then(res => {
             if (res.data.status) {
+              
               localStorage.setItem("login-token", res.headers["login-token"]);
               localStorage.setItem("loginStatus", res.data.name);
               const payload = {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
-                member_name: res.data.member_name
+                member_name: res.data.member_name,
+                auth : localStorage.removeItem("auth"),
+                member_keyword: res.data.member_keyword,
               };
               this.$store.dispatch("login", payload);
-              this.$router.push("/", () => {});
+              this.$router.push(this.preRouter, () => {});
             } else {
               this.$store.dispatch("error");
               // alert("입력 정보를 확인하세요.");
@@ -159,7 +164,7 @@ export default {
       var _promise = function() {
         return new Promise(function(resolve) {
           axios
-            .post("http://192.168.31.85:8080/member/signupcheck", {
+            .post("http://52.79.249.4:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -179,7 +184,7 @@ export default {
         var _promise2 = function() {
           return new Promise(function(resolve) {
             axios
-              .post("http://192.168.31.85:8080/member/socialtoken", {
+              .post("http://52.79.249.4:8080/member/socialtoken", {
                 email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type
@@ -200,7 +205,8 @@ export default {
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",
-              member_name: localStorage.getItem("loginStatus")
+              member_name: localStorage.getItem("loginStatus"),
+              auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
             this.$router.push("/", () => {});
@@ -208,18 +214,11 @@ export default {
         });
       });
     },
-    init() {
-      if (
-        localStorage.getItem("loginStatus") != null &&
-        localStorage.getItem("login-token") != null
-      ) {
-        alert("이미 로그인하셨습니다.");
-        this.$router.push("/").catch(err => {});
-      }
-    }
   },
-  beforeMount() {
-    this.init();
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.preRouter = from.fullPath
+    })
   }
 };
 </script>

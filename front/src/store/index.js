@@ -9,6 +9,8 @@ export default new Vuex.Store({
     token: null,
     member_id: null,
     member_name: null,
+    auth: null,
+    member_keyword: '',
     error: false
   },
   mutations: {
@@ -16,8 +18,10 @@ export default new Vuex.Store({
     // 이후 인자는 payload(즉, 임의의 매개변수)
     setToken(state, payload) {
       state.token = payload.token;
+      state.auth = payload.auth;
       state.member_id = payload.member_id;
       state.member_name = payload.member_name;
+      state.member_keyword = payload.member_keyword
     },
     setError(state) {
       state.error = true;
@@ -34,7 +38,9 @@ export default new Vuex.Store({
       context.commit("setToken", {
         token: null,
         member_id: null,
-        member_name: null
+        member_name: null,
+        auth: null,
+        member_keyword: null,
       });
     },
     error(context) {

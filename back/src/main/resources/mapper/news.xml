@@ -244,8 +244,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="getMeberNews" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.dto.NewsDTO">
-		select * from news where news_id in (SELECT news_news_id from amt.member_news
-		where member_member_id = #{member_id});
+		select * from news where news_id in (select news_id from amt.member_news
+		where member_id = #{member_id}) order by date desc
+	</select>
+	
+	<insert id="addLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		insert into amt.member_news values(#{news_id}, #{member_id})
+	</insert>
+	
+	<delete id="deleteLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		delete from amt.member_news where news_id = #{news_id} and member_id = #{member_id}
+	</delete>
+	
+	<select id="checkLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp"
+	resultType="com.ssafy.edu.help.NewsInsertHelp">
+		select * from amt.member_news where news_id = #{news_id} and member_id = #{member_id}
 	</select>
 
 </mapper>
