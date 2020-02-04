@@ -75,13 +75,15 @@
                 </v-list-item-content>
                 <v-badge inline color="red" :content="item.children.length || '0'"></v-badge>
               </template>
-              <v-list-item dark  v-for="(child, i) in item.children" :key="i" link :class="child.news_brand" @click="moveToDetail(child.news_id)">
+              <v-list-item v-for="(child, i) in item.children" :key="i" link @click="moveToDetail(child.news_id)" :class="child.news_brand">
                 <v-list-item-content >
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                      <v-list-item-title v-on=on>{{ child.news_title }}</v-list-item-title>
-                    </template>
-                    <span>{{child.news_title}}</span>
+                      <v-list-item-title v-on=on >{{ child.news_title }}</v-list-item-title>
+                    </template> 
+                    <span>
+                      {{child.news_title}}
+                    </span>
                   </v-tooltip>
                 </v-list-item-content>
               </v-list-item>
@@ -184,6 +186,7 @@ export default {
                     news_id: news.news_id,
                     news_brand: news.brand,
                     news_title: news.title,
+                    news_keyword: news.keyword,
                   },
                 ])
               })
@@ -197,12 +200,24 @@ export default {
 </script>
 <style scoped> 
   .SAMSUNG {
-    background-color: rgba(20, 40, 160, 0.7)
+    background-color: rgba(20, 40, 160, 0.1);
   }
   .LG {
-    background-color: rgba(165, 0, 52, 0.7)
+    background-color: rgba(165, 0, 52, 0.1);
   }
   .SK {
-    background-color: rgba(219, 16, 38, 0.7)
+    background-color: rgba(219, 16, 38, 0.1);
+  }
+  .SAMSUNG .v-list-item__title {
+    color: rgb(20, 40, 160);
+    font-weight: 600;
+  }
+  .LG .v-list-item__title {
+    color: rgb(165, 0, 52);
+    font-weight: 600;
+  }
+  .SK .v-list-item__title {
+    color: rgba(219, 16, 38);
+    font-weight: 600;
   }
 </style>
