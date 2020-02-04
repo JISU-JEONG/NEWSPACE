@@ -53,14 +53,14 @@ export default {
       return{
           user: null,
       }
-    };
   },
   methods: {
     get_user() {
       const token = {
         headers: {
           "login-token": localStorage.getItem("login-token")
-        }
+		}
+	  }
         http.post("/profile/",{
             member_id : localStorage.getItem("member_id")
         }, token)
@@ -76,7 +76,7 @@ export default {
   mounted(){
 	this.get_user()
   }
-};
+}
 </script>
 <style scoped>
 .header_box {
