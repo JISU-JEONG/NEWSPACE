@@ -7,30 +7,30 @@
 
 > OS
 <div>
-![windows](./readimage/windows.png =150x150)
-![ubuntu](./readimage/ubuntu.png =150x150)
+![windows](./readimage/windows.png){: width="125" height="125"}
+![ubuntu](./readimage/ubuntu.png){: width="125" height="125"}
 </div>
 
 > Language
 <div>
-![java](./readimage/java.png =150x150)
-![vue](./readimage/vue.png =150x150)
-![css](./readimage/css.png =150x150)
-![javascript](./readimage/javascript.png =150x150)
+![java](./readimage/java.png){: width="125" height="125"}
+![vue](./readimage/vue.png){: width="125" height="125"}
+![css](./readimage/css.png){: width="125" height="125"}
+![javascript](./readimage/javascript.png){: width="125" height="125"}
 </div>
 
 > IDE
 <div>
-![vscode](./readimage/vscode.png =150x150)
-![eclipse](./readimage/eclipse.png =150x150)
+![vscode](./readimage/vscode.png){: width="125" height="125"}
+![eclipse](./readimage/eclipse.png){: width="125" height="125"}
 </div>
 
 > Library
 <div>
-![vuetify](./readimage/vuetify.png =150x150)
-![jsoup](./readimage/jsoup.png =150x150)
-![selenium](./readimage/selenium.png =150x150)
-![komoran](./readimage/KoNLPy.png =150x150)
+![vuetify](./readimage/vuetify.png){: width="125" height="125"}
+![jsoup](./readimage/jsoup.png){: width="125" height="125"}
+![selenium](./readimage/selenium.png){: width="125" height="125"}
+![komoran](./readimage/KoNLPy.png){: width="125" height="125"}
 </div>
 
 ## 기술역할 분담
