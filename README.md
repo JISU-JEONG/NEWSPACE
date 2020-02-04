@@ -6,8 +6,10 @@
 ## 개발환경
 
 > OS
+<div>
 ![windows](./readimage/windows.png){: width="125" height="125"}
 ![ubuntu](./readimage/ubuntu.png){: width="125" height="125"}
+</div>
 
 > Language
 <div>
