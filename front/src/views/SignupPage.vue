@@ -1,7 +1,7 @@
 <template>
   <v-container >
     <v-row>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
         <v-card>
           <v-container style="min-height:430px;">
             <v-card-title>회원가입</v-card-title>
@@ -16,14 +16,14 @@
           </v-container>
         </v-card>
       </v-col>
-      <v-col cols="6">
-        <v-card>
+      <v-col cols="12" sm="6">
+        <v-card mb-5>
           <v-container style="min-height:430px;">
             <v-card-title>관심 키워드 등록</v-card-title>
             <v-divider></v-divider>
             
             <v-card style="min-height:120px;">
-              <span>선택된 아해들</span>
+              <span px-3>선택된 아해들</span>
               <v-divider></v-divider>
               <v-container>
                 <ul @click.stop="unselectKeyword">
@@ -189,11 +189,14 @@ export default {
 </script>
 
 <style scoped>
-
+  ul {
+    margin: 0;
+    padding: 0;
+  }
   li {
     list-style: none;
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 0 0 0 10px;
     cursor: pointer;
   }
   li:hover {
