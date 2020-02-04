@@ -42,7 +42,8 @@
 
 리소스 | GET | POST | PUT | DELETE
 ------- | ------- | ------- | ------- | -------
-`news/1` | 해당 번호의 뉴스 조회 | 좋아요 추가/삭제 | Error | Error
+`news` |	Error | 좋아요 추가/삭제 | Error | Error
+`news/1` | 해당 번호의 뉴스 조회 | Error | Error | Error
 
 
 
