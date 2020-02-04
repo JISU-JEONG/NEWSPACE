@@ -160,9 +160,9 @@ if (doc.getElementsByClass("page_404").isEmpty()) {
 ```
 
 ## Komoran
-### 문장 안에서 형태소를 분석하기 위한 라이브러리
 
 ```java
+// 문장 안에서 형태소를 분석하기 위한 라이브러리
 
 Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
 KomoranResult analyzeResultList = komoran.analyze(bodytext);
@@ -200,9 +200,9 @@ for (int c = 0; c < count.length; c++) {
 
 
 ## Selenium
-### 무한 스크롤링 페이지를 크롤링 하기 위한 라이브러리
 
 ```java
+// 무한 스크롤링 페이지를 크롤링 하기 위한 라이브러리
 
 public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 // DRIVER_ID를 설정한다.
