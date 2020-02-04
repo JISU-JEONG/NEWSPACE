@@ -75,9 +75,14 @@
                 </v-list-item-content>
                 <v-badge inline color="red" :content="item.children.length || '0'"></v-badge>
               </template>
-              <v-list-item v-for="(child, i) in item.children" :key="i" link  @click="moveToDetail(child.news_id)">
-                <v-list-item-content>
-                  <v-list-item-title>{{ child.news_title }}</v-list-item-title>
+              <v-list-item dark  v-for="(child, i) in item.children" :key="i" link :class="child.news_brand" @click="moveToDetail(child.news_id)">
+                <v-list-item-content >
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-title v-on=on>{{ child.news_title }}</v-list-item-title>
+                    </template>
+                    <span>{{child.news_title}}</span>
+                  </v-tooltip>
                 </v-list-item-content>
               </v-list-item>
             </v-list-group>
@@ -140,7 +145,7 @@ export default {
     moveToDetail(news_id) {
       router.push({ name: 'detail', params: { id: news_id }})
     },
-    init() {
+    init() { // 이거 여기 왜 있나요 영길아?
       if (
         localStorage.getItem("loginStatus") != null &&
         localStorage.getItem("login-token") != null
@@ -190,3 +195,14 @@ export default {
   }
 };
 </script>
+<style scoped> 
+  .SAMSUNG {
+    background-color: rgba(20, 40, 160, 0.7)
+  }
+  .LG {
+    background-color: rgba(165, 0, 52, 0.7)
+  }
+  .SK {
+    background-color: rgba(219, 16, 38, 0.7)
+  }
+</style>

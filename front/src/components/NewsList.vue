@@ -136,7 +136,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .size-full{
   height: auto;
   max-width: 90%;

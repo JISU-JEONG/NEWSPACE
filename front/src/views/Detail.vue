@@ -120,8 +120,7 @@ export default {
     console.log(localStorage.getItem("member_id"));
   },
   watch: {
-    '$route': 'getNews',
-    '$route': 'CommentGet'
+    '$route': ['getNews', 'CommentGet']
   },
   };
 </script>
