@@ -7,30 +7,30 @@
 
 > OS
 <div>
-<img src="/readimage/windows.png" width="125" height="125">
-<img src="/readimage/ubuntu.png" width="125" height="125">
+<img src="/readimage/windows.png" width="200" height="150">
+<img src="/readimage/ubuntu.png" width="200" height="150">
 </div>
 
 > Language
 <div>
-![java](./readimage/java.png)
-![vue](./readimage/vue.png)
-![css](./readimage/css.png)
-![javascript](./readimage/javascript.png)
+<img src="/readimage/java.png" width="200" height="150">
+<img src="/readimage/vue.png" width="200" height="150">
+<img src="/readimage/css.png" width="200" height="150">
+<img src="/readimage/javascript.png" width="200" height="150">
 </div>
 
 > IDE
 <div>
-![vscode](./readimage/vscode.png)
-![eclipse](./readimage/eclipse.png)
+<img src="/readimage/vscode.png" width="200" height="150">
+<img src="/readimage/eclipse.png" width="200" height="150">
 </div>
 
 > Library
 <div>
-![vuetify](./readimage/vuetify.png)
-![jsoup](./readimage/jsoup.png)
-![selenium](./readimage/selenium.png)
-![komoran](./readimage/KoNLPy.png)
+<img src="/readimage/vuetify.png" width="200" height="150">
+<img src="/readimage/jsoup.png" width="200" height="150">
+<img src="/readimage/selenium.png" width="200" height="150">
+<img src="/readimage/KoNLPy.png" width="200" height="150">
 </div>
 
 ## 기술역할 분담
