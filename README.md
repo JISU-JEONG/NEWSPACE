@@ -99,19 +99,14 @@
 |Function|Description|
 |--|--|
 |comment/?|해당 번호의 뉴스의 Comment들을 가져온다.|
-|2|10|
+| comment | POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date) |
+| comment | DELETE로 comment_id를 넘겨주면 삭제된다. (세션 유저의 member_id 값과 comment에 저장된 member_id 값이 같아야 지워짐) |
 
 </div>
 </details>
 
-> comment/?
->> 해당 번호의 뉴스의 Comment들을 가져온다.
 
-> comment
->> POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date)
 
-> comment
->> DELETE로 comment_id를 넘겨주면 삭제된다. (세션 유저의 member_id 값과 comment에 저장된 member_id 값이 같아야 지워짐)
 
 ---
 
