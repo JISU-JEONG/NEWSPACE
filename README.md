@@ -19,6 +19,12 @@
 - VS CODE
 - Eclipse
 
+> Library
+- Vuetify
+- Jsoup
+- Selenium
+- Komoran
+
 ## 기술역할 분담
 
 김태우 | 정지수 | 정영길 | 정영훈
@@ -36,12 +42,15 @@
 
 리소스 | GET | POST | PUT | DELETE
 ------- | ------- | ------- | ------- | -------
-news/1 | 해당 번호의 뉴스 조회 | Error | Error | Error
+`news/1` | 해당 번호의 뉴스 조회 | 좋아요 추가/삭제 | Error | Error
 
 ### NEWS REST FUNCTION DESCRIPTION
 
-> getNews/?
+> news/?
 >> 해당 번호의 뉴스를 가져온다.
+
+> news
+>> POST 형태로 해당 번호의 뉴스를 좋아요 표시한다.
 
 > getAllNews
 >> 모든 뉴스를 가져온다.(DataBase에 저장된 순서대로)
@@ -80,11 +89,20 @@ news/1 | 해당 번호의 뉴스 조회 | Error | Error | Error
 
 | 리소스 | GET | POST | PUT | DELETE |
 | ------- | ------- | ------- | ------- | ------- |
-| /comment| Error | comment 등록 | Error | comment 삭제 |
-| /comment/1 | news_id 값의 comment 조회 | Error | Error | Error |
+| `/comment` | Error | comment 등록 | Error | comment 삭제 |
+| `/comment/1` | news_id 값의 comment 조회 | Error | Error | Error |
 
+<details>
+<summary>COMMENT REST FUNCTION DESCRIPTION</summary>
+<div markdown="1">
 
-### COMMENT REST FUNCTION DESCRIPTION
+|Function|Description|
+|--|--|
+|comment/?|해당 번호의 뉴스의 Comment들을 가져온다.|
+|2|10|
+
+</div>
+</details>
 
 > comment/?
 >> 해당 번호의 뉴스의 Comment들을 가져온다.
