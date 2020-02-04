@@ -11,7 +11,8 @@ export default new Vuex.Store({
     member_name: null,
     auth: null,
     member_keyword: '',
-    error: false
+    error: false,
+    preRouter:'',
   },
   mutations: {
     // 첫번째 인자는 무조건 state
@@ -40,7 +41,7 @@ export default new Vuex.Store({
         member_id: null,
         member_name: null,
         auth: null,
-        member_keyword: null,
+        member_keyword: '',
       });
     },
     error(context) {

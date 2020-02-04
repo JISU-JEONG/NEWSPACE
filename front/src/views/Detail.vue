@@ -155,8 +155,6 @@ export default {
       else{
         alert("로그인을 해주세요")
       }
-
-
     },
   },
   beforeMount() {
@@ -165,7 +163,6 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
-    console.log(localStorage.getItem("member_id"));
   },
   watch: {
     '$route': ['getNews', 'CommentGet']

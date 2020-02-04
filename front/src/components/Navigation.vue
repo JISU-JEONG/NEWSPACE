@@ -117,8 +117,7 @@ export default {
       searchValue: "",
       drawer: false,
       dialog: false,
-      items: [
-      ]
+      items: [],
     };
   },
   methods: {
@@ -168,7 +167,7 @@ export default {
   watch: {
     member_keyword: function() {
       this.items = []
-      if (this.member_keyword) {
+        if (this.member_keyword) {
         http
           .get(`/getUserKeywordNews/${this.member_keyword}`)
           .then((response) => {
@@ -194,6 +193,7 @@ export default {
             })
           })
       }
+      console.log('itmes를 모두 채우고 난 후 입니다.', this.items)
     }
   }
 };
