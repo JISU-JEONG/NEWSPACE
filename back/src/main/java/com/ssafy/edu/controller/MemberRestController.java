@@ -163,9 +163,9 @@ public class MemberRestController {
 		result.setMember(memberservice.getMember(member.getMember_id()));
 		result.setList(newsService.getMeberNews(member.getMember_id()));
 		result.setCount(commentService.getCount(member.getMember_id()));
-		System.out.println("log test ==============================================");
-		System.out.println(result.getMember());
-		System.out.println(result.getCount());
+//		System.out.println("log test ==============================================");
+//		System.out.println(result.getMember());
+//		System.out.println(result.getCount());
 //		System.out.println(result.getList().toString());
 		
 		if(result.getList().size() <= 0) {
