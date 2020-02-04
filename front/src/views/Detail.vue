@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button @click="newspick()">pick</button>
     <v-container class="newsbody">
       <div>
         <h1>{{ news.title }}</h1>
@@ -28,6 +29,8 @@ import axios from "axios";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
 import info from "../services/getInfo";
+import http from "../services/http-common";
+
 export default {
   name: "detail",
   data() {
@@ -65,11 +68,17 @@ export default {
       }
     },
     getNews() {
+      const token = {
+        headers: {
+          "login-token": localStorage.getItem("login-token")
+        }
+      };
       axios
-        .get(`http://192.168.31.85:8080/api/getNews/${this.$route.params.id}`)
+        .get(`http://192.168.31.85:8080/api/getNews/${this.$route.params.id}`, token)
         .then(response => {
-          this.news = response.data;
+          this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
+          console.log("===>" + response.data.is_like);
         })
         .catch(error => {
           console.log(error);
@@ -93,7 +102,52 @@ export default {
           params: { searchValue: key }
         })
         .catch(err => {});
+    },
+    newspick(){
+      alert(this.$route.params.id);
+       const data = {
+          news_id: this.$route.params.id
+        };
+      const token = {
+        headers: {
+          "login-token": localStorage.getItem("login-token")
+        }
+      };
+      axios
+        .post(`http://192.168.31.85:8080/api/news/`,
+          data,token
+        )
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    newsnopick(){
+      alert("nopick");
+      const token = {
+        headers: {
+          "login-token": localStorage.getItem("login-token")
+        }
+      };
+      http
+        .delete(
+          "/news/",
+          {
+            member_id: this.$store.state.member_id
+          },
+          token
+        )
+        .then(response => {
+          this.user = response.data;
+          console.log(this.user);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+
   },
   beforeMount() {
     info();
