@@ -48,7 +48,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .cardbox{
     padding: 10px 20px;
     border: solid 1px gray;
