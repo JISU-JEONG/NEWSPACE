@@ -77,7 +77,7 @@ export default {
       if (this.$refs.loginForm.validate()) {
         // 로그인 폼이 유효한지 확인
         axios
-          .post("http://52.79.249.4:8080/member/signin", {
+          .post("http://192.168.31.84:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",

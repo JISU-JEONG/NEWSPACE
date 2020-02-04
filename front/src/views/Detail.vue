@@ -52,6 +52,8 @@ import axios from "axios";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
 import info from "../services/getInfo";
+import http from "../services/http-common";
+
 export default {
   name: "detail",
   data() {

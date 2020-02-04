@@ -45,7 +45,7 @@
 	</div>
 </template>
 <script>
-import http from '../services/http-common.js'
+import http from "../services/http-common.js";
 
 export default {
   name: 'Profile',
@@ -53,13 +53,13 @@ export default {
       return{
           user: null,
       }
+    };
   },
   methods: {
-      get_user(){
-         const token ={
-          headers: {
-            "login-token": localStorage.getItem("login-token")
-          }
+    get_user() {
+      const token = {
+        headers: {
+          "login-token": localStorage.getItem("login-token")
         }
         http.post("/profile/",{
             member_id : localStorage.getItem("member_id")
@@ -79,23 +79,23 @@ export default {
 };
 </script>
 <style scoped>
-.header_box{
-	margin: 50px 0px;
+.header_box {
+  margin: 50px 0px;
 }
-.header_name{
-    font-size: 30px;
-    text-align: center;
+.header_name {
+  font-size: 30px;
+  text-align: center;
 }
-.header_email{
-	  font-size: 20px;
-    text-align: center;
-		color: grey;
+.header_email {
+  font-size: 20px;
+  text-align: center;
+  color: grey;
 }
-.body_box{
-	margin: 50px 0px;
+.body_box {
+  margin: 50px 0px;
 }
-.newsbody{
-	font-size: 30px;
+.newsbody {
+  font-size: 30px;
 }
 .comment_font{
 	text-align: center;
