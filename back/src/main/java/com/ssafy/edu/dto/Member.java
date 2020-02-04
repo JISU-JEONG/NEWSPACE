@@ -13,7 +13,8 @@ public class Member {
 	private String tokenname;
 	private int member_id;
 	private int auth;
-
+	private String certifiedkey;
+	
 	public int getAuth() {
 		return auth;
 	}
@@ -91,6 +92,14 @@ public class Member {
 		// TODO Auto-generated constructor stub
 	}
 
+	public String getCertifiedkey() {
+		return certifiedkey;
+	}
+
+	public void setCertifiedkey(String certifiedkey) {
+		this.certifiedkey = certifiedkey;
+	}
+	
 	public Member(String email, String password, String name, String[] inputkeyword, String keyword, String type,
 			String tokenname) {
 		super();
@@ -120,7 +129,7 @@ public class Member {
 	public String toString() {
 		return "Member [email=" + email + ", password=" + password + ", name=" + name + ", inputkeyword="
 				+ Arrays.toString(inputkeyword) + ", keyword=" + keyword + ", type=" + type + ", tokenname=" + tokenname
-				+ ", member_id=" + member_id + ", auth=" + auth + "]";
+				+ ", member_id=" + member_id + ", auth=" + auth + ", certifiedkey=" + certifiedkey + "]";
 	}
 
 }

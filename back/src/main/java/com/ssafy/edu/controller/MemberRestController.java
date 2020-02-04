@@ -6,9 +6,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,13 +18,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.help.MemberNewsHelp;
-import com.ssafy.edu.help.UserKeywordNews;
+import com.ssafy.edu.help.TempKey;
+import com.ssafy.edu.service.EmailService;
 import com.ssafy.edu.service.ICommentService;
 import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
@@ -49,6 +52,9 @@ public class MemberRestController {
 	@Autowired
 	ICommentService commentService;
 
+	@Autowired
+	private EmailService emailService;
+	
 	// 일반 로그인
 	@PostMapping("/member/signin")
 	public ResponseEntity<Map<String, Object>> signin(@RequestBody Member member, HttpServletResponse res)
@@ -124,6 +130,9 @@ public class MemberRestController {
 			String sha256password = String.format("%064x", new BigInteger(1, digest.digest()));
 			member.setPassword(sha256password);
 
+			String certifiedkey = new TempKey().getKey(10, false);
+			member.setCertifiedkey(certifiedkey);
+			
 			log.info("MemberRestController Excute ! signup : " + member);
 			memberservice.insertMember(member);
 			return 1;
@@ -173,5 +182,39 @@ public class MemberRestController {
 		}
 		return new ResponseEntity<MemberNewsHelp>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/api/sendmail")
+	public String sendmail(HttpServletRequest req) throws MessagingException {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		} catch (RuntimeException e) {
+			log.error("정보조회 실패", e.getMessage());
+			resultMap.put("message", e.getMessage());
+		}
 
+		StringBuffer emailcontent = new StringBuffer();
+		emailcontent.append("<!DOCTYPE html>");
+		emailcontent.append("<html>");
+		emailcontent.append("<head>");
+		emailcontent.append("</head>");
+		emailcontent.append("<body>");
+		emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
+		emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
+		emailcontent.append("<p>" + resultMap.get("certifiedkey") + "<p>");
+		emailcontent.append("<a href='http://192.168.31.84:8080/member/");
+		emailcontent.append(resultMap.get("certifiedkey"));
+		emailcontent.append("' target='_blenk'>이메일 인증 확인</a>");
+		emailcontent.append("</body>");
+		emailcontent.append("</html>");
+		emailService.sendMail("younggil9488@gmail.com", "[New Space 이메일 인증]", emailcontent.toString());
+
+		return "emailsent";
+	}
+	
+	@GetMapping(value = "/member/{key}")
+	public String sendmailckeck(@PathVariable String key) {
+		System.out.println("제대로 들어오나요 : "+ key);
+		return null;
+	}
 }
