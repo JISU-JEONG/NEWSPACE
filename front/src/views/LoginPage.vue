@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <p>{{preRouter}}</p>
     <v-row class="justify-center">
       <v-col cols="7">
         <v-card raised>
@@ -67,7 +68,8 @@ export default {
         v => !!/.+@+./.test(v) || "이메일 형식이 아닙니다."
       ],
       passwordRules: [v => !!v || "비밀번호를 입력하세요"],
-      emptyRules: [v => !!v || "값을 입력해주세요"]
+      emptyRules: [v => !!v || "값을 입력해주세요"],
+      preRouter: '',
     };
   },
   methods: {
@@ -93,9 +95,8 @@ export default {
                 auth : localStorage.removeItem("auth"),
                 member_keyword: res.data.member_keyword,
               };
-              console.log(payload)
               this.$store.dispatch("login", payload);
-              this.$router.push("/", () => {});
+              this.$router.push(this.preRouter, () => {});
             } else {
               this.$store.dispatch("error");
               // alert("입력 정보를 확인하세요.");
@@ -214,5 +215,10 @@ export default {
       });
     },
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.preRouter = from.fullPath
+    })
+  }
 };
 </script>

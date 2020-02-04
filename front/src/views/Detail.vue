@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-container class="newsbody">
+  <v-container>
+    <div class="newsbody">
       <div>
         <h1>{{ news.title }}</h1>
       </div>
@@ -31,8 +31,8 @@
           닫기
         </v-btn>
       </v-snackbar>
-    </v-container>
-  </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -84,6 +84,7 @@ export default {
       axios
         .get(`http://192.168.31.85:8080/api/news/${this.$route.params.id}`)
         .then(response => {
+          console.log(response.data)
           this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
         })
