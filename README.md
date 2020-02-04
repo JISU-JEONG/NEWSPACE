@@ -6,31 +6,31 @@
 ## 개발환경
 
 > OS
-<div style=height: 100px;>
-![windows](./readimage/windows.png)
-![ubuntu](./readimage/ubuntu.png)
+<div>
+![windows](./readimage/windows.png = 150x150)
+![ubuntu](./readimage/ubuntu.png = 150x150)
 </div>
 
 > Language
-<div style=height: 100px;>
-![java](./readimage/java.png)
-![vue](./readimage/vue.png)
-![css](./readimage/css.png)
-![javascript](./readimage/javascript.png)
+<div>
+![java](./readimage/java.png = 150x150)
+![vue](./readimage/vue.png = 150x150)
+![css](./readimage/css.png = 150x150)
+![javascript](./readimage/javascript.png = 150x150)
 </div>
 
 > IDE
-<div style=height: 100px;>
-![vscode](./readimage/vscode.png)
-![eclipse](./readimage/eclipse.png)
+<div>
+![vscode](./readimage/vscode.png = 150x150)
+![eclipse](./readimage/eclipse.png = 150x150)
 </div>
 
 > Library
-<div style=height: 100px;>
-![vuetify](./readimage/vuetify.png)
-![jsoup](./readimage/jsoup.png)
-![selenium](./readimage/selenium.png)
-![komoran](./readimage/KoNLPy.png)
+<div>
+![vuetify](./readimage/vuetify.png = 150x150)
+![jsoup](./readimage/jsoup.png = 150x150)
+![selenium](./readimage/selenium.png = 150x150)
+![komoran](./readimage/KoNLPy.png = 150x150)
 </div>
 
 ## 기술역할 분담
