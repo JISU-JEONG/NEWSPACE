@@ -1,17 +1,29 @@
 <template>
-  <div>
-    <v-container class="newsbody">
+  <v-container>
+    <div class="newsbody">
       <div>
         <h1>{{ news.title }}</h1>
       </div>
-      <div class="tagfont">
-        <!-- for i in keywords.length에서 바꿨읍니다. -->
-        <span
-          v-for="key in keywords"
-          :key="key"
-          @click="onClickKeyword(key)"
-          style="cursor: pointer;"
-        >#{{ key }}</span>
+      <div class="tagfont d-flex justify-space-between align-end">
+          <span>
+            <span
+              v-for="key in keywords"
+              :key="key"
+              @click="onClickKeyword(key)"
+              style="cursor: pointer;"
+            >#{{ key }} </span>
+          </span>
+        <span v-if="is_like===true" class="like" @click="like()">
+            <v-icon size=40px color="yellow">
+              mdi-star
+            </v-icon>
+        </span>
+        <span v-else class="like" @click="like()">
+            <v-icon size=40px color="yellow">
+              mdi-star-outline
+            </v-icon>
+        </span>
+        <!-- </div> -->
       </div>
       <hr />
       <br />
@@ -31,8 +43,8 @@
           닫기
         </v-btn>
       </v-snackbar>
-    </v-container>
-  </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -50,6 +62,7 @@ export default {
       snackbar: false,
       timeout: 2000,
       snackbarInnerText: '',
+      is_like : false,
     };
   },
   components: {
@@ -81,11 +94,20 @@ export default {
       }
     },
     getNews() {
+      const storage = localStorage;
+      const token = {
+            headers: {
+              "login-token": storage.getItem("login-token"),
+        }
+      }
       axios
-        .get(`http://52.79.249.4:8080/api/getNews/${this.$route.params.id}`)
+        .get(`http://192.168.31.85:8080/api/news/${this.$route.params.id}`,token)
         .then(response => {
-          this.news = response.data;
+          console.log(response.data)
+          this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
+          this.is_like = response.data.is_like
+          console.log(response.data.is_like)
         })
         .catch(error => {
           console.log(error);
@@ -109,7 +131,33 @@ export default {
           params: { searchValue: key }
         })
         .catch(err => {});
-    }
+    },
+    like(){
+      if(this.$store.state.token !== null)
+      {
+        const storage = localStorage;
+        const data = {
+          news_id: this.$route.params.id,
+        };
+        axios
+          .post("http://192.168.31.85:8080/api/news", data, {
+            headers: {
+              "login-token": storage.getItem("login-token")
+            }
+          })
+          .then(response => {
+              this.is_like=response.data
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
+      else{
+        alert("로그인을 해주세요")
+      }
+
+
+    },
   },
   beforeMount() {
     info();
@@ -117,10 +165,12 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
-
     console.log(localStorage.getItem("member_id"));
-  }
-};
+  },
+  watch: {
+    '$route': ['getNews', 'CommentGet']
+  },
+  };
 </script>
 
 <style scoped>
@@ -132,6 +182,7 @@ export default {
   border-radius: 50px;
 }
 .tagfont {
+  width: 100%;
   font-size: 20px;
   color : #42A5F5;
   margin-bottom: 10px;
@@ -149,4 +200,9 @@ export default {
   display: block !important;
   margin: 0px auto !important;
 }
+.like{
+  align-content: right;
+  margin-right: 20px;
+}
+
 </style>
