@@ -15,7 +15,6 @@
 </template>
 
 <script>
-// import { mdiAccount } from '@mdi/js'
 
 export default {
   name: "appfooter",

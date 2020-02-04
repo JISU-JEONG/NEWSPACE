@@ -7,7 +7,7 @@
       <v-btn to="/" icon v-else>
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn to="/Admin" text v-if="this.$store.state.auth">
+      <v-btn to="/Admin" text v-if="this.$store.state.auth==='1'">
         <span>Admin</span>
       </v-btn>
       <v-spacer />
