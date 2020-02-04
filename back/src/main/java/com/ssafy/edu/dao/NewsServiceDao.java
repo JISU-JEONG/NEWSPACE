@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsSearch;
 
@@ -130,5 +131,27 @@ public class NewsServiceDao {
 
 	public List<NewsDTO> getMeberNews(int member_id) {
 		return SQL.selectList(ns + "getMeberNews", member_id);
+	}
+
+	public void addLikeNews(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		SQL.insert(ns + "addLikeNews", nih);
+	}
+
+	public void deleteLikeNews(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		SQL.delete(ns + "deleteLikeNews", nih);
+	}
+
+	public boolean checkLikeNews(NewsInsertHelp nih) {
+		NewsInsertHelp check = null;
+		
+		check = SQL.selectOne(ns + "checkLikeNews", nih);
+		
+		if(check == null) {
+			return false;
+		}else {
+			return true;
+		}
 	}
 }

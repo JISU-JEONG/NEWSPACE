@@ -77,7 +77,7 @@ export default {
       if (this.$refs.loginForm.validate()) {
         // 로그인 폼이 유효한지 확인
         axios
-          .post("http://192.168.31.85:8080/member/signin", {
+          .post("http://52.79.249.4:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -164,7 +164,7 @@ export default {
       var _promise = function() {
         return new Promise(function(resolve) {
           axios
-            .post("http://192.168.31.85:8080/member/signupcheck", {
+            .post("http://52.79.249.4:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -184,7 +184,7 @@ export default {
         var _promise2 = function() {
           return new Promise(function(resolve) {
             axios
-              .post("http://192.168.31.85:8080/member/socialtoken", {
+              .post("http://52.79.249.4:8080/member/socialtoken", {
                 email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type

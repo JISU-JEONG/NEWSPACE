@@ -78,7 +78,7 @@ export default {
           comment_text: text
         };
         axios
-          .post("http://192.168.31.85:8080/api/comment", data, {
+          .post("http://52.79.249.4:8080/api/comment", data, {
             headers: {
               "login-token": storage.getItem("login-token")
             }
@@ -115,7 +115,7 @@ export default {
     },
     CommentGet() {
       axios
-        .get(`http://192.168.31.85:8080/api/comment/${this.$route.params.id}`)
+        .get(`http://52.79.249.4:8080/api/comment/${this.$route.params.id}`)
         .then(response => {
           this.comments = response.data;
           console.log(this.comments);
