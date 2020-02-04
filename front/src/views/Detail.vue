@@ -164,10 +164,12 @@ export default {
   mounted() {
     this.getNews();
     this.CommentGet();
-
     console.log(localStorage.getItem("member_id"));
-  }
-};
+  },
+  watch: {
+    '$route': ['getNews', 'CommentGet']
+  },
+  };
 </script>
 
 <style scoped>

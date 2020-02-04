@@ -57,38 +57,39 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <template v-for="item in items">
-          <v-list-group
-            v-if="item.children"
-            :key="item.text"
-            v-model="item.model"
-            :prepend-icon="item.model ? item.icon : item['icon-alt']"
-            append-icon
-          >
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.text }}</v-list-item-title>
-              </v-list-item-content>
-              <v-badge inline color="red" :content="item.children.length"></v-badge>
-            </template>
-            <v-list-item v-for="(child, i) in item.children" :key="i" link>
-              <v-list-item-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ child.text }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
-          <v-list-item v-else :key="item.text" link>
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.text }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+        <v-container v-if="!member_keyword">
+          회원가입하여 더 많은 정보를 받아보든가
+        </v-container>
+        <span v-else>
+          <template v-for="item in items">
+            <v-list-group
+              v-if="item.children"
+              :key="item.text"
+              v-model="item.model"
+              :prepend-icon="item.model ? item.icon : item['icon-alt']"
+              append-icon
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.date }}</v-list-item-title>
+                </v-list-item-content>
+                <v-badge inline color="red" :content="item.children.length || '0'"></v-badge>
+              </template>
+              <v-list-item v-for="(child, i) in item.children" :key="i" link @click="moveToDetail(child.news_id)" :class="child.news_brand">
+                <v-list-item-content >
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-title v-on=on >{{ child.news_title }}</v-list-item-title>
+                    </template> 
+                    <span>
+                      {{child.news_title}}
+                    </span>
+                  </v-tooltip>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+          </template>
+        </span>
       </v-list>
     </v-navigation-drawer>
   </nav>
@@ -107,6 +108,9 @@ export default {
     usernmae() {
       return this.$store.state.member_name
     },
+    member_keyword() {
+      return this.$store.state.member_keyword
+    }
   },
   data() {
     return {
@@ -114,28 +118,6 @@ export default {
       drawer: false,
       dialog: false,
       items: [
-        // { icon: "mdi-contacts", text: "로그아웃", click: "" },
-        { icon: "mdi-history", text: "혹시 게시판을 만들게 된다면" },
-        {
-          icon: "mdi-chevron-up",
-          "icon-alt": "mdi-chevron-down",
-          text: "2020.01.10",
-          model: false,
-          children: [{ icon: "mdi-plus", text: "Create label" }]
-        },
-        {
-          icon: "mdi-chevron-up",
-          "icon-alt": "mdi-chevron-down",
-          text: "2020.01.23",
-          model: false,
-          children: [
-            { text: "Import" },
-            { text: "Export" },
-            { text: "Print" },
-            { text: "Undo changes" },
-            { text: "Other contacts" }
-          ]
-        }
       ]
     };
   },
@@ -152,10 +134,6 @@ export default {
         .catch(err => {});
       this.searchValue = "";
     },
-    // userKeywordNews() {
-    //   http
-    //     .get(`/getUserKeywordNews/${}`)
-    // },
     logout() {
       localStorage.removeItem("login-token");
       localStorage.removeItem("member_id");
@@ -166,7 +144,10 @@ export default {
       this.auth = 0
       this.$store.dispatch("logout");
     },
-    init() {
+    moveToDetail(news_id) {
+      router.push({ name: 'detail', params: { id: news_id }})
+    },
+    init() { // 이거 여기 왜 있나요 영길아?
       if (
         localStorage.getItem("loginStatus") != null &&
         localStorage.getItem("login-token") != null
@@ -184,6 +165,59 @@ export default {
   beforeMount() {
     Info();
   },
-
+  watch: {
+    member_keyword: function() {
+      this.items = []
+      if (this.member_keyword) {
+        http
+          .get(`/getUserKeywordNews/${this.member_keyword}`)
+          .then((response) => {
+            response.data.forEach(newsMain => {
+              let addObject = {
+                icon: "mdi-chevron-up",
+                "icon-alt": "mdi-chevron-down", 
+                model: false,
+                date: newsMain.date,
+                children: [],
+              }
+              newsMain.list.forEach(news => {
+                addObject.children = addObject.children.concat([
+                  {
+                    news_id: news.news_id,
+                    news_brand: news.brand,
+                    news_title: news.title,
+                    news_keyword: news.keyword,
+                  },
+                ])
+              })
+              this.items.push(addObject)
+            })
+          })
+      }
+    }
+  }
 };
 </script>
+<style scoped> 
+  .SAMSUNG {
+    background-color: rgba(20, 40, 160, 0.1);
+  }
+  .LG {
+    background-color: rgba(165, 0, 52, 0.1);
+  }
+  .SK {
+    background-color: rgba(219, 16, 38, 0.1);
+  }
+  .SAMSUNG .v-list-item__title {
+    color: rgb(20, 40, 160);
+    font-weight: 600;
+  }
+  .LG .v-list-item__title {
+    color: rgb(165, 0, 52);
+    font-weight: 600;
+  }
+  .SK .v-list-item__title {
+    color: rgba(219, 16, 38);
+    font-weight: 600;
+  }
+</style>
