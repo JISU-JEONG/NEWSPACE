@@ -48,8 +48,8 @@ public class NewsService implements INewsService {
 
 	// Properties
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; //윈도우 서버
-//	public static final String WEB_DRIVER_PATH = "/usr/bin/chromedriver";	//AWS
+//	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; //윈도우 서버
+	public static final String WEB_DRIVER_PATH = "/usr/bin/chromedriver";	//AWS
 	
 	private static final Logger logger = LoggerFactory.getLogger(NewsService.class);
 
@@ -534,12 +534,9 @@ public class NewsService implements INewsService {
 		// Driver SetUp
 		ChromeOptions option = new ChromeOptions();
 		
-//		option.setBinary("/usr/bin/google-chrome");
-		
-//		option.setHeadless(true);
+		option.setBinary("/usr/bin/google-chrome");
 		
 		option.addArguments("headless");
-//		option.setBinary("");
 
 		driver = new ChromeDriver(option);
 		driver.get(url);
@@ -680,7 +677,7 @@ public class NewsService implements INewsService {
 		// Driver SetUp
 		ChromeOptions option = new ChromeOptions();
 		
-//		option.setBinary("/usr/bin/google-chrome");
+		option.setBinary("/usr/bin/google-chrome");
 		
 		option.addArguments("headless");
 
