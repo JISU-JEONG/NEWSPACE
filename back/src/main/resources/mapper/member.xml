@@ -5,18 +5,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.member">
 	<select id="getMember" parameterType="com.ssafy.edu.dto.Member"
 		resultType="com.ssafy.edu.dto.Member">
-		SELECT * FROM amt.MEMBER WHERE EMAIL = #{email} AND
+		SELECT * FROM amt.member WHERE EMAIL = #{email} AND
 		PASSWORD = #{password} AND TYPE = #{type};
 	</select>
 
 	<select id="getEmail" parameterType="java.lang.String"
 		resultType="com.ssafy.edu.dto.Member">
-		SELECT * FROM amt.MEMBER WHERE EMAIL = #{email}
+		SELECT * FROM amt.member WHERE EMAIL = #{email}
 	</select>
 
 	<insert id="insertMember"
 		parameterType="com.ssafy.edu.dto.Member">
-		INSERT INTO amt.MEMBER(EMAIL, PASSWORD, NAME, AUTH,
+		INSERT INTO amt.member(EMAIL, PASSWORD, NAME, AUTH,
 		DELFLAG, KEYWORD, TYPE) VALUES(#{email}, #{password}, #{name}, 0, 0,
 		#{keyword}, #{type})
 	</insert>

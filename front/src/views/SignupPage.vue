@@ -104,7 +104,7 @@ export default {
       if (this.$refs.form.validate()) { // 회원가입 폼 확인
         if (this.selectedKeywords.length > 0 || this.trySignup) { // 관심 키워드 빈칸인지 확인
           axios
-            .post("http://192.168.31.85:8080/member/signup", {
+            .post("http://52.79.249.4:8080/member/signup", {
               email: this.email,
               password: this.password,
               name: this.name,

@@ -3,6 +3,7 @@ package com.ssafy.edu.service;
 import java.util.List;
 
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.help.NewsInsertHelp;
 
 public interface INewsService {
 
@@ -24,4 +25,7 @@ public interface INewsService {
 	String[] getUserKeyword();
 	List<NewsDTO> getKeywordNews(String keyword);
 	List<NewsDTO> getMeberNews(int member_id);
+	void addLikeNews(NewsInsertHelp nih);
+	void deleteLikeNews(NewsInsertHelp nih);
+	boolean checkLikeNews(NewsInsertHelp nih);
 }

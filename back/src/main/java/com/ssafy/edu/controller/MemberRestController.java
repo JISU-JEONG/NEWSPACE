@@ -74,7 +74,7 @@ public class MemberRestController {
 			resultMap.put("member_keyword", loginUser.getKeyword());
 			status = HttpStatus.ACCEPTED;
 		} catch (RuntimeException e) {
-			log.error("로그인 실패", e);
+			log.error("로그인 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -166,6 +166,7 @@ public class MemberRestController {
 
 //		System.out.println(result.getMember());
 //		System.out.println(result.getCount());
+//		System.out.println(result.getList().toString());
 		
 		if(result.getList().size() <= 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);

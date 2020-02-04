@@ -7,12 +7,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getComment"
 		resultType="com.ssafy.edu.dto.CommentDTO"
 		parameterType="java.lang.Integer">
-		SELECT * FROM COMMENT WHERE NEWS_ID = #{news_id}
+		SELECT * FROM comment WHERE NEWS_ID = #{news_id}
 	</select>
 
 	<insert id="addComment"
 		parameterType="com.ssafy.edu.dto.CommentDTO">
-		INSERT INTO COMMENT(member_id, member_name, news_id,
+		INSERT INTO comment(member_id, member_name, news_id,
 		comment_text) VALUES(#{member_id}, #{member_name},#{news_id},
 		#{comment_text})
 	</insert>
@@ -20,11 +20,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getCommentOne"
 		resultType="com.ssafy.edu.dto.CommentDTO"
 		parameterType="java.lang.Integer">
-		SELECT * FROM COMMENT WHERE COMMENT_ID = #{comment_id}
+		SELECT * FROM comment WHERE COMMENT_ID = #{comment_id}
 	</select>
 
 	<delete id="deleteComment" parameterType="java.lang.Integer">
-		DELETE FROM COMMENT
+		DELETE FROM comment
 		WHERE COMMENT_ID = #{comment_id}
 	</delete>
 

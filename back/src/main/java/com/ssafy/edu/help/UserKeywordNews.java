@@ -36,6 +36,11 @@ public class UserKeywordNews {
 		this.list = list;
 	}
 
+	public UserKeywordNews(String date) {
+		super();
+		this.date = date;
+	}
+
 	public UserKeywordNews() {
 		super();
 		// TODO Auto-generated constructor stub
