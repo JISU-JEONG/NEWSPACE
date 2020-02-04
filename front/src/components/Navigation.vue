@@ -143,6 +143,10 @@ export default {
       localStorage.removeItem("auth");
       this.auth = 0
       this.$store.dispatch("logout");
+      if(this.$route.name === 'Profile')
+      {
+        router.push('/')
+      }
     },
     moveToDetail(news_id) {
       router.push({ name: 'detail', params: { id: news_id }})

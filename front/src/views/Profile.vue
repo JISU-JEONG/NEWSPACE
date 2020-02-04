@@ -35,8 +35,8 @@
 				<div class ="newsbody">
 						{{user.member.name}}'s NEWS ROOM
 				</div>
-				<v-card v-for="news in user.list" :key="news">
-					[{{news.brand}}] {{news.title}}
+				<v-card v-for="i in user.list.length" :key="i">
+					[{{user.list[i-1].brand}}] {{user.list[i-1].title}}
 				</v-card>
 			</div>
 		</v-container>
@@ -62,7 +62,7 @@ export default {
           }
         }
         http.post("/profile/",{
-            member_id : this.$store.state.member_id
+            member_id : localStorage.getItem("member_id")
         }, token)
             .then((response) => {
                 this.user = response.data
@@ -74,8 +74,8 @@ export default {
       }
   },
   mounted(){
-      this.get_user()
-  },
+	this.get_user()
+  }
 };
 </script>
 <style scoped>
