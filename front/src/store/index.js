@@ -10,7 +10,7 @@ export default new Vuex.Store({
     member_id: null,
     member_name: null,
     auth: null,
-    member_keyword: null,
+    member_keyword: '',
     error: false
   },
   mutations: {
