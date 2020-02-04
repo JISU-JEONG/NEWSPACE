@@ -6,24 +6,32 @@
 ## 개발환경
 
 > OS
-- Windows
-- Ubuntu (배포환경 AWS)
+<div>
+![windows](./readimage/windows.png)
+![ubuntu](./readimage/ubuntu.png)
+</div>
 
 > Language
-- JAVA
-- Vue
-- CSS
-- JS
+<div>
+![java](./readimage/java.png)
+![vue](./readimage/vue.png)
+![css](./readimage/css.png)
+![javascript](./readimage/javascript.png)
+</div>
 
 > IDE
-- VS CODE
-- Eclipse
+<div>
+![vscode](./readimage/vscode.png)
+![eclipse](./readimage/eclipse.png)
+</div>
 
 > Library
-- Vuetify
-- Jsoup
-- Selenium
-- Komoran
+<div>
+![vuetify](./readimage/vuetify.png)
+![jsoup](./readimage/jsoup.png)
+![selenium](./readimage/selenium.png)
+![komoran](./readimage/KoNLPy.png)
+</div>
 
 ## 기술역할 분담
 
