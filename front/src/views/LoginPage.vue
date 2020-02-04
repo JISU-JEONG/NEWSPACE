@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <p>{{preRouter}}</p>
     <v-row class="justify-center">
       <v-col cols="7">
         <v-card raised>
@@ -96,7 +95,7 @@ export default {
                 member_keyword: res.data.member_keyword,
               };
               this.$store.dispatch("login", payload);
-              this.$router.push(this.preRouter, () => {});
+              this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
             } else {
               this.$store.dispatch("error");
               // alert("입력 정보를 확인하세요.");
@@ -209,7 +208,7 @@ export default {
               auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
-            this.$router.push("/", () => {});
+            this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
           }
         });
       });
