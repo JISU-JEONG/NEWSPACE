@@ -17,8 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertMember"
 		parameterType="com.ssafy.edu.dto.Member">
 		INSERT INTO amt.member(EMAIL, PASSWORD, NAME, AUTH,
-		DELFLAG, KEYWORD, TYPE) VALUES(#{email}, #{password}, #{name}, 0, 0,
-		#{keyword}, #{type})
+		DELFLAG, KEYWORD, TYPE, CERTIFIEDKEY) VALUES(#{email}, #{password}, #{name}, 0, 0,
+		#{keyword}, #{type}, #{certifiedkey})
 	</insert>
 
 	<select id="getMemberOne" parameterType="java.lang.Integer"

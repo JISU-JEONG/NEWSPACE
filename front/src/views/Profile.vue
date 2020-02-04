@@ -8,6 +8,7 @@
 					<div class="header_email">
 						{{user.member.email}}
 					</div>
+					<button v-on:click="emailcheck()"></button>
 			</div>
 			<div class="comment_font">
 				<div>
@@ -71,7 +72,25 @@ export default {
             .catch((error) => {
                 console.log(error)
             })
-      }
+	  },
+	  emailcheck(){
+		const token = {
+			headers: {
+			"login-token": localStorage.getItem("login-token")
+			}
+		};
+		http
+			.get(
+			"/sendmail/",
+			token
+			)
+			.then(response => {
+			console.log(response.data)
+			})
+			.catch(error => {
+			console.log(error);
+			});
+	  }
   },
   mounted(){
 	this.get_user()
