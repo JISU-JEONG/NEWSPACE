@@ -35,6 +35,9 @@
 				<div class ="newsbody">
 						{{user.member.name}}'s NEWS ROOM
 				</div>
+				<v-card v-for="news in user.list" :key="news">
+					[{{news.brand}}] {{news.title}}
+				</v-card>
 			</div>
 		</v-container>
   </div>
