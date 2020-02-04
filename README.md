@@ -7,30 +7,31 @@
 
 > OS
 <div>
-![windows](./readimage/windows.png){: width="125" height="125"}
-![ubuntu](./readimage/ubuntu.png){: width="125" height="125"}
+<img src="/readimage/windows.png" width="125" height="125">
+![windows](./readimage/windows.png)
+![ubuntu](./readimage/ubuntu.png)
 </div>
 
 > Language
 <div>
-![java](./readimage/java.png){: width="125" height="125"}
-![vue](./readimage/vue.png){: width="125" height="125"}
-![css](./readimage/css.png){: width="125" height="125"}
-![javascript](./readimage/javascript.png){: width="125" height="125"}
+![java](./readimage/java.png)
+![vue](./readimage/vue.png)
+![css](./readimage/css.png)
+![javascript](./readimage/javascript.png)
 </div>
 
 > IDE
 <div>
-![vscode](./readimage/vscode.png){: width="125" height="125"}
-![eclipse](./readimage/eclipse.png){: width="125" height="125"}
+![vscode](./readimage/vscode.png)
+![eclipse](./readimage/eclipse.png)
 </div>
 
 > Library
 <div>
-![vuetify](./readimage/vuetify.png){: width="125" height="125"}
-![jsoup](./readimage/jsoup.png){: width="125" height="125"}
-![selenium](./readimage/selenium.png){: width="125" height="125"}
-![komoran](./readimage/KoNLPy.png){: width="125" height="125"}
+![vuetify](./readimage/vuetify.png)
+![jsoup](./readimage/jsoup.png)
+![selenium](./readimage/selenium.png)
+![komoran](./readimage/KoNLPy.png)
 </div>
 
 ## 기술역할 분담
