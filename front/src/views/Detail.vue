@@ -13,7 +13,7 @@
               style="cursor: pointer;"
             >#{{ key }} </span>
           </span>
-        <span v-if="is_like===true" class="like" @click="like()">
+        <span v-if="is_like===true && $store.state.token" class="like" @click="like()">
             <v-icon size=40px color="yellow">
               mdi-star
             </v-icon>
