@@ -8,8 +8,7 @@
 > OS
 <div>
 <img src="/readimage/windows.png" width="125" height="125">
-![windows](./readimage/windows.png)
-![ubuntu](./readimage/ubuntu.png)
+<img src="/readimage/ubuntu.png" width="125" height="125">
 </div>
 
 > Language
