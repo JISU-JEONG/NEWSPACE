@@ -75,8 +75,10 @@ export default {
     login() {
       if (this.$refs.loginForm.validate()) {
         // 로그인 폼이 유효한지 확인
+        // axios
+        //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.85:8080/member/signin", {
+          .post("http://192.168.31.84:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -163,8 +165,10 @@ export default {
       //아이디 중복체크
       var _promise = function() {
         return new Promise(function(resolve) {
+          // axios
+          //   .post("http://52.79.249.4:8080/member/signupcheck", {
           axios
-            .post("http://192.168.31.85:8080/member/signupcheck", {
+            .post("http://192.168.31.84:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -183,8 +187,10 @@ export default {
       _promise().then(() => {
         var _promise2 = function() {
           return new Promise(function(resolve) {
+            // axios
+            //   .post("http://52.79.249.4:8080/member/socialtoken", {
             axios
-              .post("http://192.168.31.85:8080/member/socialtoken", {
+              .post("http://192.168.31.84:8080/member/socialtoken", {
                 email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type

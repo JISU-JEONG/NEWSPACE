@@ -25,5 +25,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.ssafy.edu.dto.Member">
 		select * from amt.member where member_id = #{member_id}
 	</select>
+	
+	<select id="emailcheck" parameterType="com.ssafy.edu.dto.Member" resultType="com.ssafy.edu.dto.Member">
+		select * from amt.member where email = #{email} and certifiedkey = #{certifiedkey}
+	</select>
+	
+	<update id="emailupdate" parameterType="com.ssafy.edu.dto.Member">
+		update amt.member set certifiedkey = "true" where email = #{email}
+	</update>
+	
+	<update id="updatemember" parameterType="com.ssafy.edu.dto.Member">
+		update amt.member set name = #{name}, keyword = #{keyword} where (member_id = #{member_id});
+	</update>
 
 </mapper>

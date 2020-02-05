@@ -8,7 +8,7 @@
 					<div class="header_email">
 						{{user.member.email}}
 					</div>
-					<button v-on:click="emailcheck()"></button>
+					<button v-on:click="emailcheck()">이메일체크</button>
 			</div>
 			<div class="comment_font">
 				<div>
@@ -66,6 +66,7 @@ export default {
             member_id : localStorage.getItem("member_id")
         }, token)
             .then((response) => {
+				console.log(response)
                 this.user = response.data
                 console.log(this.user)
             })
