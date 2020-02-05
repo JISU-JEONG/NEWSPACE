@@ -33,8 +33,19 @@ public class MemberDao {
 	}
 
 	public Member getMember(int member_id) {
-		// TODO Auto-generated method stub
 		return SQL.selectOne(ns+"getMemberOne", member_id);
 	}
 
+	public Member emailcheck(Member member) {
+		return SQL.selectOne(ns+"emailcheck", member);
+	}
+
+	public void emailupdate(Member member) {
+		SQL.update(ns+"emailupdate", member);
+		
+	}
+
+	public void updatemember(Member member) {
+		SQL.update(ns+"updatemember", member);
+	}
 }
