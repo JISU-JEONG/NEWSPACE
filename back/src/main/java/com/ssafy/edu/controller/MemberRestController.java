@@ -48,13 +48,13 @@ public class MemberRestController {
 
 	@Autowired
 	INewsService newsService;
-	
+
 	@Autowired
 	ICommentService commentService;
 
 	@Autowired
 	private EmailService emailService;
-	
+
 	// 일반 로그인
 	@PostMapping("/member/signin")
 	public ResponseEntity<Map<String, Object>> signin(@RequestBody Member member, HttpServletResponse res)
@@ -132,7 +132,7 @@ public class MemberRestController {
 
 			String certifiedkey = new TempKey().getKey(10, false);
 			member.setCertifiedkey(certifiedkey);
-			
+
 			log.info("MemberRestController Excute ! signup : " + member);
 			memberservice.insertMember(member);
 			return 1;
@@ -166,7 +166,7 @@ public class MemberRestController {
 	@PostMapping("/api/profile")
 	public ResponseEntity<MemberNewsHelp> profile(@RequestBody Member member) {
 		log.info("MemberRestController Excute ! profile : " + member.getMember_id());
-		
+
 		MemberNewsHelp result = new MemberNewsHelp();
 
 		result.setMember(memberservice.getMember(member.getMember_id()));
@@ -176,13 +176,32 @@ public class MemberRestController {
 //		System.out.println(result.getMember());
 //		System.out.println(result.getCount());
 //		System.out.println(result.getList().toString());
-		
-		if(result.getList().size() < 0) {
+
+		if (result.getList().size() < 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<MemberNewsHelp>(result, HttpStatus.OK);
 	}
-	
+
+	@PostMapping("/api/profileupdate")
+	public ResponseEntity<Member> profileupdate(@RequestBody Member member, HttpServletRequest req) {
+		log.info("MemberRestController Excute ! profileupdate : " + member);
+		Map<String, Object> resultMap = new HashMap<>();
+
+		String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",", "");
+		resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		member.setMember_id((int) resultMap.get("member_id"));
+		member.setKeyword(keyword);
+		memberservice.updatemember(member);
+
+		Member m = memberservice.getMember((int) resultMap.get("member_id"));
+
+		if (resultMap.size() <= 0) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Member>(m, HttpStatus.OK);
+	}
+
 	@GetMapping(value = "/api/sendmail")
 	public String sendmail(HttpServletRequest req) throws MessagingException {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -192,7 +211,7 @@ public class MemberRestController {
 			log.error("정보조회 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
 		}
-		
+
 //		System.out.println(resultMap);
 		StringBuffer emailcontent = new StringBuffer();
 		emailcontent.append("<!DOCTYPE html>");

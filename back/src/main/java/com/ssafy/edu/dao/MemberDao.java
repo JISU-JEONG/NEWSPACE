@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.dto.Member;
+import com.ssafy.edu.help.NewsSearch;
 
 @Repository
 public class MemberDao {
@@ -47,5 +48,13 @@ public class MemberDao {
 
 	public void updatemember(Member member) {
 		SQL.update(ns+"updatemember", member);
+	}
+
+	public List<Member> emailSendList(String keyword) {
+		// TODO Auto-generated method stub
+		
+		NewsSearch find = new NewsSearch(keyword.split(" "), "ALL");
+		
+		return SQL.selectList(ns+"emailSendList", find);
 	}
 }
