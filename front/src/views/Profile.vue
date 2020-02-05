@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user !== null">
+  <div v-if="user !== null" class="test">
 		<v-container>
 			<div class= "header_box">
 					<div class="header_name">

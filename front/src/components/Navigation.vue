@@ -195,4 +195,5 @@ export default {
     color: rgba(219, 16, 38);
     font-weight: 600;
   }
+
 </style>

@@ -202,6 +202,7 @@ export default {
 .like{
   align-content: right;
   margin-right: 20px;
+  cursor: pointer;
 }
 
 </style>

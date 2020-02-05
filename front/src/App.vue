@@ -41,4 +41,5 @@ export default {
 .background {
   background-color: white;
 }
+
 </style>
