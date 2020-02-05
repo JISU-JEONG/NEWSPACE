@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import http from '../services/http-common'
 // import news from './modules/news'
 
 Vue.use(Vuex);
@@ -11,8 +12,9 @@ export default new Vuex.Store({
     member_name: null,
     auth: null,
     member_keyword: '',
+    member_news: [],
     error: false,
-    preRouter:'',
+    preRouter:'', // 로그인시 이전 페이지로 이동위한 변수
   },
   mutations: {
     // 첫번째 인자는 무조건 state
@@ -23,10 +25,15 @@ export default new Vuex.Store({
       state.member_id = payload.member_id;
       state.member_name = payload.member_name;
       state.member_keyword = payload.member_keyword
+      state.member_news = payload.member_news
     },
     setError(state) {
       state.error = true;
+    },
+    setMemberNews(state, payload) {
+      state.member_news = payload.member_news
     }
+
   },
   actions: {
     // 첫번째 인자는 context (다양한)
@@ -42,11 +49,48 @@ export default new Vuex.Store({
         member_name: null,
         auth: null,
         member_keyword: '',
+        member_news: [],
       });
     },
     error(context) {
       context.commit("setError");
-    }
-  },
-  modules: {}
+    },
+    setMemberNews(context) {
+      console.log('멤버 뉴스가 채워지기 시작했습니다.')
+      console.log('마운트시 멤버 키워드',context.state.member_keyword)
+      context.state.member_news = []
+      const settingArray = []
+        if (context.state.member_keyword) {
+          http
+            .get(`/getUserKeywordNews/${context.state.member_keyword}`)
+            .then((response) => {
+              response.data.forEach(newsMain => {
+                let addObject = {
+                  icon: "mdi-chevron-up",
+                    "icon-alt": "mdi-chevron-down", 
+                    model: false,
+                    date: newsMain.date,
+                    children: [],
+                  }
+                  newsMain.list.forEach(news => {
+                    addObject.children = addObject.children.concat([
+                      {
+                        news_id: news.news_id,
+                        news_brand: news.brand,
+                        news_title: news.title,
+                        news_keyword: news.keyword,
+                      },
+                    ])
+                  })
+                  settingArray.push(addObject)
+                })
+                localStorage.setItem('member_news', JSON.stringify(settingArray))
+                context.commit('setMemberNews', {
+                  member_news: settingArray
+                })
+              })
+          }
+
+        }
+      }    
 });
