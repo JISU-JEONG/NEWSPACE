@@ -78,8 +78,10 @@ export default {
   methods: {
     Signup() {
       if (this.selectedKeywords.length > 0 || this.trySignup) {
+        // axios
+        //     .post("http://52.79.249.4:8080/member/signup", {
         axios
-          .post("http://192.168.31.85:8080/member/signup", {
+          .post("http://192.168.31.84:8080/member/signup", {
             email: localStorage.getItem("member_email"),
             name: localStorage.getItem("member_name"),
             inputkeyword: this.selectedKeywords,
@@ -101,6 +103,8 @@ export default {
       const parentFunc = this;
       var _promise = function() {
         return new Promise(function(resolve) {
+          // axios
+          //   .post("http://52.79.249.4:8080/member/socialtoken", {
           axios
             .post("http://192.168.31.85:8080/member/socialtoken", {
               email: localStorage.getItem("member_email"),

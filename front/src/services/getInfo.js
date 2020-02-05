@@ -28,7 +28,8 @@ function getinfo() {
           member_id: localStorage.getItem("member_id"),
           member_name: localStorage.getItem("member_name"),
           auth: localStorage.getItem("auth"),
-          member_keyword: localStorage.getItem("member_keyword")
+          member_keyword: localStorage.getItem("member_keyword"),
+          member_news: JSON.parse(localStorage.getItem('member_news'))
         };
         store.dispatch("login", payload);
 
@@ -44,6 +45,7 @@ function getinfo() {
         localStorage.removeItem("member_name");
         localStorage.removeItem("member_email");
         localStorage.removeItem("member_keyword")
+        localStorage.removeItem("member_news")
         localStorage.removeItem("member_type");
         localStorage.removeItem("loginStatus");
         localStorage.removeItem("auth");

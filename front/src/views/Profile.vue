@@ -8,7 +8,7 @@
 					<div class="header_email">
 						{{user.member.email}}
 					</div>
-					<button v-on:click="emailcheck()"></button>
+					<button v-on:click="emailcheck()">이메일체크</button>
 			</div>
 			<div class="comment_font">
 				<div>

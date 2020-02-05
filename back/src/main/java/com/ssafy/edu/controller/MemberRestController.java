@@ -177,10 +177,34 @@ public class MemberRestController {
 //		System.out.println(result.getCount());
 //		System.out.println(result.getList().toString());
 		
-		if(result.getList().size() <= 0) {
+		if(result.getList().size() < 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<MemberNewsHelp>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/api/profileupdate")
+	public ResponseEntity<Member> profileupdate(@RequestBody Member member, HttpServletRequest req) {
+		log.info("MemberRestController Excute ! profileupdate : " + member);
+		Map<String, Object> resultMap = new HashMap<>();
+
+		String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",","");
+		try {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		} catch (RuntimeException e) {
+			log.error("정보조회 실패", e.getMessage());
+			resultMap.put("message", e.getMessage());
+		}
+		
+		member.setMember_id((int)resultMap.get("member_id"));
+		member.setKeyword(keyword);
+		memberservice.updatemember(member);
+		
+		Member m = memberservice.getMember((int)resultMap.get("member_id"));
+		if(m == null) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Member>(m, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/api/sendmail")
@@ -192,7 +216,8 @@ public class MemberRestController {
 			log.error("정보조회 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
 		}
-
+		
+//		System.out.println(resultMap);
 		StringBuffer emailcontent = new StringBuffer();
 		emailcontent.append("<!DOCTYPE html>");
 		emailcontent.append("<html>");
@@ -201,20 +226,14 @@ public class MemberRestController {
 		emailcontent.append("<body>");
 		emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
 		emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
-		emailcontent.append("<p>" + resultMap.get("certifiedkey") + "<p>");
 		emailcontent.append("<a href='http://192.168.31.84:8080/member/");
-		emailcontent.append(resultMap.get("certifiedkey"));
-		emailcontent.append("' target='_blenk'>이메일 인증 확인</a>");
+		emailcontent.append(resultMap.get("member_certifiedkey"));
+		emailcontent.append("/" + resultMap.get("member_email"));
+		emailcontent.append("'>이메일 인증 확인</a>");
 		emailcontent.append("</body>");
 		emailcontent.append("</html>");
-		emailService.sendMail("younggil9488@gmail.com", "[New Space 이메일 인증]", emailcontent.toString());
+		emailService.sendMail((String)resultMap.get("member_email"), "[New Space 이메일 인증]", emailcontent.toString());
 
 		return "emailsent";
-	}
-	
-	@GetMapping(value = "/member/{key}")
-	public String sendmailckeck(@PathVariable String key) {
-		System.out.println("제대로 들어오나요 : "+ key);
-		return null;
 	}
 }
