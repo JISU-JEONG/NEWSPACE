@@ -36,7 +36,21 @@ public class MemberService {
 	}
 
 	public Member getMember(int member_id) {
-		// TODO Auto-generated method stub
 		return dao.getMember(member_id);
+	}
+	
+	public boolean emailcheck(Member member) {
+		Member m = dao.emailcheck(member);
+		if(m==null) {			
+			return false;
+		}
+		else {
+			dao.emailupdate(member);
+			return true;
+		}
+	}
+
+	public void updatemember(Member member) {
+		dao.updatemember(member);
 	}
 }
