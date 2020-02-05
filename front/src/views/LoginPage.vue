@@ -97,6 +97,7 @@ export default {
                 member_keyword: res.data.member_keyword,
               };
               this.$store.dispatch("login", payload);
+              this.$store.dispatch("setMemberNews") // 키워드 뉴스 받아오기
               this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
             } else {
               this.$store.dispatch("error");
@@ -214,6 +215,7 @@ export default {
               auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
+            this.$store.dispatch("setMemberNews")
             this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
           }
         });

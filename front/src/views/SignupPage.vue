@@ -106,7 +106,7 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/signup", {
           axios
-            .post("http://192.168.31.84:8080/member/signup", {
+            .post("http://192.168.31.85:8080/member/signup", {
               email: this.email,
               password: this.password,
               name: this.name,

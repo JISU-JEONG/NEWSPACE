@@ -61,7 +61,7 @@
           회원가입하여 더 많은 정보를 받아보든가
         </v-container>
         <span v-else>
-          <template v-for="item in items">
+          <template v-for="item in member_news">
             <v-list-group
               v-if="item.children"
               :key="item.text"
@@ -110,6 +110,9 @@ export default {
     },
     member_keyword() {
       return this.$store.state.member_keyword
+    },
+    member_news() {
+      return this.$store.state.member_news
     }
   },
   data() {
@@ -117,7 +120,6 @@ export default {
       searchValue: "",
       drawer: false,
       dialog: false,
-      items: [],
     };
   },
   methods: {
@@ -140,6 +142,7 @@ export default {
       localStorage.removeItem("member_keyword")
       localStorage.removeItem("loginStatus");
       localStorage.removeItem("auth");
+      localStorage.removeItem("member_news");
       this.auth = 0
       this.$store.dispatch("logout");
       if(this.$route.name === 'Profile')
@@ -168,38 +171,6 @@ export default {
   beforeMount() {
     Info();
   },
-  watch: {
-    member_keyword: function() {
-      this.items = []
-        if (this.member_keyword) {
-        http
-          .get(`/getUserKeywordNews/${this.member_keyword}`)
-          .then((response) => {
-            response.data.forEach(newsMain => {
-              let addObject = {
-                icon: "mdi-chevron-up",
-                "icon-alt": "mdi-chevron-down", 
-                model: false,
-                date: newsMain.date,
-                children: [],
-              }
-              newsMain.list.forEach(news => {
-                addObject.children = addObject.children.concat([
-                  {
-                    news_id: news.news_id,
-                    news_brand: news.brand,
-                    news_title: news.title,
-                    news_keyword: news.keyword,
-                  },
-                ])
-              })
-              this.items.push(addObject)
-            })
-          })
-      }
-      console.log('itmes를 모두 채우고 난 후 입니다.', this.items)
-    }
-  }
 };
 </script>
 <style scoped> 
