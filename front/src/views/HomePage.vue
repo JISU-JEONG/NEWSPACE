@@ -17,10 +17,6 @@ export default {
 	methods: {
 
 	},
-	mounted(){
-		console.log("sica : " + localStorage.getItem("member_id"));
-
-	},
 	beforeMount() {
 		info();
 	}
