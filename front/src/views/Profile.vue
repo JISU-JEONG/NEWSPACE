@@ -271,7 +271,6 @@ export default {
 // 	  info();
 //   },
   mounted(){
-	console.log("profile => " + localStorage.getItem("member_id"))
 	this.get_user()
   }
 }

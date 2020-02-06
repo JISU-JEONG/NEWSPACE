@@ -198,7 +198,6 @@ export default {
               .then(res => {
                 localStorage.setItem("login-token", res.headers["login-token"]);
                 localStorage.setItem("loginStatus", parentFunc.username);
-                console.log("==> social : "+ localStorage.getItem("login-token"));
                 resolve("ㄲ");
               });
           });
@@ -211,7 +210,6 @@ export default {
           } else {
             //이미 로그인한적이 있을시 홈으루
             
-            console.log(localStorage.getItem("member_id"));
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",
