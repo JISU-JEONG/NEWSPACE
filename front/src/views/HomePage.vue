@@ -11,7 +11,7 @@
 
 <script>
 import NewsList from '../components/NewsList'
-import Info from '../services/getInfo';
+import info from '../services/getInfo';
 import store from "../store";
 
 export default {
@@ -22,8 +22,12 @@ export default {
 	methods: {
 
 	},
+	mounted(){
+		console.log("sica : " + localStorage.getItem("member_id"));
+
+	},
 	beforeMount() {
-		Info();
+		info();
 	}
 }
 </script>

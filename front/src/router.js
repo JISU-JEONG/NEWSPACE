@@ -54,7 +54,6 @@ const routes = [
     component: SocialSignup,
     meta: {
       scrollToTop: true,
-      needBlockAuthUser: true
     }
   },
   {
