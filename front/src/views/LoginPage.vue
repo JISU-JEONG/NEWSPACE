@@ -78,7 +78,7 @@ export default {
         // axios
         //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.84:8080/member/signin", {
+          .post("http://192.168.31.85:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -97,6 +97,7 @@ export default {
                 member_keyword: res.data.member_keyword,
               };
               this.$store.dispatch("login", payload);
+              this.$store.dispatch("setMemberNews") // 키워드 뉴스 받아오기
               this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
             } else {
               this.$store.dispatch("error");
@@ -167,7 +168,7 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/signupcheck", {
           axios
-            .post("http://192.168.31.84:8080/member/signupcheck", {
+            .post("http://192.168.31.85:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -214,6 +215,7 @@ export default {
               auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
+            this.$store.dispatch("setMemberNews")
             this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
           }
         });

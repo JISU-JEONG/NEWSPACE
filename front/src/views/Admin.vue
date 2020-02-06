@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$store.state.auth==='1'">
     <div class="admin_header">
       <h1 class="admin_font">NEWSPACE ADMIN PAGE</h1>
     </div>
@@ -23,10 +23,26 @@
       </div>
     </div>
   </div>
+  <div v-else></div>
 </template>
 
 <script>
+import router from '../router'
+
 export default {
+  name :'admin',
+  methods: {
+    getout(){
+      if(this.$store.state.auth !=='1')
+      {
+        alert("잘못된 접근입니다. 꺼져 주세요.")
+        router.push('/')
+      }
+    }
+  },
+  mounted(){
+    this.getout()
+  }
 
 }
 </script>

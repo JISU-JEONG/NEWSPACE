@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-container v-if="loading">
-      <h1>로딩중이다!!!!!!!!기다려!!!!!!!!!!!</h1>
-    </v-container>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="300"></v-progress-circular>
+    </v-overlay>
     <transition name="list">
       <v-container class="main_web" v-if="show">
         <h1>{{searchValue}} 검색결과</h1>
