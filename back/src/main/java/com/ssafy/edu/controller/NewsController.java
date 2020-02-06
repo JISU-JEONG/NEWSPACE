@@ -14,6 +14,8 @@ import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.MemberNewsHelp;
 import com.ssafy.edu.help.NewsInsertHelp;
+import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.SearchChart;
 import com.ssafy.edu.help.UserKeywordNews;
 import com.ssafy.edu.help.getNewsHelp;
 import com.ssafy.edu.service.INewsService;
@@ -283,5 +285,29 @@ public class NewsController {
 			logger.error("NewsRestController Error ! " + news.getNews_id() + " " + member_id);
 			return false;
 		}
+	}
+	
+	@RequestMapping(value = "/getChartKeyword", method = RequestMethod.GET)
+	public ResponseEntity<List<List<NewsKeywordCounter>>> getChartKeyword() throws Exception {
+		logger.info("NewsController Excute ! getChartKeyword \t" + new Date());
+
+		List<List<NewsKeywordCounter>> list = newsService.getChartKeyword();
+		
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<List<NewsKeywordCounter>>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getSearchChartKeyword/{search}", method = RequestMethod.GET)
+	public ResponseEntity<List<SearchChart>> getSearchChartKeyword(@PathVariable String search) throws Exception {
+		logger.info("NewsController Excute ! getSearchChartKeyword \t" + new Date());
+
+		List<SearchChart> list = newsService.getSearchChartKeyword(search);
+		
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<SearchChart>>(list, HttpStatus.OK);
 	}
 }

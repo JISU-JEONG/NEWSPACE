@@ -11,6 +11,33 @@ public class NewsDTO {
 	private String keyword;
 	private String url;
 	private String bodytext;
+	private String thumb;
+
+
+	
+
+	@Override
+	public String toString() {
+		return "NewsDTO [news_id=" + news_id + ", title=" + title + ", date=" + date + ", body=" + body + ", brand="
+				+ brand + ", category=" + category + ", keyword=" + keyword + ", url=" + url + ", bodytext=" + bodytext
+				+ ", thumb=" + thumb + "]";
+	}
+
+
+	public NewsDTO(String title, String date, String body, String brand, String category, String keyword, String url,
+			String bodytext, String thumb) {
+		super();
+		this.title = title;
+		this.date = date;
+		this.body = body;
+		this.brand = brand;
+		this.category = category;
+		this.keyword = keyword;
+		this.url = url;
+		this.bodytext = bodytext;
+		this.thumb = thumb;
+	}
+
 
 	public NewsDTO() {
 		super();
@@ -33,23 +60,21 @@ public class NewsDTO {
 	}
 
 
-	public NewsDTO(String title, String date, String brand, String category, String url) {
+	public NewsDTO(String title, String date, String brand, String category, String url, String thumb) {
 		super();
 		this.title = title;
 		this.date = date;
 		this.brand = brand;
 		this.category = category;
 		this.url = url;
+		this.thumb = thumb;
 	}
 
-	@Override
-	public String toString() {
-		return "NewsDTO [news_id=" + news_id + ", title=" + title + ", date=" + date + ", body=" + body + ", brand="
-				+ brand + ", category=" + category + ", keyword=" + keyword + ", url=" + url + ", bodytext=" + bodytext
-				+ "]";
+	public NewsDTO(String url, String thumb) {
+		super();
+		this.url = url;
+		this.thumb = thumb;
 	}
-
-	
 
 	public int getNews_id() {
 		return news_id;
@@ -123,6 +148,15 @@ public class NewsDTO {
 
 	public void setBodytext(String bodytext) {
 		this.bodytext = bodytext;
+	}
+	
+	public String getThumb() {
+		return thumb;
+	}
+
+
+	public void setThumb(String thumb) {
+		this.thumb = thumb;
 	}
 
 	public NewsDTO(String title, String date, String body, String brand, String category, String keyword, String url,

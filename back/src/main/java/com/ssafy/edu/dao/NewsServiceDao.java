@@ -10,6 +10,7 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsSearch;
+import com.ssafy.edu.help.SearchChart;
 
 @Repository
 public class NewsServiceDao {
@@ -145,13 +146,30 @@ public class NewsServiceDao {
 
 	public boolean checkLikeNews(NewsInsertHelp nih) {
 		NewsInsertHelp check = null;
-		
+
 		check = SQL.selectOne(ns + "checkLikeNews", nih);
-		
-		if(check == null) {
+
+		if (check == null) {
 			return false;
-		}else {
+		} else {
 			return true;
 		}
+	}
+
+	public List<NewsDTO> getChartKeyword() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getChartKeyword");
+	}
+
+	public List<NewsDTO> getChartKeyword(String string) {
+		// TODO Auto-generated method stub
+
+		return SQL.selectList(ns + "getChartKeywordBrand", string);
+
+	}
+
+	public List<NewsDTO> getSearchChartKeyword(SearchChart searchChart) {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getSearchChartKeyword", searchChart);
 	}
 }
