@@ -16,10 +16,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="addNews" parameterType="com.ssafy.edu.dto.NewsDTO">
 		insert into news(title, date,
-		body, brand, category, keyword, url, bodytext) values (#{title},
+		body, brand, category, keyword, url, bodytext, thumb) values (#{title},
 		#{date},
 		#{body}, #{brand}, #{category}, #{keyword}, #{url},
-		#{bodytext})
+		#{bodytext}, #{thumb})
 	</insert>
 
 	<select id="getSamsungNews"
@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.ssafy.edu.help.NewsSearch"
 		resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
-		k.KEYWORD, n.URL, n.BODYTEXT
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
 		FROM news n JOIN newskeyword k
 		WHERE
 		n.NEWS_ID = k.NEWS_ID
@@ -108,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.ssafy.edu.help.NewsSearch"
 		resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
-		k.KEYWORD, n.URL, n.BODYTEXT
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
 		FROM news n JOIN newskeyword k
 		WHERE
 		n.NEWS_ID = k.NEWS_ID
@@ -142,7 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.ssafy.edu.help.NewsSearch"
 		resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
-		k.KEYWORD, n.URL, n.BODYTEXT
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
 		FROM news n JOIN newskeyword k
 		WHERE
 		n.NEWS_ID = k.NEWS_ID
@@ -176,7 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.ssafy.edu.help.NewsSearch"
 		resultType="com.ssafy.edu.dto.NewsDTO">
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
-		k.KEYWORD, n.URL, n.BODYTEXT
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
 		FROM news n JOIN newskeyword k
 		WHERE
 		n.NEWS_ID = k.NEWS_ID
@@ -224,7 +224,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.ssafy.edu.dto.NewsDTO"
 		parameterType="com.ssafy.edu.help.NewsSearch">
 		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
-		k.KEYWORD, n.URL, n.BODYTEXT
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
 		FROM news n JOIN newskeyword k
 		WHERE
 		n.NEWS_ID = k.NEWS_ID
@@ -259,6 +259,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="checkLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp"
 	resultType="com.ssafy.edu.help.NewsInsertHelp">
 		select * from amt.member_news where news_id = #{news_id} and member_id = #{member_id}
+	</select>
+	
+	<select id="getChartKeyword" resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
+		FROM news n JOIN newskeyword k
+		WHERE n.NEWS_ID = k.NEWS_ID AND n.DATE >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY n.DATE DESC
+	</select>
+	
+	<select id="getChartKeywordBrand" resultType="com.ssafy.edu.dto.NewsDTO" parameterType="java.lang.String">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
+		FROM news n JOIN newskeyword k
+		WHERE n.NEWS_ID = k.NEWS_ID AND n.DATE >= DATE_SUB(NOW(), INTERVAL 31 DAY) 
+		AND n.brand like #{string} ORDER BY n.DATE DESC
+	</select>
+	
+	<select id="getSearchChartKeyword" resultType="com.ssafy.edu.dto.NewsDTO" parameterType="com.ssafy.edu.help.SearchChart">
+		select NEWS_ID, TITLE, DATE, BODY, BRAND, CATEGORY,
+		KEYWORD, URL, BODYTEXT, THUMB
+		from news
+		where 
+		<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="OR ">
+					KEYWORD LIKE CONCAT('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		AND date_format(date, '%Y-%m-%d') between DATE_FORMAT(CONCAT(DATE_FORMAT( date_add(now(), INTERVAL - #{datecount} month) ,'%Y-%m'),'-1'),'%Y-%m-%d') and last_day(now())
 	</select>
 
 </mapper>

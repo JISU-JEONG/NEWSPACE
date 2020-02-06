@@ -34,6 +34,7 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.SearchChart;
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
@@ -320,7 +321,8 @@ public class NewsService implements INewsService {
 					|| s.equals("그니") || s.equals("그랑") || s.equals("튜브") || s.equals("빌리") || s.equals("이노")
 					|| s.equals("베이") || s.equals("방식") || s.equals("빌트") || s.equals("프리") || s.equals("제품")
 					|| s.equals("레드") || s.equals("하이") || s.equals("기능") || s.equals("상배") || s.equals("양사")
-					|| s.equals("바이") || s.equals("인공") || s.equals("지능")) {
+					|| s.equals("바이") || s.equals("인공") || s.equals("지능") || s.equals("LG전자") || s.equals("LG")
+					|| s.equals("10") || s.equals("SK텔레콤") || s.equals("SK이노베이션")) {
 				continue;
 			}
 			if (map.containsKey(s)) {
@@ -388,6 +390,136 @@ public class NewsService implements INewsService {
 		}
 	}
 
+	@Override
+	public List<List<NewsKeywordCounter>> getChartKeyword() {
+		// TODO Auto-generated method stub
+		List<List<NewsKeywordCounter>> result = new ArrayList<>();
+
+		List<NewsDTO> alist = null;
+		alist = dao.getChartKeyword();
+		
+		List<NewsDTO> samsunglist = null;
+		samsunglist = dao.getChartKeyword("SAMSUNG");
+		
+		List<NewsDTO> lglist = null;
+		lglist = dao.getChartKeyword("LG");
+		
+		List<NewsDTO> sklist = null;
+		sklist = dao.getChartKeyword("SK");
+		
+
+		result.add(chartKeywordSet(alist));
+		result.add(chartKeywordSet(samsunglist));
+		result.add(chartKeywordSet(lglist));
+		result.add(chartKeywordSet(sklist));
+		
+		return result;
+
+	}
+	
+	public List<NewsKeywordCounter> chartKeywordSet(List<NewsDTO> list){
+		
+		List<NewsKeywordCounter> resultList = new ArrayList<>();
+		
+		if (list.isEmpty()) {
+			return null;
+		} else {
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+
+			for (NewsDTO n : list) {
+				String[] str = n.getKeyword().split(" ");
+
+				if (str.length <= 1) {
+					continue;
+				}
+
+				for (String s : str) {
+					if (map.containsKey(s)) {
+						int value = map.get(s);
+						value++;
+						map.put(s, value);
+					} else {
+						map.put(s, 1);
+					}
+				}
+			}
+			ArrayList<NewsKeywordCounter> counterList = new ArrayList<NewsKeywordCounter>();
+
+			for (String key : map.keySet()) {
+				counterList.add(new NewsKeywordCounter(key, map.get(key)));
+			}
+
+			counterList.sort(new Comparator<NewsKeywordCounter>() {
+
+				@Override
+				public int compare(NewsKeywordCounter o1, NewsKeywordCounter o2) {
+					// TODO Auto-generated method stub
+					return o2.getCount() - o1.getCount();
+				}
+			});
+
+			int index = 0;
+			int size = 30;
+
+			for (NewsKeywordCounter nkc : counterList) {
+				resultList.add(new NewsKeywordCounter(nkc.getKeyword(), nkc.getCount()));
+				index++;
+
+				if (index >= size) {
+					break;
+				}
+			}
+		}
+		return resultList;
+	}
+	
+	@Override
+	public List<SearchChart> getSearchChartKeyword(String search) {
+		// TODO Auto-generated method stub
+		
+		List<SearchChart> result = new ArrayList<SearchChart>();
+		
+		List<List<NewsDTO>> list = new ArrayList<List<NewsDTO>>();
+		
+		String[] find = search.split(" ");
+		
+		for(int i=11; i>=0; i--) {
+			List<NewsDTO> temp = dao.getSearchChartKeyword(new SearchChart("ALL", i, 0, find));
+			list.add(temp);
+		}
+		
+		int max = 0;
+		
+		int index = 11;
+		for(List<NewsDTO> l : list) {
+			
+			int lmax = 0;
+			
+			for(NewsDTO n : l) {
+				
+				int[] count = new int[find.length];
+
+				for (int c = 0; c < count.length; c++) {
+					count[c] = StringUtils.countMatches(n.getKeyword(), find[c]);
+				}
+				
+				for(int c=0; c<count.length; c++) {
+					lmax += count[c];
+				}
+			}
+			
+			if(max == 0) {
+				max = lmax;
+			}else {
+				result.add(new SearchChart("ALL", index--, max-lmax, find, search));
+			}
+		}
+		
+		result.add(new SearchChart("ALL", index, max, find, search));
+		
+		return result;
+	}
+
 	public void samsung_Crawling1() throws IOException, ParseException {
 
 		Calendar now = Calendar.getInstance();
@@ -423,6 +555,14 @@ public class NewsService implements INewsService {
 						String cate = category[i];
 						String url = ele1.get(j).attr("href");
 						String bodytext = ele1Doc.getElementsByClass("text_cont").text();
+
+						String thumb = ele1.get(j).getElementsByClass("thumb_wrap").attr("style");
+						if (thumb.length() > 23) {
+							thumb = thumb.substring(21, thumb.length() - 2);
+						} else {
+							thumb = "";
+						}
+
 						date = date.replaceAll("/", "-");
 						date = date.substring(0, 10);
 						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -442,19 +582,9 @@ public class NewsService implements INewsService {
 						String keyword = "";
 						String txt = "";
 
-//						Komoran komoran = new Komoran("lib/komoran/models");
-//						List<List<Pair<String, String>>> result = komoran.analyze(bodytext);
-//						for (List<Pair<String, String>> eojeolResult : result) {
-//							for (Pair<String, String> wordMorph : eojeolResult) {
-//								if (wordMorph.getSecond().equals("SN") || wordMorph.getSecond().equals("SW")
-//										|| wordMorph.getSecond().equals("SL")) {
-//									txt += wordMorph.getFirst();
-//								}
-//								if (wordMorph.getSecond().equals("NNG") || wordMorph.getSecond().equals("NNP")) {
-//									keyword += wordMorph.getFirst() + " ";
-//								}
-//							}
-//						}
+						if (bodytext.length() < 10) {
+							bodytext = "no content";
+						}
 
 						Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
 						KomoranResult analyzeResultList = komoran.analyze(bodytext);
@@ -484,7 +614,7 @@ public class NewsService implements INewsService {
 						}
 
 						NewsDTO check = null;
-						NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext);
+						NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext, thumb);
 						check = getNewsOne(news.getUrl());
 						if (check == null) {
 							logger.info("Added News : " + news.getUrl());
@@ -540,6 +670,14 @@ public class NewsService implements INewsService {
 						String cate = category[i];
 						String url = ele1.get(j).attr("href");
 						String bodytext = ele1Doc.getElementsByClass("text_cont").text();
+
+						String thumb = ele1.get(j).getElementsByClass("thumb_wrap").attr("style");
+						if (thumb.length() > 23) {
+							thumb = thumb.substring(21, thumb.length() - 2);
+						} else {
+							thumb = "";
+						}
+
 						date = date.replaceAll("/", "-");
 						date = date.substring(0, 10);
 						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -558,6 +696,10 @@ public class NewsService implements INewsService {
 
 						String keyword = "";
 						String txt = "";
+
+						if (bodytext.length() < 10) {
+							bodytext = "no content";
+						}
 
 						Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
 						KomoranResult analyzeResultList = komoran.analyze(bodytext);
@@ -587,7 +729,7 @@ public class NewsService implements INewsService {
 						}
 
 						NewsDTO check = null;
-						NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext);
+						NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, url, bodytext, thumb);
 						check = getNewsOne(news.getUrl());
 						if (check == null) {
 							logger.info("Added News : " + news.getUrl());
@@ -688,7 +830,9 @@ public class NewsService implements INewsService {
 				String brand = "LG";
 				String cate = "ALL";
 				String newsurl = webElement.findElement(By.className("thum_itembx")).getAttribute("href");
-				NewsDTO news = new NewsDTO(title, date, brand, cate, newsurl);
+				String thumb = webElement.findElement(By.className("thum")).findElement(By.tagName("img"))
+						.getAttribute("src");
+				NewsDTO news = new NewsDTO(title, date, brand, cate, newsurl, thumb);
 				list.add(news);
 			}
 		}
@@ -710,6 +854,10 @@ public class NewsService implements INewsService {
 
 			String keyword = "";
 			String txt = "";
+
+			if (bodytext.length() < 10) {
+				bodytext = "no content";
+			}
 
 			Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
 			KomoranResult analyzeResultList = komoran.analyze(bodytext);
@@ -738,7 +886,7 @@ public class NewsService implements INewsService {
 			}
 
 			NewsDTO check = null;
-			NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, newsurl, bodytext);
+			NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, newsurl, bodytext, n.getThumb());
 			check = getNewsOne(news.getUrl());
 			if (check == null) {
 				logger.info("Added News : " + news.getUrl());
@@ -754,7 +902,9 @@ public class NewsService implements INewsService {
 
 	public void sk_Crawling() throws ParseException, IOException {
 
-		ArrayList<String> list = new ArrayList<>();
+//		ArrayList<String> list = new ArrayList<>();
+
+		ArrayList<NewsDTO> list = new ArrayList<>();
 
 		String url = "http://mediask.co.kr/category/news/%eb%b3%b4%eb%8f%84%ec%9e%90%eb%a3%8c-news-2";
 
@@ -818,43 +968,35 @@ public class NewsService implements INewsService {
 					}
 				}
 			}
-
 			webElements.clear();
 		}
 
 		if (!flag) {
-			webElements = driver.findElements(By.tagName("a"));
+//			webElements = driver.findElements(By.tagName("a"));
+			webElements = driver.findElement(By.className("list")).findElements(By.tagName("a"));
 
-			for (int i = 0; i < webElements.size(); i++) {
+			for (int i = 0; i < webElements.size() - 1; i++) {
 				webElement = webElements.get(i);
 
-				String checkUrl = webElement.getAttribute("href");
-				if (checkUrl.length() >= 21) {
-					String temp = checkUrl.substring(21, checkUrl.length());
-					char[] checked = temp.toCharArray();
-					if (checked.length >= 5) {
-						if (checked[0] >= '0' && checked[0] <= '9') {
-							list.add(checkUrl);
-						} else {
-							continue;
-						}
-					} else {
-						continue;
-					}
-				}
+				String newsurl = webElement.getAttribute("href");
+				String thumb = webElement.findElement(By.className("thumnail")).findElement(By.tagName("img"))
+						.getAttribute("src");
+
+				NewsDTO news = new NewsDTO(newsurl, thumb);
+				list.add(news);
 			}
 		}
 		driver.close();
 		driver.quit();
 
-		for (String s : list) {
-			Document doc = Jsoup.connect(s).get();
+//		for (String s : list) {
+		for (NewsDTO n : list) {
+			Document doc = Jsoup.connect(n.getUrl()).timeout(120000).get();
 
 			String title = doc.getElementsByClass("postTitle").get(0).getElementsByTag("h2").text();
 			String date = doc.getElementsByClass("postInfo").get(0).getElementsByTag("p").get(1).text();
 			String brand = "SK";
 			String cate = "ALL";
-			String newsurl = s;
 			Elements bodyEle = doc.getElementsByClass("post").get(0).getElementsByTag("p");
 			String body = "";
 			for (int i = 0; i < bodyEle.size(); i++) {
@@ -864,6 +1006,10 @@ public class NewsService implements INewsService {
 
 			String keyword = "";
 			String txt = "";
+
+			if (bodytext.length() < 10) {
+				bodytext = "no content";
+			}
 
 			Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
 			KomoranResult analyzeResultList = komoran.analyze(bodytext);
@@ -892,7 +1038,7 @@ public class NewsService implements INewsService {
 			}
 
 			NewsDTO check = null;
-			NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, newsurl, bodytext);
+			NewsDTO news = new NewsDTO(title, date, body, brand, cate, keyword, n.getUrl(), bodytext, n.getThumb());
 			check = getNewsOne(news.getUrl());
 
 			if (check == null) {
@@ -906,6 +1052,87 @@ public class NewsService implements INewsService {
 		list.clear();
 	}
 
+	public void allKeywordSet() {
+		//어쩌다 전체 키워드 셋팅 시킬때 씀
+		List<NewsDTO> list = dao.getAllNews();
+
+		for (NewsDTO n : list) {
+
+			int news_id = n.getNews_id();
+			String word = n.getKeyword();
+
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+
+			String[] keys = word.split(" ");
+
+			for (String s : keys) {
+				if (s.length() <= 1 || s.equals("삼성전자") || s.equals("삼성") || s.equals("전자") || s.equals("분야")
+						|| s.equals("사람") || s.equals("임직원") || s.equals("월드") || s.equals("최대") || s.equals("선정")
+						|| s.equals("코리아") || s.equals("최적") || s.equals("진행") || s.equals("아래") || s.equals("소개")
+						|| s.equals("부문") || s.equals("적용") || s.equals("기간") || s.equals("이상") || s.equals("상판")
+						|| s.equals("규모") || s.equals("북미") || s.equals("지급") || s.equals("사원") || s.equals("규모")
+						|| s.equals("지원") || s.equals("대상") || s.equals("영민") || s.equals("주옥") || s.equals("구성")
+						|| s.equals("사용") || s.equals("자녀") || s.equals("사용자") || s.equals("시간") || s.equals("경험")
+						|| s.equals("신창") || s.equals("제공") || s.equals("대표") || s.equals("레이") || s.equals("학교")
+						|| s.equals("아우") || s.equals("아이") || s.equals("이두") || s.equals("사이") || s.equals("기준")
+						|| s.equals("리뷰") || s.equals("으뜸") || s.equals("구매") || s.equals("관련") || s.equals("건조")
+						|| s.equals("마음") || s.equals("시장") || s.equals("지역") || s.equals("상무") || s.equals("모습")
+						|| s.equals("그니") || s.equals("그랑") || s.equals("튜브") || s.equals("빌리") || s.equals("이노")
+						|| s.equals("베이") || s.equals("방식") || s.equals("빌트") || s.equals("프리") || s.equals("제품")
+						|| s.equals("레드") || s.equals("하이") || s.equals("기능") || s.equals("상배") || s.equals("양사")
+						|| s.equals("바이") || s.equals("인공") || s.equals("지능") || s.equals("LG전자") || s.equals("LG")
+						|| s.equals("10") || s.equals("SK텔레콤") || s.equals("SK이노베이션")) {
+					continue;
+				}
+				if (map.containsKey(s)) {
+					int value = map.get(s);
+					value++;
+					map.put(s, value);
+				} else {
+					map.put(s, 1);
+				}
+			}
+
+			ArrayList<NewsKeywordCounter> counterList = new ArrayList<NewsKeywordCounter>();
+
+			for (String key : map.keySet()) {
+				counterList.add(new NewsKeywordCounter(key, map.get(key)));
+			}
+
+			counterList.sort(new Comparator<NewsKeywordCounter>() {
+
+				@Override
+				public int compare(NewsKeywordCounter o1, NewsKeywordCounter o2) {
+					// TODO Auto-generated method stub
+					return o2.getCount() - o1.getCount();
+				}
+			});
+
+			String keyword = "";
+
+			for (int i = 0; i < counterList.size(); i++) {
+				if (i >= 5) {
+					break;
+				}
+				keyword += counterList.get(i).getKeyword() + " ";
+			}
+			if (keyword.length() >= 1) {
+				keyword = keyword.substring(0, keyword.length() - 1);
+			}
+
+			NewsKeyword nk = null;
+			nk = dao.newsKeywordValid(news_id);
+
+			if (nk == null) {
+				dao.addNewsKeyword(new NewsKeyword(news_id, keyword));
+			}else {
+				dao.updateNewsKeyword(new NewsKeyword(news_id, keyword));
+			}
+
+		}
+
+	}
+
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 3600000)
 	public void Scheduler() throws IOException, ParseException {
@@ -917,5 +1144,7 @@ public class NewsService implements INewsService {
 //		lg_Crawling();
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
 //		sk_Crawling();
+		logger.info("CRAWLING DONE." + "\t" + new Date());
+//		allKeywordSet();
 	}
 }
