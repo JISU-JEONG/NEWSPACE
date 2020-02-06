@@ -107,8 +107,8 @@ public class MemberRestController {
 
 	// 아이디 중복체크
 	public String search(String email) {
+		
 		if (memberservice.getEmail(email) == null) {
-			log.info("MemberRestController Excute ! search : " + memberservice.getEmail(email));
 			return "Notexist";
 		} else {
 			return "exist";
@@ -118,6 +118,7 @@ public class MemberRestController {
 	// 회원가입
 	@PostMapping("/member/signup")
 	public int signup(@RequestBody Member member) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		log.info("MemberRestController Excute ! search : " + memberservice.getEmail(member.getEmail()));
 		if (search(member.getEmail()).equals("Notexist")) {
 			member.setKeyword(member.getInputkeyword().toString());
 			String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",",
@@ -153,8 +154,9 @@ public class MemberRestController {
 		log.info("\"MemberRestController Excute ! socialtoken " + member);
 
 		Map<String, Object> resultMap = new HashMap<>();
-
-		member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
+		if(memberservice.getEmail(member.getEmail()) != null) {			
+			member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
+		}
 
 		String token = jwtService.create(member);
 		res.setHeader("login-token", token);

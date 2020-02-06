@@ -43,7 +43,6 @@
               @click:append="userInputKeywordToList"
               @keyup.enter.stop="userInputKeywordToList"
               :error="error"
-              ₩
               :error-messages="errorMessages"
               @input="inputKeyword"
             />
@@ -63,6 +62,8 @@
 <script>
 import http from "../services/http-common";
 import info from "../services/getInfo";
+import axios from "axios";
+
 export default {
   name: "SocialSignpPage",
   data() {
@@ -106,9 +107,9 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/socialtoken", {
           axios
-            .post("http://192.168.31.85:8080/member/socialtoken", {
+            .post("http://192.168.31.84:8080/member/socialtoken", {
               email: localStorage.getItem("member_email"),
-              name: localStorage.getItem("member_email"),
+              name: localStorage.getItem("member_name"),
               type: localStorage.getItem("member_type")
             })
             .then(res => {

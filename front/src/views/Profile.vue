@@ -117,6 +117,7 @@
 <script>
 import http from "../services/http-common.js";
 import router from '../router'
+import info from '../services/getInfo'
 
 export default {
   name: 'Profile',
@@ -266,6 +267,9 @@ export default {
 			this.dialog = false
 		}
   },
+//   beforeMount(){
+// 	  info();
+//   },
   mounted(){
 	this.get_user()
   }
