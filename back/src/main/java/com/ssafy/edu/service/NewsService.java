@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,7 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.edu.dao.MemberDao;
 import com.ssafy.edu.dao.NewsServiceDao;
+import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
@@ -41,6 +45,12 @@ public class NewsService implements INewsService {
 
 	@Autowired
 	private NewsServiceDao dao;
+
+	@Autowired
+	private MemberDao memberDao;
+
+	@Autowired
+	private EmailService emailService;
 
 	private WebDriver driver;
 	private WebElement webElement;
@@ -285,7 +295,7 @@ public class NewsService implements INewsService {
 	}
 
 	public void setKeyword(NewsDTO n) {
-		
+
 		n = dao.getNewsOne(n.getUrl());
 
 		int news_id = n.getNews_id();
@@ -350,6 +360,32 @@ public class NewsService implements INewsService {
 		}
 		addNewsKeyword(news_id, keyword);
 
+		List<Member> memberList = memberDao.emailSendList(keyword);
+
+		for (Member m : memberList) {
+
+			try {
+
+				StringBuffer emailcontent = new StringBuffer();
+				emailcontent.append("<!DOCTYPE html>");
+				emailcontent.append("<html>");
+				emailcontent.append("<head>");
+				emailcontent.append("</head>");
+				emailcontent.append("<body>");
+				emailcontent.append("<strong>" + m.getName() + "</strong>" + "님 안녕하세요.<br>");
+				emailcontent.append("당신이 선택하신 키워드에 매칭되는 최신 뉴스가 올라왔습니다. :)<br>");
+				emailcontent.append("<br><br><br>");
+				emailcontent.append(n.getTitle() + "<br>");
+				emailcontent.append(n.getBody() + "<br>");
+				emailcontent.append("<a href='" + n.getUrl() + "'>해당 기사 사이트로 가기</a><br>");
+				emailcontent.append("</body>");
+				emailcontent.append("</html>");
+				emailService.sendMail(m.getEmail(), "[NEWSPACE] 추천 뉴스가 도착했습니다.", emailcontent.toString());
+			} catch (MessagingException e) {
+				logger.error(e.getMessage());
+			}
+
+		}
 	}
 
 	public void samsung_Crawling1() throws IOException, ParseException {
@@ -870,17 +906,16 @@ public class NewsService implements INewsService {
 		list.clear();
 	}
 
-
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 3600000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
-		samsung_Crawling1();
+//		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
-		samsung_Crawling2();
+//		samsung_Crawling2();
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-		lg_Crawling();
+//		lg_Crawling();
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
-		sk_Crawling();
+//		sk_Crawling();
 	}
 }

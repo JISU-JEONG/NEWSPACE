@@ -17,7 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertMember"
 		parameterType="com.ssafy.edu.dto.Member">
 		INSERT INTO amt.member(EMAIL, PASSWORD, NAME, AUTH,
-		DELFLAG, KEYWORD, TYPE, CERTIFIEDKEY) VALUES(#{email}, #{password}, #{name}, 0, 0,
+		DELFLAG, KEYWORD, TYPE, CERTIFIEDKEY) VALUES(#{email}, #{password},
+		#{name}, 0, 0,
 		#{keyword}, #{type}, #{certifiedkey})
 	</insert>
 
@@ -25,17 +26,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.ssafy.edu.dto.Member">
 		select * from amt.member where member_id = #{member_id}
 	</select>
-	
-	<select id="emailcheck" parameterType="com.ssafy.edu.dto.Member" resultType="com.ssafy.edu.dto.Member">
-		select * from amt.member where email = #{email} and certifiedkey = #{certifiedkey}
+
+	<select id="emailcheck" parameterType="com.ssafy.edu.dto.Member"
+		resultType="com.ssafy.edu.dto.Member">
+		select * from amt.member where email = #{email} and
+		certifiedkey = #{certifiedkey}
 	</select>
-	
-	<update id="emailupdate" parameterType="com.ssafy.edu.dto.Member">
-		update amt.member set certifiedkey = "true" where email = #{email}
+
+	<update id="emailupdate"
+		parameterType="com.ssafy.edu.dto.Member">
+		update amt.member set certifiedkey = "true" where email
+		= #{email}
 	</update>
-	
-	<update id="updatemember" parameterType="com.ssafy.edu.dto.Member">
-		update amt.member set name = #{name}, keyword = #{keyword} where (member_id = #{member_id});
+
+	<update id="updatemember"
+		parameterType="com.ssafy.edu.dto.Member">
+		update amt.member set name = #{name}, keyword =
+		#{keyword} where (member_id = #{member_id});
 	</update>
+
+	<select id="emailSendList" resultType="com.ssafy.edu.dto.Member"
+	parameterType="com.ssafy.edu.help.NewsSearch">
+		select * from amt.member
+		where (
+			<choose>
+			<when test="search.length != 0">
+				(
+				<foreach collection="search" item="word" index="index"
+					separator="OR ">
+					keyword like concat('%',#{word},'%')
+				</foreach>
+				)
+			</when>
+		</choose>
+		) and certifiedkey = "true"
+	</select>
 
 </mapper>
