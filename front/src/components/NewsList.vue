@@ -175,6 +175,8 @@ iframe{
   height: 1vw;
 }
 .main_web{
+  width: 90%;
+  margin: 10px auto;
   background-color: white;
 }
 
