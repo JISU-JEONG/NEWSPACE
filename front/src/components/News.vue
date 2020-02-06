@@ -1,22 +1,37 @@
 <template>
   <v-container>
       <div class="cardbox" :class="news.brand">
-        <div  @click="goDetail(news.news_id)">
-          <div class="brand-title">
-            <span v-if="news.brand === 'LG'">{{news.brand}} Electronics</span>
-            <span v-else-if="news.brand === 'SK'">{{news.brand}} Hynix</span>
-            <span v-else>{{news.brand}}</span>
-          </div>
-          <div class="head_font">{{news.title}}</div>
-          <div class="box">
-            {{news.date}}
-          </div>
-        </div>
-        <div>
-          <span class="tagfont" v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
-            #{{key}}
-          </span>
-        </div>
+          <v-row>
+            <v-col
+            sm=12
+            md=8
+            >
+              <div  @click="goDetail(news.news_id)">
+                <div class="brand-title">
+                  <span v-if="news.brand === 'LG'">{{news.brand}} Electronics</span>
+                  <span v-else-if="news.brand === 'SK'">{{news.brand}} Hynix</span>
+                  <span v-else>{{news.brand}}</span>
+                </div>
+                <div class="head_font">{{news.title}}</div>
+                <div class="box">
+                  {{news.date}}
+                </div>
+              </div>
+              <div>
+                <span class="tagfont" v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
+                  #{{key}}
+                </span>
+              </div>
+          </v-col>
+          <v-col
+          md=4 
+          class="imgbox"
+          >
+            <v-img
+              :src="news.thumb"
+            ></v-img>
+          </v-col>
+        </v-row>
       </div>
   </v-container>
 </template>
@@ -51,10 +66,11 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
   .cardbox{
-    margin: 0 auto;
+    margin: 0px auto;
     padding: 10px 10px;
     border: solid 1px gray;
-    border-radius: 10px;
+    /* border-radius: 10px; */
+    /* background-color: #F5F5F5; */
     box-sizing: border-box;
     cursor: pointer;
     transition: all 0.5s ;
@@ -121,5 +137,13 @@ export default {
     font-size: 18px;
     font-family: 'Noto Sans KR', sans-serif;
     color: #DB1026;
+  }
+  v-img{
+    display: block;
+    align-content: center;
+    padding-bottom: 0px;
+  }
+  .imgbox{
+    padding: 12px 10px;
   }
 </style>
