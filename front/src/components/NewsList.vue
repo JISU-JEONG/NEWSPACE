@@ -6,20 +6,20 @@
           background-color="transparent"
           grow
         >
-          <v-tab>
+          <v-tab @click="brandCheck(0)">
             all
           </v-tab>
-          <v-tab>
+          <v-tab @click="brandCheck(1)">
             Samsung
           </v-tab>
-          <v-tab>
+          <v-tab @click="brandCheck(2)">
             LG
-          </v-tab>
-          <v-tab>
+          </v-tab >
+          <v-tab @click="brandCheck(3)">
             SK
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab">
+        <v-tabs-items v-model="tab" >
           <v-tab-item>
             <div class="box"
               v-for="i in AllList.length" :key="i"
@@ -125,7 +125,11 @@ export default {
           .catch(() => {
             this.errored = true;
           });
-    }
+    },
+    brandCheck(number) {
+            console.log(number)
+            this.$emit('brancdCheck-event', number)
+        }
   },
   mounted() {
       // this.NewsList();
