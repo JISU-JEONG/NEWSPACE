@@ -23,7 +23,7 @@
             <v-divider></v-divider>
             
             <v-card style="min-height:120px;">
-              <span px-3>선택된 아해들</span>
+              <span px-3>선택된 키워드</span>
               <v-divider></v-divider>
               <v-container>
                 <ul @click.stop="unselectKeyword">
@@ -35,7 +35,7 @@
             </v-card>
             <hr>
             <v-card style="min-height:120px;" class="mt-3" >
-              <span>선택되지 못한 아해들</span> <br>
+              <span>클릭하여 관심 키워드를 등록하세요.</span> <br>
               <v-divider></v-divider>
               <v-container>
                 <ul @click.stop="selectKeyword">
@@ -89,8 +89,7 @@ export default {
       userInputKeyword: '', // 가입자가 입력한 키워드
       selectedKeywords: [],
       unselectedKeywords: [],
-      textColor: "red--text",
-      textColorList: ["red--text", "purple--text", "blue--text", "teal--text", "lime--text", "yellow--text", "brown--text", "grey--text"],
+      textColorList: ["red--text", "purple--text", "blue--text", "teal--text", "lime--text", "yellow--text", "brown--text", "grey--text"], 
       error: false,
       errorMessages: '',
       trySignup: false,
