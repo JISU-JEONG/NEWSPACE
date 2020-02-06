@@ -43,7 +43,7 @@ import firebase from "firebase/app";
 import firebaseservice from "../services/FirebaseService";
 import http from "../services/http-common";
 import axios from "axios";
-
+import info from '../services/getInfo'
 export default {
   name: "login",
   computed: {
@@ -78,7 +78,7 @@ export default {
         // axios
         //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.85:8080/member/signin", {
+          .post("http://192.168.31.84:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -92,7 +92,7 @@ export default {
               const payload = {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
-                member_name: res.data.member_name,
+                member_name: res.data.name,
                 auth : localStorage.removeItem("auth"),
                 member_keyword: res.data.member_keyword,
               };
@@ -146,7 +146,7 @@ export default {
             .then(res => {
               console.log(res.user);
               parentFunc.username = res.user.displayName;
-              parentFunc.socialemail = res.user.uid;
+              parentFunc.socialemail = res.user.email;
               parentFunc.type = "google";
               resolve("ㄲ");
             })
@@ -168,7 +168,7 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/signupcheck", {
           axios
-            .post("http://192.168.31.85:8080/member/signupcheck", {
+            .post("http://192.168.31.84:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -198,20 +198,24 @@ export default {
               .then(res => {
                 localStorage.setItem("login-token", res.headers["login-token"]);
                 localStorage.setItem("loginStatus", parentFunc.username);
+                console.log("==> social : "+ localStorage.getItem("login-token"));
                 resolve("ㄲ");
               });
           });
         };
         _promise2().then(() => {
+          console.log(parentFunc.duplicationflag);
           if (parentFunc.duplicationflag == 1) {
             //처음 로그인시 키워드 선택
             this.$router.push("/SocialSignup", () => {});
           } else {
             //이미 로그인한적이 있을시 홈으루
+            
+            console.log(localStorage.getItem("member_id"));
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",
-              member_name: localStorage.getItem("loginStatus"),
+              member_name: parentFunc.username,
               auth : localStorage.removeItem("auth")
             };
             this.$store.dispatch("login", payload);
