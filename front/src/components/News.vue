@@ -12,8 +12,8 @@
             {{news.date}}
           </div>
         </div>
-        <div class="tagfont">
-          <span v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
+        <div>
+          <span class="tagfont" v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
             #{{key}}
           </span>
         </div>
@@ -49,8 +49,10 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
   .cardbox{
-    padding: 10px 20px;
+    margin: 0 auto;
+    padding: 10px 10px;
     border: solid 1px gray;
     border-radius: 10px;
     box-sizing: border-box;
@@ -58,19 +60,27 @@ export default {
     transition: all 0.5s ;
   }
   .tagfont{
-  width: 100%;
-  font-size: 18px;
-  color : #42A5F5;
-  margin-top: 10px;
+    width: 100%;
+    font-size: 15px;
+    color : #42A5F5;
+    margin-top: 5px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: oblique;
+  }
+  .tagfont:hover{
+    text-decoration: underline;
   }
   .head_font{
     color: black;
+    font-family: 'Noto Sans KR', sans-serif;
     width: 100%;
-    font-size: 25px;
+    font-size: 18px;
   }
   .box{
     width: 100%;
-    font-size:15px;
+    font-size:13px;
+    margin-left: 2px;
+    font-family: 'Noto Sans KR', sans-serif;
     color: gray;
   }
   .SAMSUNG:hover {
@@ -82,9 +92,9 @@ export default {
   }
   .SAMSUNG .brand-title {
     width: 100%;
-    font-size:30px;
+    font-size: 18px;
+    font-family: 'Noto Sans KR', sans-serif;
     color: #1428A0;
-    margin-bottom: 10px;
   }
   .LG:hover {
     border: solid 2px #A50034;
@@ -95,9 +105,9 @@ export default {
   }
   .LG .brand-title{
     width: 100%;
-    font-size:30px;
+    font-size: 18px;
+    font-family: 'Noto Sans KR', sans-serif;
     color: #A50034;
-    margin-bottom: 10px;
   }
   .SK:hover {
     border: solid 2px #DB1026;
@@ -108,8 +118,8 @@ export default {
   }
   .SK .brand-title{
     width: 100%;
-    font-size:30px;
+    font-size: 18px;
+    font-family: 'Noto Sans KR', sans-serif;
     color: #DB1026;
-    margin-bottom: 10px;
   }
 </style>

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <NewsList></NewsList>
+		<div class="newsbox">
+	    <NewsList></NewsList>
+		</div>
+		<div class="subbox">
+			asd
+		</div>
   </div>
 </template>
 
@@ -24,4 +29,13 @@ export default {
 </script>
 
 <style scoped>
+.newsbox{
+	display: inline-block;
+	padding: 2% 2%;
+	width: 70%;
+}
+.subbox{
+	display: inline-block;
+	width: 30%;
+}
 </style>
