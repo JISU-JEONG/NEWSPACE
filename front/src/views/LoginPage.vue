@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="7">
+      <v-col cols="11" sm=7>
         <v-card raised>
           <v-alert color="error" icon="warning" v-show="this.$store.state.error">로그인 정보를 확인해주세요</v-alert>
           <v-card-title>로그인</v-card-title>
@@ -26,11 +26,12 @@
             </v-form>
             <v-divider></v-divider>
           </v-container>
-          <v-subheader>소셜 로그인</v-subheader>
+          <v-card-title style="padding-bottom:0">소셜 로그인</v-card-title>
+          <v-subheader>기존에 사용하시는 계정으로 간단하게 가입/로그인할 수 있습니다.</v-subheader>
           <v-container d-flex justify-space-around>
             <input type="hidden" v-model="socialemail" />
-            <v-btn dark color="indigo darken-2" @click="FacebookLogin">Facebook 로그인</v-btn>
-            <v-btn dark color="red darken-2" @click="GoogleLogin">Google 로그인</v-btn>
+            <img src="../../images/Facebook.png" @click="FacebookLogin" style="cursor:pointer; width:64px; height:64px;">
+            <img src="../../images/Google.png" @click="GoogleLogin" style="cursor:pointer; width:64px; height:64px;">
           </v-container>
         </v-card>
       </v-col>
@@ -78,7 +79,7 @@ export default {
         // axios
         //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.84:8080/member/signin", {
+          .post("http://192.168.31.85:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
