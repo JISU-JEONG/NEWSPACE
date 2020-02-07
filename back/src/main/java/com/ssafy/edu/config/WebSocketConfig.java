@@ -1,5 +1,7 @@
 package com.ssafy.edu.config;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,7 +14,7 @@ import com.ssafy.edu.interceptor.HttpHandshakeInterceptor;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-     
+	
     @Autowired
     private HttpHandshakeInterceptor handshakeInterceptor;
  

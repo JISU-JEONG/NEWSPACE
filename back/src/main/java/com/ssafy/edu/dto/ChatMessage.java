@@ -5,12 +5,31 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
- 
+    private String[] users;
+    private int usernumber;
+    
     public enum MessageType {
-        CHAT, JOIN, LEAVE
+        CHAT, JOIN, LEAVE, JOINUSER
     }
  
-    public MessageType getType() {
+	public String[] getUsers() {
+		return users;
+	}
+
+	public void setUsers(String[] users) {
+		this.users = users;
+	}
+
+	
+	public int getUsernumber() {
+		return usernumber;
+	}
+
+	public void setUsernumber(int usernumber) {
+		this.usernumber = usernumber;
+	}
+
+	public MessageType getType() {
         return type;
     }
  
