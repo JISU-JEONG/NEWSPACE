@@ -1187,7 +1187,7 @@ public class NewsService implements INewsService {
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
 		sk_Crawling();
 		logger.info("CRAWLING DONE." + "\t" + new Date());
-		allKeywordSet();
+//		allKeywordSet();
 	}
 
 }
