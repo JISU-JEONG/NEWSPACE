@@ -19,7 +19,7 @@
         </ul>
       </v-container>
       <div class="chat-form">
-        <v-form @submit.prevent="sendMessage()">
+        <v-form @submit.prevent="sendMessage()" autocomplete="off">
           <v-text-field 
             ref="form"
             solo
@@ -27,7 +27,8 @@
             type="text"
             append-outer-icon="mdi-send"
             @click:append-outer="sendMessage"
-            hide-details
+            hide-details="true"
+            autofocus="autofocus"
           />
         </v-form>
       </div>
@@ -52,15 +53,14 @@ export default {
       userlist:[],
       receivemessage: [],
       fromMe: 'from-me',
-      fromThem: 'from-them'
+      fromThem: 'from-them',
+      autofocus: false,
     };
   },
   methods: {
     openChat() {
       this.show = !this.show
-      if (!this.show) {
-        this.$refs.form.focus()
-      }
+      this.autofocus = true
     },
     connect() {
       var socket = new SockJS("http://192.168.31.84:8080/ws");
