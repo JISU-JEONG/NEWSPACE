@@ -24,6 +24,7 @@
               </div>
           </v-col>
           <v-col
+          sm=12
           md=4 
           class="imgbox"
           >
