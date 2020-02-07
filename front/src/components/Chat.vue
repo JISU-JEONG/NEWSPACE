@@ -1,26 +1,37 @@
 <template>
-  <v-container>
-    <h1>현재접속유저 : {{usernumber}}</h1>
-    <ul v-for="(item, index) in userlist" :key="index">{{ item }}</ul>
-    <hr>
-    <br />
-
-    <section>
-    <ul v-for="(item, index) in receivemessage" :key="index">
-      <div class="from-me" :key="index" v-if="item.from_me">
-        <p v-if="item.sender !== 'system'">{{ item.sender }}</p>
-        {{ item.content }}
+  <div>
+    <v-btn color="green" dark fixed right bottom fab @click="show = !show">
+      <v-icon>
+        mdi-message-processing
+      </v-icon>
+    </v-btn>
+    <div class="chat-container" v-show="show">
+        <div class="chat-nav">
+          <span>현재접속유저 : {{usernumber}}</span>
+        </div>
+        <v-container class="chat-room">
+        <ul v-for="(item, index) in receivemessage" :key="index">
+          <div :class="[item.from_me ? fromMe : fromThem]" >
+            <p v-if="item.sender !== 'system'">{{ item.sender }}</p>
+            <li>{{ item.content }}</li>            
+          </div>
+          <div class="clear"></div>
+        </ul>
+      </v-container>
+      <div class="chat-form">
+        <v-form @submit.prevent="sendMessage()">
+          <v-text-field 
+            solo
+            v-model="message"
+            type="text"
+            append-outer-icon="mdi-send"
+            @click:append-outer="sendMessage"
+            hide-details
+          />
+        </v-form>
       </div>
-      <div class="from-them" :key="index" v-else>
-        <p v-if="item.sender !== 'system'">{{ item.sender }}</p>
-        {{ item.content }}
-      </div>
-      <div class="clear"></div>
-    </ul>
-    </section>
-    <input type="text" v-model="message" placeholder="Type a message..." v-on:keyup.enter="sendMessage()"/>
-    <button v-on:click="sendMessage()">전송</button>
-  </v-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -34,10 +45,13 @@ export default {
   name: "Chat",
   data() {
     return {
+      show: false,
       message: "",
       usernumber: 0,
       userlist:[],
-      receivemessage: []
+      receivemessage: [],
+      fromMe: 'from-me',
+      fromThem: 'from-them'
     };
   },
   methods: {
@@ -78,6 +92,7 @@ export default {
         );
       }
       this.message = "";
+
     },
     onMessageReceived(payload) {
       var message = JSON.parse(payload.body);
@@ -106,6 +121,8 @@ export default {
         else{
           this.receivemessage.push({from_me:false, content:message.content, sender:message.sender});
         }
+      let objDiv = document.querySelector('.chat-room')
+      objDiv.scrollTop = objDiv.scrollHeight + 100
       }
     }
   },
@@ -122,36 +139,81 @@ export default {
 </script>
 
 <style scoped>
-body {
+ul {
+  padding: 0;
+}
+.chat-container {
+  position: absolute;
+  right: 30px;
+  bottom: 100px;
+  height: 500px;
+  width: 400px;
+  background: #fff;
+  border: solid 1px rgb(190, 190, 190);
+  box-shadow: 1px rgb(190, 190, 190);
   font-family: "Helvetica Neue";
-  font-size: 20px;
-  font-weight: normal;
+  font-size: 16px;
 }
-
-section {
-  max-width: 450px;
-  margin: 50px auto;
+.chat-nav {
+  width: 100%;
+  height: 36px;
+  position: absolute;
+  top: 0;
+  background: #BBDEFB;
+  border-bottom: solid 1px rgb(190, 190, 190);
+  z-index: 2;
+  padding-left: 8px;
+  line-height: 2em;
 }
-section div {
-  max-width: 255px;
-  word-wrap: break-word;
-  margin-bottom: 20px;
-  line-height: 24px;
+.chat-room {
+  width: 100%;
+  height: 90%;
+  padding-top: 48px;  
+  background: #BBDEFB;
+  overflow-x:hidden;
+  overflow-y: scroll;
+}
+.chat-form {
+  width: 100%;
+  height: 10%;
+  position: absolute;
+  bottom:0;
+  border-top: solid 1px rgb(190, 190, 190);
+  background: #fff000;
+}
+.v-application--is-ltr {
+  margin: 12px 6px !important;
+}
+.v-input__append-outer {
+  margin: 12px 6px !important;
 }
 
 .clear {
   clear: both;
 }
-
 .from-me {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.from-me p {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(15, 7, 7);
+  margin:0 8px 4px 0;
+}
+.from-me li{
+  max-width: 90%;
   position: relative;
-  padding: 10px 20px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
   color: white;
   background: #0B93F6;
-  border-radius: 25px;
-  float: right;
+  border-radius: 15px;
+  list-style: none;
 }
-.from-me:before {
+/* .from-me li:before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -160,9 +222,9 @@ section div {
   height: 20px;
   border-right: 20px solid #0B93F6;
   border-bottom-left-radius: 16px 14px;
-  -webkit-transform: translate(0, -2px);
-}
-.from-me:after {
+  transform: translate(0, -2px);
+} */
+/* .from-me li:after {
   content: "";
   position: absolute;
   z-index: 1;
@@ -172,29 +234,45 @@ section div {
   height: 20px;
   background: white;
   border-bottom-left-radius: 10px;
-  -webkit-transform: translate(-30px, -2px);
-}
+  transform: translate(-30px, -2px);
+} */
 
 .from-them {
-  position: relative;
-  padding: 10px 20px;
-  background: #E5E5EA;
-  border-radius: 25px;
-  color: black;
-  float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.from-them:before {
+.from-them p {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(15, 7, 7);
+  margin:0 8px 4px 0;
+}
+.from-them li {
+  max-width: 90%;
+  position: relative;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: #fff;
+  border-radius:  15px;
+  color: black;
+  list-style: none;
+
+}
+
+/* .from-them li:before {
   content: "";
   position: absolute;
   z-index: 2;
   bottom: -2px;
   left: -7px;
   height: 20px;
-  border-left: 20px solid #E5E5EA;
+  border-left: 20px solid #fff;
   border-bottom-right-radius: 16px 14px;
-  -webkit-transform: translate(0, -2px);
+  transform: translate(0, -2px);
 }
-.from-them:after {
+.from-them li:after {
   content: "";
   position: absolute;
   z-index: 3;
@@ -204,6 +282,6 @@ section div {
   height: 20px;
   background: white;
   border-bottom-right-radius: 10px;
-  -webkit-transform: translate(-30px, -2px);
-}
+  transform: translate(-30px, -2px);
+} */
 </style>

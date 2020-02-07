@@ -54,7 +54,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .inputcomment{
     padding: 10px 50px 30px;
 }
