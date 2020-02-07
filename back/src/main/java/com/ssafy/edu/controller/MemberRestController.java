@@ -5,7 +5,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -240,5 +242,25 @@ public class MemberRestController {
 		emailService.sendMail((String)resultMap.get("member_email"), "[New Space 이메일 인증]", emailcontent.toString());
 
 		return "emailsent";
+	}
+	
+	@PostMapping("/member/adminManageUser")
+	public ResponseEntity<List<Member>> adminManageUser(HttpServletRequest req) {
+		log.info("Administrator Page Access ! " + req.getLocalAddr()+":" + req.getLocalPort() + "\t" + new Date() );
+
+		List<Member> list = null;
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		} catch (RuntimeException e) {
+			log.error("정보조회 실패", e.getMessage());
+			resultMap.put("message", e.getMessage());
+		}
+		System.out.println(resultMap.toString());
+		
+		int auth = (int) resultMap.get("auth");
+
+		return null;
 	}
 }

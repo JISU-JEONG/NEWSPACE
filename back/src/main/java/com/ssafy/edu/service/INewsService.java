@@ -5,6 +5,7 @@ import java.util.List;
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
 
 public interface INewsService {
@@ -32,4 +33,5 @@ public interface INewsService {
 	boolean checkLikeNews(NewsInsertHelp nih);
 	List<List<NewsKeywordCounter>> getChartKeyword();
 	List<SearchChart> getSearchChartKeyword(String search);
+	List<NewsStatusHelp> getNewsStatus();
 }
