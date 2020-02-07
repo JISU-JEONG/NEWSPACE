@@ -69,7 +69,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .cardtop {
   padding-bottom: 5px;
   font-size: 25px;

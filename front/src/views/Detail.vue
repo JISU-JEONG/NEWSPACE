@@ -5,34 +5,24 @@
         <h1>{{ news.title }}</h1>
       </div>
       <div class="tagfont d-flex justify-space-between align-end">
-        <span>
-          <span
-            v-for="key in keywords"
-            :key="key"
-            @click="onClickKeyword(key)"
-            style="cursor: pointer;"
-          >#{{ key }} </span>
+          <span>
+            <span
+              v-for="key in keywords"
+              :key="key"
+              @click="onClickKeyword(key)"
+              style="cursor: pointer;"
+            >#{{ key }} </span>
+          </span>
+        <span v-if="is_like===true && $store.state.token" class="like" @click="like()">
+            <v-icon size=40px color="yellow">
+              mdi-star
+            </v-icon>
         </span>
-        <v-tooltip v-if="is_like===true && $store.state.token"  top>
-          <template v-slot:activator="{ on }">
-            <span class="like" @click="like()" v-on="on">
-                <v-icon size=40px color="yellow">
-                  mdi-star
-                </v-icon>
-            </span>
-          </template>
-          <span>기사 스크랩하기 취소</span>
-        </v-tooltip>
-        <v-tooltip v-else class="like" top>
-          <template v-slot:activator="{ on }">
-            <span class="like" @click="like()" v-on="on">
-              <v-icon size=40px color="yellow">
-                mdi-star-outline
-              </v-icon>                                                                                         
-            </span>
-          </template>
-          <span>기사 스크랩하기</span>
-        </v-tooltip>
+        <span v-else class="like" @click="like()">
+            <v-icon size=40px color="yellow">
+              mdi-star-outline
+            </v-icon>
+        </span>
       </div>
       <hr />
       <br />

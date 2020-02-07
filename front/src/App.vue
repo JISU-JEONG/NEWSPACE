@@ -4,6 +4,7 @@
     <v-content class="background">
       <router-view />
     </v-content>
+    <chat />
     <AppFooter />
   </v-app>
 </template>
@@ -12,6 +13,7 @@
 import "@mdi/font/css/materialdesignicons.css";
 import Navigation from "./components/Navigation";
 import AppFooter from "./components/AppFooter";
+import Chat from "./components/Chat"
 
 export default {
   name: "App",
@@ -25,7 +27,8 @@ export default {
   },
   components: {
     Navigation,
-    AppFooter
+    AppFooter,
+    Chat
   }
 };
 </script>
