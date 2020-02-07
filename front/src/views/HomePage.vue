@@ -1,5 +1,6 @@
 <template>
   <div>
+      <chat />	
 	  <div class="keyheader">
 		<div v-show="number===0" id="chartdiv1">
 		</div>
@@ -13,7 +14,6 @@
 		</div> -->
 	</div>
 	<v-container>
-
 	  <v-row>
 		<v-col 
 		sm=12
@@ -49,6 +49,7 @@ import NewsList from '../components/NewsList'
 import http from '../services/http-common.js'
 import Info from '../services/getInfo';
 import store from "../store";
+import Chat from "../components/Chat"
 
 export default {
 	name: 'HomePage',
@@ -59,7 +60,8 @@ export default {
 		}
 	},
 	components: {
-    	NewsList,
+		NewsList,
+		Chat,
 	},
 	methods: {
 		selectColor(weight){
@@ -214,7 +216,7 @@ export default {
 	},
 	mounted(){
 		this.getKeyword()
-	}
+	},
 }
 
 </script>
