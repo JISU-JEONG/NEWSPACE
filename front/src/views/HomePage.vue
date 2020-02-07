@@ -1,5 +1,6 @@
 <template>
   <div>
+      <chat />	
 	  <v-row>
 		<v-col 
 		xs=12
@@ -36,6 +37,8 @@ import http from '../services/http-common.js'
 import Info from '../services/getInfo';
 import store from "../store";
 import VueWordCloud from 'vuewordcloud';
+import Chat from "../components/Chat"
+
 
 export default {
 	name: 'HomePage',
@@ -47,7 +50,8 @@ export default {
 	},
 	components: {
 		[VueWordCloud.name]: VueWordCloud,
-    	NewsList,
+		NewsList,
+		Chat,
 	},
 	methods: {
 		selectColor(weight){
@@ -134,7 +138,7 @@ export default {
 	},
 	mounted(){
 		this.getKeyword()
-	}
+	},
 }
 
 </script>

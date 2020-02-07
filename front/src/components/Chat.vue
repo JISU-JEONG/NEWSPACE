@@ -126,8 +126,6 @@ export default {
         } else{
           this.receivemessage.push({from_me:false, content:message.content, sender:message.sender});
         }
-        let objDiv = document.querySelector('.chat-room')
-        objDiv.scrollTop = "100%"
       }
     }
   },
@@ -139,7 +137,14 @@ export default {
   },
   mounted() {
     this.connect();
+  },
+	updated() {
+		this.$nextTick(function () {
+      var objDiv = document.querySelector('.chat-room')
+      objDiv.scrollTop = objDiv.scrollHeight
+    })
   }
+  
 };
 </script>
 
@@ -158,6 +163,7 @@ ul {
   box-shadow: 2px rgb(190, 190, 190);
   font-family: "Helvetica Neue";
   font-size: 16px;
+  z-index: 4;
 }
 .chat-nav {
   width: 100%;
@@ -166,7 +172,7 @@ ul {
   top: 0;
   background: #BBDEFB;
   border-bottom: solid 1px rgb(190, 190, 190);
-  z-index: 2;
+  z-index: 5;
   padding-left: 8px;
   line-height: 2em;
 }

@@ -13,11 +13,13 @@
       <v-spacer />
       <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)">
         <v-text-field
+          outlined
           v-model="searchValue"
           label="검색"
           hide-details
           clearable
           append-outer-icon="mdi-magnify"
+          style="border-radius:5px;"
           @click:append-outer.stop="onSubmit(searchValue)"
         />
       </v-form>

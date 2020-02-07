@@ -4,7 +4,7 @@
       padless
       class="px-5 py-5"
       app
-      absolute
+      
     >
       <span>ABOUT US</span>
       <v-spacer></v-spacer>

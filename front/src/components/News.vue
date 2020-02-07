@@ -68,12 +68,13 @@ export default {
   .cardbox{
     margin: 0px auto;
     padding: 10px 10px;
-    border: solid 1px gray;
+    box-shadow: 1px 2px 7px lightgray;
     /* border-radius: 10px; */
     /* background-color: #F5F5F5; */
     box-sizing: border-box;
     cursor: pointer;
-    transition: all 0.5s ;
+    border-radius: 7px;
+    transition: 300ms linear;
   }
   .tagfont{
     width: 100%;
@@ -99,12 +100,8 @@ export default {
     font-family: 'Noto Sans KR', sans-serif;
     color: gray;
   }
-  .SAMSUNG:hover {
-    border: solid 2px #1428A0;
-    box-shadow: 1px 1px 3px 0.1px #1428A0;
-    box-sizing: border-box;
-    padding: 9px 19px;
-    transform: scale(1.05);    
+  .cardbox:hover {
+    box-shadow: 1px 2px 4px gray;
   }
   .SAMSUNG .brand-title {
     width: 100%;
@@ -112,25 +109,11 @@ export default {
     font-family: 'Noto Sans KR', sans-serif;
     color: #1428A0;
   }
-  .LG:hover {
-    border: solid 2px #A50034;
-    box-shadow: 1px 1px 3px 0.1px #A50034;
-    box-sizing: border-box;
-    padding: 9px 19px;
-    transform: scale(1.05);    
-  }
   .LG .brand-title{
     width: 100%;
     font-size: 18px;
     font-family: 'Noto Sans KR', sans-serif;
     color: #A50034;
-  }
-  .SK:hover {
-    border: solid 2px #DB1026;
-    box-shadow: 1px 1px 3px 0.1px #DB1026;
-    box-sizing: border-box;
-    padding: 9px 19px;
-    transform: scale(1.05);    
   }
   .SK .brand-title{
     width: 100%;
