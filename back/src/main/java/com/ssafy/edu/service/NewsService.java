@@ -517,6 +517,15 @@ public class NewsService implements INewsService {
 		
 		result.add(new SearchChart("ALL", index, max, find, search));
 		
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+		Calendar cal = Calendar.getInstance();
+		
+		for(SearchChart sc : result) {
+			cal = Calendar.getInstance();
+			cal.add(cal.MONTH, -sc.getDatecount());
+			sc.setDate(df.format(cal.getTime()));
+		}
+		
 		return result;
 	}
 
@@ -1137,14 +1146,14 @@ public class NewsService implements INewsService {
 	@Scheduled(fixedDelay = 3600000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
-//		samsung_Crawling1();
+		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
-//		samsung_Crawling2();
+		samsung_Crawling2();
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-//		lg_Crawling();
+		lg_Crawling();
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
-//		sk_Crawling();
+		sk_Crawling();
 		logger.info("CRAWLING DONE." + "\t" + new Date());
-//		allKeywordSet();
+		allKeywordSet();
 	}
 }

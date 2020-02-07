@@ -9,6 +9,25 @@ public class SearchChart {
 	private int value;
 	private String[] search;
 	private String keyword;
+	private String date;
+
+	public SearchChart(String brand, int datecount, int value, String[] search, String keyword, String date) {
+		super();
+		this.brand = brand;
+		this.datecount = datecount;
+		this.value = value;
+		this.search = search;
+		this.keyword = keyword;
+		this.date = date;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
 
 	public String getKeyword() {
 		return keyword;
