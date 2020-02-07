@@ -10,6 +10,7 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsSearch;
+import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
 
 @Repository
@@ -171,5 +172,28 @@ public class NewsServiceDao {
 	public List<NewsDTO> getSearchChartKeyword(SearchChart searchChart) {
 		// TODO Auto-generated method stub
 		return SQL.selectList(ns + "getSearchChartKeyword", searchChart);
+	}
+
+	public int getNewsStatus(String string) {
+		
+		if(string.equals("ALLALL")) {
+			return SQL.selectOne(ns + "getNewsStatusAA");
+		}else if(string.equals("ALLTODAY")) {
+			return SQL.selectOne(ns + "getNewsStatusAT");
+		}else if(string.equals("SAMSUNGALL")) {
+			return SQL.selectOne(ns + "getNewsStatusSA");
+		}else if(string.equals("SAMSUNGTODAY")) {
+			return SQL.selectOne(ns + "getNewsStatusST");
+		}else if(string.equals("LGALL")) {
+			return SQL.selectOne(ns + "getNewsStatusLA");
+		}else if(string.equals("LGTODAY")) {
+			return SQL.selectOne(ns + "getNewsStatusLT");
+		}else if(string.equals("SKALL")) {
+			return SQL.selectOne(ns + "getNewsStatusSKA");
+		}else if(string.equals("SKTODAY")) {
+			return SQL.selectOne(ns + "getNewsStatusSKT");
+		}else {
+			return 0;
+		}
 	}
 }

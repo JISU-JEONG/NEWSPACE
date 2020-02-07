@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.CommentDTO;
-import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.service.ICommentService;
 import com.ssafy.edu.service.JwtService;
 

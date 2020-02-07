@@ -15,6 +15,7 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.MemberNewsHelp;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
 import com.ssafy.edu.help.UserKeywordNews;
 import com.ssafy.edu.help.getNewsHelp;
@@ -309,5 +310,17 @@ public class NewsController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<SearchChart>>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getNewsStatus", method = RequestMethod.GET)
+	public ResponseEntity<List<NewsStatusHelp>> getNewsStatus() throws Exception {
+		logger.info("NewsController Excute ! getNewsStatus \t" + new Date());
+
+		List<NewsStatusHelp> list = newsService.getNewsStatus();
+		
+		if (list.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<NewsStatusHelp>>(list, HttpStatus.OK);
 	}
 }

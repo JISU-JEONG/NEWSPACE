@@ -77,6 +77,7 @@
 | findNews/? | 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다. |
 | getChartKeyword | 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스에서 가장 많이 나온 키워드들을 검색한다. |
 | getSearchChartKeyword/? | 검색결과 뉴스들 사이에서 해당 검색어의 빈도수를 1년동안 월별로 나타낸다. |
+| getNewsStatus | 전체, 삼성, LG, SK의 뉴스 수, 그리고 오늘 업로드 된 뉴스 수를 리턴한다. |
 </div>
 </details>
 

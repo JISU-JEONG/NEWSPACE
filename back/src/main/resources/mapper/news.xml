@@ -293,5 +293,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</choose>
 		AND date_format(date, '%Y-%m-%d') between DATE_FORMAT(CONCAT(DATE_FORMAT( date_add(now(), INTERVAL - #{datecount} month) ,'%Y-%m'),'-1'),'%Y-%m-%d') and last_day(now())
 	</select>
+	
+	<select id="getNewsStatusAA" resultType="java.lang.Integer">
+		select count(*) from news
+	</select>
+	
+	<select id="getNewsStatusAT" resultType="java.lang.Integer">
+		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY)
+	</select>
+	
+	<select id="getNewsStatusSA" resultType="java.lang.Integer">
+		select count(*) from news where brand like "SAMSUNG"
+	</select>
+	
+	<select id="getNewsStatusST" resultType="java.lang.Integer">
+		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "SAMSUNG"
+	</select>
+	
+	<select id="getNewsStatusLA" resultType="java.lang.Integer">
+		select count(*) from news where brand like "LG"
+	</select>
+	
+	<select id="getNewsStatusLT" resultType="java.lang.Integer">
+		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "LG"
+	</select>
+	
+	<select id="getNewsStatusSKA" resultType="java.lang.Integer">
+		select count(*) from news where brand like "SK"
+	</select>
+	
+	<select id="getNewsStatusSKT" resultType="java.lang.Integer">
+		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "SK"
+	</select>
 
 </mapper>
