@@ -22,6 +22,7 @@ function getinfo() {
         localStorage.setItem("member_keyword", res.data.data.keyword);
         localStorage.setItem("member_type", res.data.data.type);
         localStorage.setItem("auth", res.data.data.auth);
+        localStorage.setItem("certifiedkey", res.data.data.certifiedkey);
 
         const payload = {
           token: localStorage.getItem("login-token"),

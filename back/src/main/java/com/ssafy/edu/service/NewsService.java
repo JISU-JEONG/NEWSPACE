@@ -34,6 +34,7 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
 import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
@@ -56,7 +57,7 @@ public class NewsService implements INewsService {
 	private WebDriver driver;
 	private WebElement webElement;
 	private List<WebElement> webElements;
-
+	
 	// Properties
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; // 윈도우 서버
@@ -294,6 +295,37 @@ public class NewsService implements INewsService {
 	public boolean checkLikeNews(NewsInsertHelp nih) {
 		return dao.checkLikeNews(nih);
 	}
+	
+	@Override
+	public List<NewsStatusHelp> getNewsStatus() {
+		List<NewsStatusHelp> list = new ArrayList<NewsStatusHelp>();
+		
+		int c1 = dao.getNewsStatus("ALLALL");
+		list.add(new NewsStatusHelp("ALLALL", c1));
+		
+		int c2 = dao.getNewsStatus("SAMSUNGALL");
+		list.add(new NewsStatusHelp("SAMSUNGALL", c2));
+		
+		int c3 = dao.getNewsStatus("LGALL");
+		list.add(new NewsStatusHelp("LGALL", c3));
+		
+		int c4 = dao.getNewsStatus("SKALL");
+		list.add(new NewsStatusHelp("SKALL", c4));
+		
+		int c5 = dao.getNewsStatus("ALLTODAY");
+		list.add(new NewsStatusHelp("ALLTODAY", c5));
+		
+		int c6 = dao.getNewsStatus("SAMSUNGTODAY");
+		list.add(new NewsStatusHelp("SAMSUNGTODAY", c6));
+		
+		int c7 = dao.getNewsStatus("LGTODAY");
+		list.add(new NewsStatusHelp("LGTODAY", c7));
+		
+		int c8 = dao.getNewsStatus("SKTODAY");
+		list.add(new NewsStatusHelp("SKTODAY", c8));
+		
+		return list;
+	}
 
 	public void setKeyword(NewsDTO n) {
 
@@ -383,6 +415,7 @@ public class NewsService implements INewsService {
 				emailcontent.append("</body>");
 				emailcontent.append("</html>");
 				emailService.sendMail(m.getEmail(), "[NEWSPACE] 추천 뉴스가 도착했습니다.", emailcontent.toString());
+				logger.info("Email Service Send To : " + m.getName() + "\t" + "news_id : " + news_id);
 			} catch (MessagingException e) {
 				logger.error(e.getMessage());
 			}
@@ -516,6 +549,15 @@ public class NewsService implements INewsService {
 		}
 		
 		result.add(new SearchChart("ALL", index, max, find, search));
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+		Calendar cal = Calendar.getInstance();
+		
+		for(SearchChart sc : result) {
+			cal = Calendar.getInstance();
+			cal.add(cal.MONTH, -sc.getDatecount());
+			sc.setDate(df.format(cal.getTime()));
+		}
 		
 		return result;
 	}
@@ -1134,17 +1176,18 @@ public class NewsService implements INewsService {
 	}
 
 //	@Scheduled(cron = "0 31 10 * * *")
-	@Scheduled(fixedDelay = 3600000)
+	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
-//		samsung_Crawling1();
+		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
-//		samsung_Crawling2();
+		samsung_Crawling2();
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-//		lg_Crawling();
+		lg_Crawling();
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
-//		sk_Crawling();
+		sk_Crawling();
 		logger.info("CRAWLING DONE." + "\t" + new Date());
 //		allKeywordSet();
 	}
+
 }

@@ -43,7 +43,8 @@ public class JwtService {
         		.claim("member_name", member.getName ())
         		.claim("member_keyword", member.getKeyword())
 				.claim("member_email", member.getEmail())
-        		.claim("member_certifiedkey", member.getCertifiedkey());
+        		.claim("member_certifiedkey", member.getCertifiedkey())
+        		.claim("auth", member.getAuth());
 
         // signature - secret key를 이용한 암호화
         builder.signWith(SignatureAlgorithm.HS256, salt.getBytes());

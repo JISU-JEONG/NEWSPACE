@@ -53,4 +53,5 @@ public class MemberService {
 	public void updatemember(Member member) {
 		dao.updatemember(member);
 	}
+
 }
