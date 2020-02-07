@@ -18,14 +18,16 @@ public class RedirectController {
 		Member member = new Member();
 		member.setCertifiedkey(key);
 		member.setEmail(email);
-//		System.out.println("제대로 들어오나요 : "+ key);
+		System.out.println("key: "+ key);
+		System.out.println("email"+ email);
+
 		boolean check = memberservice.emailcheck(member);
 		String url = "";
 		if(check) {
-			url = "http://192.168.31.85:8081/Profile";
+			url = "http://192.168.31.62:8080/Profile";
 		}
 		else {
-			url = "http://192.168.31.85:8081/";
+			url = "http://192.168.31.62:8080/";
 		}
 		return "redirect:"+url;
 	}

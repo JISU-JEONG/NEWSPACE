@@ -161,6 +161,7 @@ public class MemberRestController {
 		Map<String, Object> resultMap = new HashMap<>();
 		if(memberservice.getEmail(member.getEmail()) != null) {			
 			member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
+			member.setCertifiedkey(memberservice.getEmail(member.getEmail()).getCertifiedkey());
 		}
 
 		String token = jwtService.create(member);
@@ -233,7 +234,7 @@ public class MemberRestController {
 		emailcontent.append("<body>");
 		emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
 		emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
-		emailcontent.append("<a href='"+ aws_ip + "/member/");
+		emailcontent.append("<a href='"+ "http://192.168.31.84:8080/member/");
 		emailcontent.append(resultMap.get("member_certifiedkey"));
 		emailcontent.append("/" + resultMap.get("member_email"));
 		emailcontent.append("'>이메일 인증 확인</a>");
