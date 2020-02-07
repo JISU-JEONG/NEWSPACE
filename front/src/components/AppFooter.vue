@@ -3,8 +3,7 @@
       dark
       padless
       class="px-5 py-5"
-      app
-      absolute
+      style="z-index:10"
     >
       <span>ABOUT US</span>
       <v-spacer></v-spacer>

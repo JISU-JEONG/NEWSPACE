@@ -1,17 +1,21 @@
 <template>
   <div>
-	  <div class="keyheader">
-		<div v-show="number===0" id="chartdiv1">
+	  <div>
+			<div class="keyheader">
+				<div v-show="number===0" id="chartdiv1"></div>
+				<div v-show="number===1" id="chartdiv2"></div>
+				<div v-show="number===2" id="chartdiv3"></div>
+				<div v-show="number===3" id="chartdiv4"></div>
+			</div>
+				<div class="under" 
+				:todaytext=todaytext
+				:todaycount = addComma(todaycount)
+				:alltext = alltext
+				:allcount = addComma(allcount)
+				>
+					{{todaytext}} : <strong>{{todaycount}}</strong> 건 | {{alltext}} : <strong>{{allcount}}</strong> 건
+				</div>
 		</div>
-		<div v-show="number===1" id="chartdiv2">
-		</div>
-		<div v-show="number===2" id="chartdiv3">
-		</div>
-		<div v-show="number===3" id="chartdiv4">
-		</div>
-		<!-- <div class="under" :Alllcount=allcout :todaycount=todaycount>
-		</div> -->
-	</div>
 	<v-container>
 
 	  <v-row>
@@ -21,7 +25,7 @@
 	    	<NewsList @brancdCheck-event="brandCheck"></NewsList>
 		</v-col>
 		<v-col
-		class="d-sm-none d-md-flex"
+		class="d-none d-sm-none d-md-flex"
 		md=3>
 			<div class="side">
 				<div class="sidehead">
@@ -55,7 +59,11 @@ export default {
 	data(){
 		return {
 			number : 0,
-			text : "전체"
+			todaytext : "금일 뉴스",
+			todaycount : 0,
+			alltext : "전체 뉴스",
+			allcount : 0,
+			status : [],
 		}
 	},
 	components: {
@@ -202,11 +210,65 @@ export default {
 				// title.fontWeight = "800";
 		},
 		brandCheck(number){
-			if(number===0) this.text="전체"
-			if(number===1) this.text="SAMSUNG"
-			if(number===2) this.text="LG"
-			if(number===3) this.text="SK"
+			if(number===0) {
+				this.todaytext = "금일 뉴스"
+				this.todaycount = this.status[4].count
+				this.alltext = "전체 뉴스"
+				this.allcount = this.status[0].count
+			}
+			if(number===1){
+				this.todaytext = "금일 삼성 뉴스"
+				this.todaycount = this.status[5].count
+				this.alltext = "전체 삼성 뉴스"
+				this.allcount = this.status[1].count
+			} 
+			if(number===2) {
+				this.todaytext = "금일 LG 뉴스"
+				this.todaycount = this.status[6].count
+				this.alltext = "전체 LG 뉴스"
+				this.allcount = this.status[2].count
+			}
+			if(number===3) {
+				this.todaytext = "금일 SK 뉴스"
+				this.todaycount = this.status[7].count
+				this.alltext = "전체 SK 뉴스"
+				this.allcount = this.status[3].count
+			}
 			this.number = number;
+		},
+		getStatus(){
+			http.get('/getNewsStatus')
+				.then(response => {
+						this.status = response.data
+						this.todaytext = "금일 뉴스"
+						this.todaycount = this.status[4].count
+						this.alltext = "전체 뉴스"
+						this.allcount = this.status[0].count
+					})
+					.catch(e => {
+						console.log(e);
+					});
+
+		},
+		addComma(value) {
+			var num = String(value);
+			if (!num) return 0;
+			if (num.length <= 3) {
+				return num;
+			}
+
+			var count = Math.floor((num.length - 1) / 3);
+
+			var result = "";
+			for (var i = 0; i < count; i++) {
+				var length = num.length;
+				var strCut = num.substr(length - 3, length);
+
+				num = num.slice(0, length - 3);
+				result = "," + strCut + result;
+			}
+			result = num + result;
+			return result;
 		}
 	},
 	beforeMount() {
@@ -214,6 +276,7 @@ export default {
 	},
 	mounted(){
 		this.getKeyword()
+		this.getStatus()
 	}
 }
 
@@ -221,7 +284,9 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
-
+.keyheader{
+	padding: 20px 30px;
+}
 .keywordheader{
 	margin: 29px 50px 10px 0px;
 	height: 220px;
@@ -240,6 +305,9 @@ export default {
 	width: 100%;
 	height: 50px;
 	background-color:#E5E5E5;
+	text-align: center;
+	line-height: 50px;
+	font-size: 15px;
 }
 #chartdiv1, #chartdiv2, #chartdiv3, #chartdiv4 {
   width: 100%;
@@ -256,7 +324,11 @@ export default {
 	margin-top: 20px;
 	margin-bottom: 10px;
 }
-strong{
+.sidebody strong{
 	color: rgb(74, 204, 255);
+}
+.under strong{
+	font-size: 25px;
+	color: #FF5500;
 }
 </style>
