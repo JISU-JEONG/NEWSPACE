@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="green" dark fixed right bottom fab @click="show = !show">
+    <v-btn color="green" dark fixed right bottom fab @click="openChat">
       <v-icon>
         mdi-message-processing
       </v-icon>
@@ -19,14 +19,16 @@
         </ul>
       </v-container>
       <div class="chat-form">
-        <v-form @submit.prevent="sendMessage()">
+        <v-form @submit.prevent="sendMessage()" autocomplete="off">
           <v-text-field 
+            ref="form"
             solo
             v-model="message"
             type="text"
             append-outer-icon="mdi-send"
             @click:append-outer="sendMessage"
-            hide-details
+            hide-details="true"
+            autofocus="autofocus"
           />
         </v-form>
       </div>
@@ -51,12 +53,16 @@ export default {
       userlist:[],
       receivemessage: [],
       fromMe: 'from-me',
-      fromThem: 'from-them'
+      fromThem: 'from-them',
+      autofocus: false,
     };
   },
   methods: {
+    openChat() {
+      this.show = !this.show
+      this.autofocus = true
+    },
     connect() {
-
       var socket = new SockJS("http://192.168.31.84:8080/ws");
       stompClient = Stomp.over(socket);
 
@@ -117,12 +123,9 @@ export default {
       else {
         if(message.sender===username){
           this.receivemessage.push({from_me:true, content:message.content, sender:message.sender});
-        }
-        else{
+        } else{
           this.receivemessage.push({from_me:false, content:message.content, sender:message.sender});
         }
-      let objDiv = document.querySelector('.chat-room')
-      objDiv.scrollTop = objDiv.scrollHeight + 100
       }
     }
   },
@@ -134,7 +137,14 @@ export default {
   },
   mounted() {
     this.connect();
+  },
+	updated() {
+		this.$nextTick(function () {
+      var objDiv = document.querySelector('.chat-room')
+      objDiv.scrollTop = objDiv.scrollHeight
+    })
   }
+  
 };
 </script>
 
@@ -145,14 +155,15 @@ ul {
 .chat-container {
   position: absolute;
   right: 30px;
-  bottom: 100px;
+  top: 130px;
   height: 500px;
   width: 400px;
   background: #fff;
-  border: solid 1px rgb(190, 190, 190);
-  box-shadow: 1px rgb(190, 190, 190);
+  border: solid 2px rgb(190, 190, 190);
+  box-shadow: 2px rgb(190, 190, 190);
   font-family: "Helvetica Neue";
   font-size: 16px;
+  z-index: 4;
 }
 .chat-nav {
   width: 100%;
@@ -161,7 +172,7 @@ ul {
   top: 0;
   background: #BBDEFB;
   border-bottom: solid 1px rgb(190, 190, 190);
-  z-index: 2;
+  z-index: 5;
   padding-left: 8px;
   line-height: 2em;
 }
@@ -177,16 +188,12 @@ ul {
   width: 100%;
   height: 10%;
   position: absolute;
+  padding-right: 7px;
   bottom:0;
   border-top: solid 1px rgb(190, 190, 190);
   background: #fff000;
 }
-.v-application--is-ltr {
-  margin: 12px 6px !important;
-}
-.v-input__append-outer {
-  margin: 12px 6px !important;
-}
+
 
 .clear {
   clear: both;

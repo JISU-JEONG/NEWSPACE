@@ -4,7 +4,7 @@
     <v-content class="background">
       <router-view />
     </v-content>
-    <chat />
+    <!-- <chat /> -->
     <AppFooter />
   </v-app>
 </template>
