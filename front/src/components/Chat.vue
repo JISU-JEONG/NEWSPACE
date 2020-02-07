@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="green" dark fixed right bottom fab @click="show = !show">
+    <v-btn color="green" dark fixed right bottom fab @click="openChat">
       <v-icon>
         mdi-message-processing
       </v-icon>
@@ -21,6 +21,7 @@
       <div class="chat-form">
         <v-form @submit.prevent="sendMessage()">
           <v-text-field 
+            ref="form"
             solo
             v-model="message"
             type="text"
@@ -55,8 +56,13 @@ export default {
     };
   },
   methods: {
+    openChat() {
+      this.show = !this.show
+      if (!this.show) {
+        this.$refs.form.focus()
+      }
+    },
     connect() {
-
       var socket = new SockJS("http://192.168.31.84:8080/ws");
       stompClient = Stomp.over(socket);
 
@@ -117,12 +123,11 @@ export default {
       else {
         if(message.sender===username){
           this.receivemessage.push({from_me:true, content:message.content, sender:message.sender});
-        }
-        else{
+        } else{
           this.receivemessage.push({from_me:false, content:message.content, sender:message.sender});
         }
-      let objDiv = document.querySelector('.chat-room')
-      objDiv.scrollTop = objDiv.scrollHeight + 100
+        let objDiv = document.querySelector('.chat-room')
+        objDiv.scrollTop = "100%"
       }
     }
   },
@@ -145,12 +150,12 @@ ul {
 .chat-container {
   position: absolute;
   right: 30px;
-  bottom: 100px;
+  top: 130px;
   height: 500px;
   width: 400px;
   background: #fff;
-  border: solid 1px rgb(190, 190, 190);
-  box-shadow: 1px rgb(190, 190, 190);
+  border: solid 2px rgb(190, 190, 190);
+  box-shadow: 2px rgb(190, 190, 190);
   font-family: "Helvetica Neue";
   font-size: 16px;
 }
@@ -177,16 +182,12 @@ ul {
   width: 100%;
   height: 10%;
   position: absolute;
+  padding-right: 7px;
   bottom:0;
   border-top: solid 1px rgb(190, 190, 190);
   background: #fff000;
 }
-.v-application--is-ltr {
-  margin: 12px 6px !important;
-}
-.v-input__append-outer {
-  margin: 12px 6px !important;
-}
+
 
 .clear {
   clear: both;
