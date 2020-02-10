@@ -28,7 +28,7 @@
 
 <script>
 import router from '../router'
-
+import axios from 'axios'
 export default {
   name :'admin',
   methods: {
@@ -38,10 +38,26 @@ export default {
         alert("잘못된 접근입니다. 꺼져 주세요.")
         router.push('/')
       }
-    }
   },
   mounted(){
     this.getout()
+    axios
+        .post("http://192.168.31.85:8080/member/adminManage/", {},
+        {
+          headers: {
+            "login-token": localStorage.getItem("login-token")
+          }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    read(){
+      
+    }
   }
 
 }
