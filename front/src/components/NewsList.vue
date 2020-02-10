@@ -127,16 +127,15 @@ export default {
           });
     },
     brandCheck(number) {
-            console.log(number)
             this.$emit('brancdCheck-event', number)
         }
   },
-  mounted() {
-      // this.NewsList();
+  beforeMount() {
+    // this.NewsList();
+      this.getAllNewsRecent();
       this.SamsungRecentNewsList();
       this.LgRecentNewsList();
       this.SkRecentNewsList();
-      this.getAllNewsRecent();
     }
 }
 </script>

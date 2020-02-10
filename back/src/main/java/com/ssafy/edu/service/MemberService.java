@@ -54,4 +54,9 @@ public class MemberService {
 		dao.updatemember(member);
 	}
 
+	public List<Member> getNormalMember() {
+		// TODO Auto-generated method stub
+		return dao.getNormalMember();
+	}
+
 }

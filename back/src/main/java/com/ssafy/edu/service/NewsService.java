@@ -13,6 +13,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.cache.decorators.ScheduledCache;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -25,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.edu.dao.MemberDao;
@@ -560,6 +562,24 @@ public class NewsService implements INewsService {
 		}
 		
 		return result;
+	}
+	
+	private boolean samsungCrawling;
+	private boolean lgCrawling;
+	private boolean skCrawling;
+	private boolean keywordSet;
+
+	@Override
+	public List<Boolean> getServerStatus() {
+		// TODO Auto-generated method stub
+		List<Boolean> list = new ArrayList<>();
+		
+		list.add(samsungCrawling);
+		list.add(lgCrawling);
+		list.add(skCrawling);
+		list.add(keywordSet);
+		
+		return list;
 	}
 
 	public void samsung_Crawling1() throws IOException, ParseException {
@@ -1179,15 +1199,22 @@ public class NewsService implements INewsService {
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
+		samsungCrawling = true;
 //		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
 //		samsung_Crawling2();
+		samsungCrawling = false;
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
+		lgCrawling = true;
 //		lg_Crawling();
+		lgCrawling = false;
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
+		skCrawling = true;
 //		sk_Crawling();
+		skCrawling = false;
 		logger.info("CRAWLING DONE." + "\t" + new Date());
+		keywordSet = true;
 //		allKeywordSet();
+		keywordSet = false;
 	}
-
 }
