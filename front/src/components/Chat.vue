@@ -1,6 +1,6 @@
 <template>
   <div class="chat-world">
-    <v-btn color="green" style="position: fixed; left:16px; bottom: 86px; z-index:50" dark fab @click="openChat" >
+    <v-btn color="green" style="position: fixed; left:24px; bottom: 72px; z-index:50" dark fab @click="openChat" >
       <v-icon>
         mdi-message-processing
       </v-icon>
@@ -53,7 +53,7 @@ var stompClient = null;
 var username = "";
 
 export default {
-  name: "Chat",
+  name: "chat",
   directives: { 
     drag 
   },
@@ -175,7 +175,7 @@ ul {
 }
 .chat-container {
   position: absolute;
-  top: 100px;
+  top: 90px;
   left: 50px;
   height: 500px;
   width: 400px;
