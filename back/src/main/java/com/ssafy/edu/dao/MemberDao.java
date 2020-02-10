@@ -57,4 +57,9 @@ public class MemberDao {
 		
 		return SQL.selectList(ns+"emailSendList", find);
 	}
+
+	public List<Member> getNormalMember() {
+		return SQL.selectList(ns+"getNormalMember");
+		
+	}
 }

@@ -8,13 +8,8 @@
 				<div v-show="number===2" id="chartdiv3"></div>
 				<div v-show="number===3" id="chartdiv4"></div>
 			</div>
-				<div class="under" 
-				:todaytext=todaytext
-				:todaycount = addComma(todaycount)
-				:alltext = alltext
-				:allcount = addComma(allcount)
-				>
-					{{todaytext}} : <strong>{{todaycount}}</strong> 건 | {{alltext}} : <strong>{{allcount}}</strong> 건
+				<div class="under" >
+					{{todaytext}} : <strong> {{ commaToay }} </strong> 건 | {{alltext}} : <strong>{{ commaAll }}</strong> 건
 				</div>
 		</div>
 	<v-container>
@@ -71,16 +66,16 @@ export default {
 		NewsList,
 		Chat,
 	},
-	methods: {
-		selectColor(weight){
-			if(weight > 10) {
-				console.log('brown')
-				return 'brown'
-			}
-			else if (weight > 7) return 'green'
-			else if(weight > 5) return 'RoyalBlue' 
-			else return 'Indigo'
+	computed: {
+		commaToay(){
+			return this.addComma(this.todaycount)
 		},
+		commaAll(){
+			return this.addComma(this.allcount)
+		}
+		
+	},
+	methods: {
 		getKeyword(){
 			http.get('/getChartKeyword')
 				.then(response => {
@@ -93,7 +88,7 @@ export default {
 				});
 		},
 		start(keywords){
-							/**
+				/**
 				 * ---------------------------------------
 				 * This demo was created using amCharts 4.
 				 * 
@@ -104,11 +99,8 @@ export default {
 				 * https://www.amcharts.com/docs/v4/
 				 * ---------------------------------------
 				 */
-
 				// Themes begin
-				am4core.useTheme(am4themes_animated);
 				// Themes end
-
 				var chart1 = am4core.create("chartdiv1", am4plugins_wordCloud.WordCloud);
 				var chart2 = am4core.create("chartdiv2", am4plugins_wordCloud.WordCloud);
 				var chart3 = am4core.create("chartdiv3", am4plugins_wordCloud.WordCloud);
@@ -215,6 +207,7 @@ export default {
 			if(number===0) {
 				this.todaytext = "금일 뉴스"
 				this.todaycount = this.status[4].count
+				// this.todaycount = 10000
 				this.alltext = "전체 뉴스"
 				this.allcount = this.status[0].count
 			}
@@ -252,8 +245,8 @@ export default {
 					});
 
 		},
-		addComma(value) {
-			var num = String(value);
+		addComma(number) {
+			var num = String(number);
 			if (!num) return 0;
 			if (num.length <= 3) {
 				return num;
@@ -302,7 +295,8 @@ export default {
 	height: 500px;
 	text-align: center;
 	padding: 30px 20px 0 20px;
-  background-image: url("../components/images/sideback.jpg")
+	box-shadow: 1px 2px 7px lightgray;
+  	background-image: url("../components/images/sideback.jpg")
 }
 .under{
 	width: 100%;
@@ -313,6 +307,7 @@ export default {
 	font-size: 15px;
 }
 #chartdiv1, #chartdiv2, #chartdiv3, #chartdiv4 {
+
   width: 100%;
   height: 350px;
 }

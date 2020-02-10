@@ -323,4 +323,5 @@ public class NewsController {
 		}
 		return new ResponseEntity<List<NewsStatusHelp>>(list, HttpStatus.OK);
 	}
+	
 }

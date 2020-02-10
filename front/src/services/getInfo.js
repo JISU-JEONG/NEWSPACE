@@ -53,7 +53,7 @@ function getinfo() {
         store.dispatch("logout");
       });
   } else {
-    console.log("토큰이 없을때는 아무것도 안해요~");
+    // console.log("토큰이 없을때는 아무것도 안해요~");
   }
 }
 
