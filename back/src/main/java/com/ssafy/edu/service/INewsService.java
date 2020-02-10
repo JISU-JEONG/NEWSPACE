@@ -34,4 +34,5 @@ public interface INewsService {
 	List<List<NewsKeywordCounter>> getChartKeyword();
 	List<SearchChart> getSearchChartKeyword(String search);
 	List<NewsStatusHelp> getNewsStatus();
+	List<Boolean> getServerStatus();
 }

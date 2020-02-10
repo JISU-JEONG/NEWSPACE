@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
+import com.ssafy.edu.help.AdminManageHelp;
 import com.ssafy.edu.help.MemberNewsHelp;
 import com.ssafy.edu.help.TempKey;
 import com.ssafy.edu.service.EmailService;
@@ -234,7 +235,7 @@ public class MemberRestController {
 		emailcontent.append("<body>");
 		emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
 		emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
-		emailcontent.append("<a href='"+ "http://192.168.31.84:8080/member/");
+		emailcontent.append("<a href='"+ aws_ip +"/member/");
 		emailcontent.append(resultMap.get("member_certifiedkey"));
 		emailcontent.append("/" + resultMap.get("member_email"));
 		emailcontent.append("'>이메일 인증 확인</a>");
@@ -245,11 +246,13 @@ public class MemberRestController {
 		return "emailsent";
 	}
 	
-	@PostMapping("/member/adminManageUser")
-	public ResponseEntity<List<Member>> adminManageUser(HttpServletRequest req) {
+	@PostMapping("/member/adminManage")
+	public ResponseEntity<AdminManageHelp> adminManage(HttpServletRequest req) {
 		log.info("Administrator Page Access ! " + req.getLocalAddr()+":" + req.getLocalPort() + "\t" + new Date() );
 
 		List<Member> list = null;
+		List<Boolean> checkCrawling = null;
+		AdminManageHelp amh = new AdminManageHelp();
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
@@ -258,10 +261,23 @@ public class MemberRestController {
 			log.error("정보조회 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
 		}
-		System.out.println(resultMap.toString());
-		
 		int auth = (int) resultMap.get("auth");
-
-		return null;
+		System.out.println(auth);
+		
+		if(auth != 1) {
+			System.out.println("check error");
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}else {
+			System.out.println("check");
+			list = memberservice.getNormalMember();
+			checkCrawling =  newsService.getServerStatus();
+			
+			amh.setMemberList(list);
+			amh.setCheckCrawling(checkCrawling);
+			
+			System.out.println(amh.toString());
+			
+			return new ResponseEntity<AdminManageHelp>(amh, HttpStatus.OK);
+		}
 	}
 }

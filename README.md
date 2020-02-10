@@ -38,7 +38,7 @@
 
 김태우 | 정지수 | 정영길 | 정영훈
 ------- | ------- | ------- | -------
- Front | Front | Web Master | Back
+ Front | Front | GOD | Back
 
 # front-end
 
