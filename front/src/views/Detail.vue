@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <chat />
     <div class="newsbody">
       <div>
         <h1>{{ news.title }}</h1>
@@ -52,9 +53,15 @@ import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
 import info from "../services/getInfo";
 import http from "../services/http-common";
+import Chat from "../components/Chat"
 
 export default {
   name: "detail",
+  components: {
+    CommentList,
+    CommentForm,
+    Chat
+  },
   data() {
     return {
       news: [],
@@ -66,10 +73,7 @@ export default {
       is_like : false,
     };
   },
-  components: {
-    CommentList,
-    CommentForm
-  },
+
   methods: {
     CommentCreate(text) {
       if (text !== "") {
