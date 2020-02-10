@@ -1,27 +1,27 @@
 <template>
   <v-container>
-      <div class="cardbox" :class="news.brand">
-          <v-row>
-            <v-col
-            sm=12
-            md=8
-            >
-              <div  @click="goDetail(news.news_id)">
-                <div class="brand-title">
-                  <span v-if="news.brand === 'LG'">{{news.brand}} Electronics</span>
-                  <span v-else-if="news.brand === 'SK'">{{news.brand}} Hynix</span>
-                  <span v-else>{{news.brand}}</span>
-                </div>
-                <div class="head_font">{{news.title}}</div>
-                <div class="box">
-                  {{news.date}}
-                </div>
+      <div class="cardbox" :class="news.brand" @click="onClickNews($event, news)">
+        <v-row>
+          <v-col
+          sm=12
+          md=8
+          >
+            <div>
+              <div class="brand-title">
+                <span v-if="news.brand === 'LG'">{{news.brand}} Electronics</span>
+                <span v-else-if="news.brand === 'SK'">{{news.brand}} Hynix</span>
+                <span v-else>{{news.brand}}</span>
               </div>
-              <div>
-                <span class="tagfont" v-for="key in news.keyword.split(' ')" :key="key" @click="onClickKeyword(key)" style="cursor: pointer;" >
-                  #{{key}}
-                </span>
+              <div class="head_font">{{news.title}}</div>
+              <div class="box">
+                {{news.date}}
               </div>
+            </div>
+            <div>
+              <span class="tagfont" v-for="key in news.keyword.split(' ')" :key="key" style="cursor: pointer;" :data-key="key">
+                #{{key}}
+              </span>
+            </div>
           </v-col>
           <v-col
           sm=12
@@ -51,6 +51,13 @@ export default {
     company : {type: String}
   },
   methods: {  
+    onClickNews(event, news) {
+      if (event.target.classList.contains('tagfont')) {  // news 클릭시
+        this.onClickKeyword(event.target.dataset.key) // tag 이면 검색으로
+      } else {
+        this.goDetail(news.news_id) // 그 외에는 상세보기로
+      }
+    },
     goDetail(id) {
       router.push({ name: 'detail', params: { id: id }})
     },

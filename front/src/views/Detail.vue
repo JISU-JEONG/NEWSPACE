@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <chat />
+    <!-- <chat /> -->
     <div class="newsbody">
       <div>
         <h1>{{ news.title }}</h1>

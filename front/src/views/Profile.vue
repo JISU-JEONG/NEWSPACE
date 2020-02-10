@@ -4,8 +4,9 @@
       <div class="header_box">
         <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
         <div class="header_email">{{user.member.email}}</div>
-        <div class="header_email" v-if="isemailcheck !== 'true'">
-          <button v-on:click="emailcheck()">이메일체크</button>
+        <div class="header_email" >
+          <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
+          <span v-else>이메일 인증 완료</span>
         </div>
       </div>
       <div class="comment_font">
@@ -131,7 +132,7 @@ export default {
         .then(response => {
           this.user = response.data;
           this.selectedKeywords = this.user.member.keyword.split(" ");
-          this.isemailcheck = certifiedkey;
+          this.isemailcheck = localStorage.getItem("certifiedkey");
           this.keywordSetting();
         })
         .catch(error => {
@@ -294,5 +295,25 @@ export default {
   font-size: 14px;
   color: black;
   margin-left: 7px;
+}
+ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+  display: inline-block;
+  margin: 0 0 0 8px;
+  cursor: pointer;
+}
+li:hover {
+  transform: scale(1.2);
+}
+.list-enter-active{
+  transition: all 1s;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

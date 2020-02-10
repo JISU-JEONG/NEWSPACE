@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <chat />
+    <!-- <chat /> -->
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="250" width="10" color="blue-grey lighten-5"></v-progress-circular>
     </v-overlay>
