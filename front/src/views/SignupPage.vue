@@ -197,7 +197,7 @@ export default {
   li {
     list-style: none;
     display: inline-block;
-    margin-left: 0 0 0 10px;
+    margin: 0 0 0 8px;
     cursor: pointer;
   }
   li:hover {

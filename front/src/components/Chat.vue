@@ -1,9 +1,14 @@
 <template>
   <div class="chat-world">
     <v-btn color="green" style="position: fixed; left:24px; bottom: 72px; z-index:50" dark fab @click="openChat" >
-      <v-icon>
-        mdi-message-processing
-      </v-icon>
+      <v-icon v-if="show || !countUnreadMessages">mdi-message-processing</v-icon>
+      <v-badge
+        v-else
+        color="red"
+        :content="countUnreadMessages"
+      >
+        <v-icon>mdi-message-processing</v-icon>
+      </v-badge>
     </v-btn>
     <div class="chat-container" v-drag:header v-show="show">
         <div class="chat-nav " >
@@ -18,11 +23,14 @@
         </div>
         <v-container class="chat-room">
         <ul v-for="(item, index) in receivemessage" :key="index">
-          <div :class="[item.from_me ? fromMe : fromThem]" >
-            <p v-if="item.sender !== 'system'">{{ item.sender }}</p>
+          <div v-if="item.sender !== 'system'" :class="[item.from_me ? fromMe : fromThem]" >
+            <p>{{ item.sender }}</p>
             <li>{{ item.content }}</li>            
           </div>
-          <div class="clear"></div>
+          <div v-else style="text-align:center">
+            <li>{{ item.content }}</li>
+          </div>
+
         </ul>
       </v-container>
       <div class="chat-form">
@@ -60,21 +68,27 @@ export default {
   data() {
     return {
       show: false,
+      countReadMessages: 0,
       message: "",
       usernumber: 0,
       userlist:[],
       receivemessage: [],
-      fromMe: 'from-me',
+      fromMe: 'from-me', // 동적 css 위한 변수저장
       fromThem: 'from-them',
-      autofocus: false,
-      sender : "",
-      sessionid : ""
+      autofocus: false, // 채팅창 켜지면 입력창에 바로 focus되게 하려 했으나..
     };
   },
+  computed: {
+    countUnreadMessages: function() {
+      return this.receivemessage.length - this.countReadMessages
+    }
+  },
   methods: {
-    openChat() {
-      console.log('닫혀라좀제발')
+    openChat() { // 채팅창 열고 닫기
       this.show = !this.show
+      if (!this.show) {
+        this.countReadMessages = this.receivemessage.length
+      } 
       this.autofocus = !this.autofocus
     },
     connect() {
@@ -170,6 +184,7 @@ export default {
     this.connect();
   },
 	updated() {
+    // 채팅창 스크롤 맨 아래로 내리기
 		this.$nextTick(function () {
       var objDiv = document.querySelector('.chat-room')
       objDiv.scrollTop = objDiv.scrollHeight
@@ -177,6 +192,7 @@ export default {
   }
   
 };
+
 </script>
 
 <style scoped>

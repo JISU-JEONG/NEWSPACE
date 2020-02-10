@@ -1,7 +1,7 @@
 <template>
   <div>
 	  <div>
-	       <chat />
+	       <!-- <chat /> -->
 			<div class="keyheader">
 				<div v-show="number===0" id="chartdiv1"></div>
 				<div v-show="number===1" id="chartdiv2"></div>

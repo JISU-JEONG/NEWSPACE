@@ -1,6 +1,7 @@
 <template>
   <nav v-if="$route.name !== 'Admin'">
-    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" style="height:56px">
+    <chat />
+    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short>
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
       </v-btn>
@@ -20,6 +21,7 @@
           append-outer-icon="mdi-magnify"
           style="border-radius:5px;"
           @click:append-outer.stop="onSubmit(searchValue)"
+          autocomplete="off"
         />
       </v-form>
       <v-spacer />
@@ -74,7 +76,7 @@
                 <v-list-item-content>
                   <v-list-item-title>{{ item.date }}</v-list-item-title>
                 </v-list-item-content>
-                <v-badge inline color="red" :content="item.children.length || '0'"></v-badge>
+                <v-badge inline color="red" v-show="item.children.length" :content="item.children.length"></v-badge>
               </template>
               <v-list-item v-for="(child, i) in item.children" :key="i" link @click="moveToDetail(child.news_id)" :class="child.news_brand">
                 <v-list-item-content >
@@ -101,9 +103,14 @@ import store from "../store";
 import http from "../services/http-common"
 import Info from "../services/getInfo";
 import router from '../router'
+import Chat from "../components/Chat"
+
 
 export default {
   name: "Navigation",
+  components: {
+    Chat
+  },
   props: {},
   computed: {
     usernmae() {
