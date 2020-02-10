@@ -1,5 +1,7 @@
 package com.ssafy.edu.dto;
 
+import java.util.Arrays;
+
 public class ChatMessage {
     
     private MessageType type;
@@ -7,8 +9,17 @@ public class ChatMessage {
     private String sender;
     private String[] users;
     private int usernumber;
+    private String sessionid;
     
-    public enum MessageType {
+    public String getSessionid() {
+		return sessionid;
+	}
+
+	public void setSessionid(String sessionid) {
+		this.sessionid = sessionid;
+	}
+
+	public enum MessageType {
         CHAT, JOIN, LEAVE, JOINUSER
     }
  
@@ -52,5 +63,12 @@ public class ChatMessage {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
+	@Override
+	public String toString() {
+		return "ChatMessage [type=" + type + ", content=" + content + ", sender=" + sender + ", users="
+				+ Arrays.toString(users) + ", usernumber=" + usernumber + ", sessionid=" + sessionid + "]";
+	}
      
+    
 }

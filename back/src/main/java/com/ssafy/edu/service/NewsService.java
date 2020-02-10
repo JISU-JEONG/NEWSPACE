@@ -1179,13 +1179,13 @@ public class NewsService implements INewsService {
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
-		samsung_Crawling1();
+//		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
-		samsung_Crawling2();
+//		samsung_Crawling2();
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
-		lg_Crawling();
+//		lg_Crawling();
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
-		sk_Crawling();
+//		sk_Crawling();
 		logger.info("CRAWLING DONE." + "\t" + new Date());
 //		allKeywordSet();
 	}
