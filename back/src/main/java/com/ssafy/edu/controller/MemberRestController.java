@@ -275,8 +275,6 @@ public class MemberRestController {
 			amh.setMemberList(list);
 			amh.setCheckCrawling(checkCrawling);
 			
-			System.out.println(amh.toString());
-			
 			return new ResponseEntity<AdminManageHelp>(amh, HttpStatus.OK);
 		}
 	}
