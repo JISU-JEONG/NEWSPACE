@@ -51,7 +51,6 @@ import stmop from "../services/stomp"
 import drag from '@branu-jp/v-drag'
 
 var stompClient = null;
-var username = "";
 
 export default {
   name: "chat",
@@ -68,6 +67,8 @@ export default {
       fromMe: 'from-me',
       fromThem: 'from-them',
       autofocus: false,
+      sender : "",
+      sessionid : ""
     };
   },
   methods: {
@@ -80,7 +81,7 @@ export default {
       var socket = new SockJS("http://192.168.31.84:8080/ws");
       stompClient = Stomp.over(socket);
 
-      stompClient.connect({username : username}, this.onConnected, this.onError);
+      stompClient.connect({username : localStorage.getItem("member_name"), member_id : localStorage.getItem("member_id")}, this.onConnected, this.onError);
     },
     onConnected() {
       stompClient.subscribe("/topic/publicChatRoom", this.onMessageReceived);
@@ -88,7 +89,7 @@ export default {
       stompClient.send(
         "/app/chat.addUser",
         {},
-        JSON.stringify({ sender: username, type: "JOIN" })
+        JSON.stringify({ sender: localStorage.getItem("member_name"), type: "JOIN" })
       );
     },
     onError(error) {
@@ -101,7 +102,8 @@ export default {
       
       if (messageContent && stompClient) {
         var chatMessage = {
-          sender: username,
+          sender: localStorage.getItem("member_name"),
+          sessionid: localStorage.getItem("member_id"),
           content: this.message,
           type: "CHAT"
         };
@@ -117,25 +119,25 @@ export default {
     onMessageReceived(payload) {
       var message = JSON.parse(payload.body);
       if (message.type === "JOIN") {
-        if(message.sender===username){
-          this.receivemessage.push({from_me:true, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
+        if(message.sessionid===localStorage.getItem("member_id")){
+          this.receivemessage.push({from_me:message.sessionid, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
         }
         else{
-          this.receivemessage.push({from_me:false, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
+          this.receivemessage.push({from_me:message.sessionid, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
         }
       } else if (message.type === "LEAVE") {
-        if(message.sender===username){
-          this.receivemessage.push({from_me:true, content:message.sender + "님이 떠나셨습니다.", sender:"system"});
+        if(message.sessionid===localStorage.getItem("member_id")){
+          this.receivemessage.push({from_me:message.sessionid, content:message.sender + "님이 떠나셨습니다.", sender:"system"});
         }
         else{
-          this.receivemessage.push({from_me:false, content:message.sender + "님이 떠나셨습니다", sender:"system"});
+          this.receivemessage.push({from_me:message.sessionid, content:message.sender + "님이 떠나셨습니다", sender:"system"});
         }
       } else if (message.type === "JOINUSER") {
         this.userlist = message.users;
         this.usernumber = message.usernumber;
       }
       else {
-        if(message.sender===username){
+        if(message.sessionid===localStorage.getItem("member_id")){
           this.receivemessage.push({from_me:true, content:message.content, sender:message.sender});
         } else{
           this.receivemessage.push({from_me:false, content:message.content, sender:message.sender});
@@ -144,10 +146,25 @@ export default {
     }
   },
   beforeMount(){
-    username = localStorage.getItem("member_name");
-    if(username==null){
-      username = "익명의사용자"
+    if(localStorage.getItem("member_name") === null){
+      var nick = ["기분나쁜", "기분좋은", "신바람나는", "상쾌한", "짜릿한", "그리운", "자유로운", "서운한", "울적한", "비참한",
+            "위축되는", "긴장되는", "두려운", "당당한", "배부른", "수줍은", "창피한", "멋있는", "열받은", "심심한", "잘생긴", "이쁜", "시끄러운"];
+      var name = ["사자", "코끼리", "호랑이", "곰", "여우", "늑대", "너구리", "침팬치", "고릴라", "참새", "고슴도치", "강아지",
+            "고양이", "거북이", "토끼", "앵무새", "하이에나", "돼지", "하마", "원숭이", "물소", "얼룩말", "치타", "악어", "기린", "수달", "염소", "다람쥐",
+            "판다"];
+      var randomnick = Math.floor(Math.random() * nick.length) + 1;
+      var randomname = Math.floor(Math.random() * name.length) + 1;
     }
+    else{
+      this.sender = localStorage.getItem("member_name");
+    }
+
+    if(localStorage.getItem("member_id") === null){
+      var randomid =  Math.floor(Math.random() * 2000000) + 1000000;
+    }
+    
+    console.log(nick[randomnick] + " " + name[randomname]);
+    console.log(randomid);
   },
   mounted() {
     this.connect();
