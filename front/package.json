@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@branu-jp/v-drag": "^0.1.0",
     "axios": "^0.19.1",
     "core-js": "^3.6.2",
     "firebase": "^7.7.0",

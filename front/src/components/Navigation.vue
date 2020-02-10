@@ -1,6 +1,6 @@
 <template>
   <nav v-if="$route.name !== 'Admin'">
-    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp">
+    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" style="height:56px">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
       </v-btn>
@@ -13,7 +13,6 @@
       <v-spacer />
       <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)">
         <v-text-field
-          outlined
           v-model="searchValue"
           label="검색"
           hide-details
