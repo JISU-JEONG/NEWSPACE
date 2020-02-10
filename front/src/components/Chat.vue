@@ -47,6 +47,7 @@
 import axios from "axios";
 import store from "../store";
 import info from "../services/getInfo"
+import stmop from "../services/stomp"
 import drag from '@branu-jp/v-drag'
 
 var stompClient = null;
