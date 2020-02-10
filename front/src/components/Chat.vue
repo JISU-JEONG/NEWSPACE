@@ -1,13 +1,20 @@
 <template>
-  <div>
-    <v-btn color="green" dark fixed right bottom fab @click="openChat">
+  <div class="chat-world">
+    <v-btn color="green" style="position: fixed; left:16px; bottom: 86px; z-index:50" dark fab @click="openChat" >
       <v-icon>
         mdi-message-processing
       </v-icon>
     </v-btn>
-    <div class="chat-container" v-show="show">
-        <div class="chat-nav">
-          <span>현재접속유저 : {{usernumber}}</span>
+    <div class="chat-container" v-drag:header v-show="show">
+        <div class="chat-nav " >
+          <v-row>
+            <v-col cols="11" id="header" style="cursor:move; padding:0 0 0 12px;" >
+              <span> 현재접속유저 : {{usernumber}}</span>
+            </v-col>
+            <v-col cols="1" style="padding:0;" >
+              <v-icon @click="openChat">mdi-close-outline</v-icon>
+            </v-col>
+          </v-row>
         </div>
         <v-container class="chat-room">
         <ul v-for="(item, index) in receivemessage" :key="index">
@@ -40,11 +47,16 @@
 import axios from "axios";
 import store from "../store";
 import info from "../services/getInfo"
+import drag from '@branu-jp/v-drag'
+
 var stompClient = null;
 var username = "";
 
 export default {
   name: "Chat",
+  directives: { 
+    drag 
+  },
   data() {
     return {
       show: false,
@@ -59,8 +71,9 @@ export default {
   },
   methods: {
     openChat() {
+      console.log('닫혀라좀제발')
       this.show = !this.show
-      this.autofocus = true
+      this.autofocus = !this.autofocus
     },
     connect() {
       var socket = new SockJS("http://192.168.31.84:8080/ws");
@@ -152,10 +165,18 @@ export default {
 ul {
   padding: 0;
 }
+.chat-world {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 10
+}
 .chat-container {
   position: absolute;
-  right: 30px;
-  top: 130px;
+  top: 100px;
+  left: 50px;
   height: 500px;
   width: 400px;
   background: #fff;
@@ -163,7 +184,7 @@ ul {
   box-shadow: 2px rgb(190, 190, 190);
   font-family: "Helvetica Neue";
   font-size: 16px;
-  z-index: 4;
+  
 }
 .chat-nav {
   width: 100%;
@@ -193,7 +214,6 @@ ul {
   border-top: solid 1px rgb(190, 190, 190);
   background: #fff000;
 }
-
 
 .clear {
   clear: both;
