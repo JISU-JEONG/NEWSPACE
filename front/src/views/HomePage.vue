@@ -1,6 +1,5 @@
 <template>
   <div>
-<<<<<<< front/src/views/HomePage.vue
 	  <div>
 	       <chat />
 			<div class="keyheader">

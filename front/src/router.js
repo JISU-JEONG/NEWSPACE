@@ -67,11 +67,11 @@ const routes = [
   	name: "Admin",
   	component: Admin
   },
-  {
-    path: "/Chat",
-    name: "Chat",
-    component: Chat
-  }
+  // {
+  //   path: "/Chat",
+  //   name: "Chat",
+  //   component: Chat
+  // }
 ]
 
 const scrollBehavior = function (to, from, savedPosition) {
