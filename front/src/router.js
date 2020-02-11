@@ -70,9 +70,9 @@ const routes = [
   	component: Admin
   },
   {
-  	path: "/Offline",
-  	name: "Offline",
-  	component: Offline
+    path: "/Offline",
+    name: "Offline",
+    component: Offline
   }
 ]
 
