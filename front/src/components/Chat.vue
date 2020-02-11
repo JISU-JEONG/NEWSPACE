@@ -39,6 +39,8 @@
             ref="form"
             solo
             v-model="message"
+            :disabled="disabled"
+            :label="label"
             type="text"
             append-outer-icon="mdi-send"
             @click:append-outer="sendMessage"
@@ -69,14 +71,16 @@ export default {
   data() {
     return {
       show: false,
-      countReadMessages: 0,
+      disabled: true, // 로그인 안한 사용자 채팅 막기
+      label: "로그인이 필요합니다.",
+      countReadMessages: 0, // 읽지않은 메세지 카운트
       message: "",
       usernumber: 0,
       username: "",
       flag: false,
       userlist:[],
       receivemessage: [],
-      fromMe: 'from-me', // 동적 css 위한 변수저장
+      fromMe: 'from-me', // css class 바인딩 위한 변수
       fromThem: 'from-them',
       autofocus: false, // 채팅창 켜지면 입력창에 바로 focus되게 하려 했으나..
     };
@@ -110,8 +114,8 @@ export default {
     }
   },
   methods: {
-    openChat() { // 채팅창 열고 닫기
-      this.show = !this.show
+    openChat() { // 채팅창 버튼 클릭시
+      this.show = !this.show // 채팅창 열고 닫기
       if (!this.show) {
         this.countReadMessages = this.receivemessage.length;
       }
@@ -165,19 +169,9 @@ export default {
     onMessageReceived(payload) {
       var message = JSON.parse(payload.body);
       if (message.type === "JOIN") {
-        if(message.sessionid===this.username){
-          this.receivemessage.push({from_me:message.sessionId, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
-        }
-        else{
-          this.receivemessage.push({from_me:message.sessionId, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
-        }
-      } else if (message.type === "LEAVE") {
-        if(message.sessionid===this.username){
-          this.receivemessage.push({from_me:message.sessionId, content:message.sender + "님이 떠나셨습니다.", sender:"system"});
-        }
-        else{
-          this.receivemessage.push({from_me:message.sessionId, content:message.sender + "님이 떠나셨습니다", sender:"system"});
-        }
+        this.receivemessage.push({from_me:message.sessionid, content:message.sender + "님이 들어오셨습니다.", sender:"system"});
+      } else if (message.type === "LEAVE") {  
+        this.receivemessage.push({from_me:message.sessionid, content:message.sender + "님이 떠나셨습니다", sender:"system"});
       } else if (message.type === "JOINUSER") {
         this.userlist = message.users;
         this.usernumber = message.usernumber;
@@ -253,15 +247,15 @@ ul {
 }
 .chat-room {
   width: 100%;
-  height: 90%;
-  padding-top: 48px;  
+  height: 100%;
+  padding: 48px 12px;  
   background: #BBDEFB;
   overflow-x:hidden;
   overflow-y: scroll;
 }
 .chat-form {
   width: 100%;
-  height: 10%;
+  height: 48px;
   position: absolute;
   padding-right: 7px;
   bottom:0;
@@ -294,30 +288,6 @@ ul {
   border-radius: 15px;
   list-style: none;
 }
-/* .from-me li:before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  bottom: -2px;
-  right: -7px;
-  height: 20px;
-  border-right: 20px solid #0B93F6;
-  border-bottom-left-radius: 16px 14px;
-  transform: translate(0, -2px);
-} */
-/* .from-me li:after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  bottom: -2px;
-  right: -56px;
-  width: 26px;
-  height: 20px;
-  background: white;
-  border-bottom-left-radius: 10px;
-  transform: translate(-30px, -2px);
-} */
-
 .from-them {
   display: flex;
   flex-direction: column;
@@ -339,30 +309,14 @@ ul {
   border-radius:  15px;
   color: black;
   list-style: none;
-
 }
-
-/* .from-them li:before {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  bottom: -2px;
-  left: -7px;
-  height: 20px;
-  border-left: 20px solid #fff;
-  border-bottom-right-radius: 16px 14px;
-  transform: translate(0, -2px);
+@media screen and (max-width:600px) {
+  .chat-container {
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 50; 
+  } 
 }
-.from-them li:after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  bottom: -2px;
-  left: 4px;
-  width: 26px;
-  height: 20px;
-  background: white;
-  border-bottom-right-radius: 10px;
-  transform: translate(-30px, -2px);
-} */
 </style>
