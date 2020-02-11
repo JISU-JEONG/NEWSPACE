@@ -104,11 +104,15 @@ export default {
           this.receivemessage.push({from_me:true, content:"연결이 종료되었습니다.", sender:"system"});
           localStorage.removeItem("member_name");
           this.username = "익명의 사용자";
+          this.disabled = true,
+          this.label = '로그인이 필요합니다.'
           console.log("disconnet");
         }
       }
       else{
         this.username = this.member_name;
+        this.disabled = false,
+        this.label = ''
 
       }
     }

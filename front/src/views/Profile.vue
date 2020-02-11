@@ -1,99 +1,99 @@
 <template>
-  <div v-if="user !== null" class="test">
-    <v-container>
-      <div class="header_box">
-        <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
-        <div class="header_email">{{user.member.email}}</div>
-        <div class="header_email" >
-          <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
-          <span v-else>이메일 인증 완료</span>
-        </div>
+  <v-container>
+    <div class="header_box">
+      <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
+      <div class="header_email">{{user.member.email}}</div>
+      <div class="header_email" >
+        <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
+        <span v-else>이메일 인증 완료</span>
       </div>
-      <div class="comment_font">
-        <div>
-          <h1>{{user.count}}</h1>
-        </div>
-        <div>
-          <p>comments</p>
-        </div>
+    </div>
+    <div class="comment_font">
+      <div>
+        <h1>{{user.count}}</h1>
       </div>
-      <v-card>
-        <v-card-title>
-          "{{user.member.name}}"님이 선택한 키워드
-          <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
-        </v-card-title>
-        <v-card-text>
-          <span v-for="k in user.member.keyword.split(' ')" :key="k">#{{ k }}</span>
-        </v-card-text>
+      <div>
+        <p>comments</p>
+      </div>
+    </div>
+    <v-card>
+      <v-card-title>
+        "{{user.member.name}}"님이 선택한 키워드
+        <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
+      </v-card-title>
+      <v-card-text>
+        <span v-for="k in user.member.keyword.split(' ')" :key="k">#{{ k }}</span>
+      </v-card-text>
+    </v-card>
+
+    <div class="body_box">
+      <div class="newsbody">{{user.member.name}}'s NEWS ROOM</div>
+      <v-card
+        v-for="i in user.list.length"
+        :key="i"
+        @click="goDetail(user.list[i-1].news_id)"
+      >
+        <v-container>
+          [{{user.list[i-1].brand}}] {{user.list[i-1].title}}
+        </v-container>
       </v-card>
-    </v-container>
-    <v-container>
-      <div class="body_box">
-        <div class="newsbody">{{user.member.name}}'s NEWS ROOM</div>
-        <v-card
-          v-for="i in user.list.length"
-          :key="i"
-          @click="goDetail(user.list[i-1].news_id)"
-        >[{{user.list[i-1].brand}}] {{user.list[i-1].title}}</v-card>
-      </div>
+    </div>
 
-      <v-dialog v-model="dialog" max-width="400">
-        <v-card>
-          <v-container style="min-height:430px;">
-            <v-card-title>관심 키워드 수정</v-card-title>
+    <v-dialog v-model="dialog" max-width="400">
+      <v-card>
+        <v-container style="min-height:430px;">
+          <v-card-title>관심 키워드 수정</v-card-title>
+          <v-divider></v-divider>
+          <v-card style="min-height:120px;">
+            <span px-3>선택된 아해들</span>
             <v-divider></v-divider>
-            <v-card style="min-height:120px;">
-              <span px-3>선택된 아해들</span>
-              <v-divider></v-divider>
-              <v-container>
-                <ul @click.stop="unselectKeyword">
-                  <transition-group name="list">
-                    <li
-                      v-for="keyword in selectedKeywords"
-                      :key="keyword"
-                      class="text--darken-3"
-                    >{{keyword}}</li>
-                  </transition-group>
-                </ul>
-              </v-container>
-            </v-card>
-            <hr />
-            <v-card style="min-height:120px;" class="mt-3">
-              <span>선택되지 못한 아해들</span>
-              <br />
-              <v-divider></v-divider>
-              <v-container>
-                <ul @click.stop="selectKeyword">
-                  <transition-group name="list" id="selectedSpan">
-                    <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
-                  </transition-group>
-                </ul>
-              </v-container>
-            </v-card>
-            <v-text-field
-              style="margin-top:16px;"
-              label="추가하고싶은 키워드"
-              v-model="userInputKeyword"
-              append-icon="mdi-plus"
-              @click:append="userInputKeywordToList"
-              @keyup.enter.stop="userInputKeywordToList"
-              :error="error"
-              :error-messages="errorMessages"
-              @input="inputKeyword"
-            />
-          </v-container>
-          <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-container>
+              <ul @click.stop="unselectKeyword">
+                <transition-group name="list">
+                  <li
+                    v-for="keyword in selectedKeywords"
+                    :key="keyword"
+                    class="text--darken-3"
+                  >{{keyword}}</li>
+                </transition-group>
+              </ul>
+            </v-container>
+          </v-card>
+          <hr />
+          <v-card style="min-height:120px;" class="mt-3">
+            <span>선택되지 못한 아해들</span>
+            <br />
+            <v-divider></v-divider>
+            <v-container>
+              <ul @click.stop="selectKeyword">
+                <transition-group name="list" id="selectedSpan">
+                  <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
+                </transition-group>
+              </ul>
+            </v-container>
+          </v-card>
+          <v-text-field
+            style="margin-top:16px;"
+            label="추가하고싶은 키워드"
+            v-model="userInputKeyword"
+            append-icon="mdi-plus"
+            @click:append="userInputKeywordToList"
+            @keyup.enter.stop="userInputKeywordToList"
+            :error="error"
+            :error-messages="errorMessages"
+            @input="inputKeyword"
+          />
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-            <v-btn color="green darken-1" text @click.stop="OkClick()">ok</v-btn>
+          <v-btn color="green darken-1" text @click.stop="OkClick()">ok</v-btn>
 
-            <v-btn color="green darken-1" text @click.stop="cancleClick()">Cancle</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-container>
-  </div>
-  <div v-else></div>
+          <v-btn color="green darken-1" text @click.stop="cancleClick()">Cancle</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 <script>
 import http from "../services/http-common.js";
