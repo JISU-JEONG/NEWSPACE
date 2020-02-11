@@ -244,15 +244,15 @@ ul {
 }
 .chat-room {
   width: 100%;
-  height: 90%;
-  padding-top: 48px;  
+  height: 100%;
+  padding: 48px 12px;  
   background: #BBDEFB;
   overflow-x:hidden;
   overflow-y: scroll;
 }
 .chat-form {
   width: 100%;
-  height: 10%;
+  height: 48px;
   position: absolute;
   padding-right: 7px;
   bottom:0;
@@ -307,11 +307,13 @@ ul {
   color: black;
   list-style: none;
 }
-@media screen and (max-width: 960px) {
-  body {
-
+@media screen and (max-width:600px) {
+  .chat-container {
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 50; 
   } 
 }
-
-
 </style>
