@@ -1,11 +1,10 @@
 <template>
-  <v-container >
+  <v-container>
     <v-row>
       <v-col cols="12" sm="6">
         <v-card>
           <v-container style="min-height:430px;">
             <v-card-title>회원가입</v-card-title>
-            <v-divider></v-divider>
             <v-form ref="form" v-model="valid" @submit.prevent="Signup">
               <v-text-field :rules="nameRules" label="이름" v-model="name" type="text" />
               <v-text-field :rules="emailRules" label="이메일" v-model="email" type="text" />
@@ -20,10 +19,16 @@
         <v-card mb-5>
           <v-container style="min-height:430px;">
             <v-card-title>관심 키워드 등록</v-card-title>
+            <v-card-subtitle>
+              0. 클릭하여 키워드를 추가하거나 삭제할 수 있습니다. <br>
+              1. 키워드와 일치하는 뉴스를 이메일로 전송해드립니다 (이메일 인증 필요) <br>
+              2. 로그인시 해당 키워드와 일치하는 뉴스를 따로 보여드립니다.
+            </v-card-subtitle>
+
             <v-divider></v-divider>
             
             <v-card style="min-height:120px;">
-              <span px-3>선택된 키워드</span>
+              <span class="mx-3">선택된 키워드</span>
               <v-divider></v-divider>
               <v-container>
                 <ul @click.stop="unselectKeyword">
@@ -35,7 +40,7 @@
             </v-card>
             <hr>
             <v-card style="min-height:120px;" class="mt-3" >
-              <span>클릭하여 관심 키워드를 등록하세요.</span> <br>
+              <span class="mx-3">한달동안 뉴스에서 많이 언급된 키워드</span> <br>
               <v-divider></v-divider>
               <v-container>
                 <ul @click.stop="selectKeyword">
