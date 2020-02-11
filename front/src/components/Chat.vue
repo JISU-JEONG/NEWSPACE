@@ -70,7 +70,6 @@ export default {
   data() {
     return {
       show: false,
-      startChat: false,  // 채팅연결 상태, true: 연결된 상태
       disabled: true, // 로그인 안한 사용자 채팅 막기
       label: "로그인이 필요합니다.",
       countReadMessages: 0, // 읽지않은 메세지 카운트
@@ -97,17 +96,11 @@ export default {
       if (!this.show) {
         this.countReadMessages = this.receivemessage.length  // 안읽은 메세제 계산을위한 변수
       } 
-      if (this.member_name && !this.startChat) { // 로그인했고, 아직 채팅이 연결 안된 상태라면
-        this.connect();   
-        this.startChat = true 
-      }
-
       this.autofocus = !this.autofocus
     },
     connect() {
       var socket = new SockJS("http://192.168.31.84:8080/ws");
       stompClient = Stomp.over(socket);
-
       stompClient.connect({username : localStorage.getItem("member_name"), member_id : localStorage.getItem("member_id")}, this.onConnected, this.onError);
     },
     onConnected() {
@@ -167,9 +160,13 @@ export default {
       if (this.member_name) {
         this.disabled = false
         this.label = ''
+        this.connect();    // 로그인시 채팅연결
       } else {
         this.disabled = true
         this.label = '로그인이 필요합니다.'
+        if (stompClient) { 
+          stompClient.disconnect() // 로그아웃시 채팅끊기
+        }
       }
     }
   },
