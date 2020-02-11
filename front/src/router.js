@@ -8,6 +8,7 @@ import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
 import Admin from './views/Admin.vue'
+import Offline from './views/Offline.vue'
 
 Vue.use(Router)
 
@@ -66,6 +67,11 @@ const routes = [
   	name: "Admin",
   	component: Admin
   },
+  {
+    path: "/Offline",
+    name: "Offline",
+    component: Offline
+  }
 ]
 
 const scrollBehavior = function (to, from, savedPosition) {
