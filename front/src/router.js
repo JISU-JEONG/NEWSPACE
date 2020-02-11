@@ -9,7 +9,6 @@ import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
 import Admin from './views/Admin.vue'
 import Offline from './views/Offline.vue'
-
 Vue.use(Router)
 
 const routes = [
@@ -60,7 +59,10 @@ const routes = [
   {
   	path: "/Profile",
   	name: "Profile",
-  	component: Profile
+    component: Profile,
+    meta: {
+      needAuthUser: true
+    }
   },
   {
   	path: "/Admin",
@@ -100,11 +102,22 @@ function blockAuthUser(to, from, next) {
     next() // 로그인 안된 유저는 해당 페이지로 이동.
   }
 }
-
+function blockNoneAuthUser(to, from, next) {
+  if (localStorage.getItem("loginStatus") === null ||
+      localStorage.getItem("login-token") === null) {
+        next('/')
+  } else {
+    next()
+  }
+}
 router.beforeEach((to, from, next) => {
   if (to.matched.some(m => m.meta.needBlockAuthUser)) {
     blockAuthUser(to, from, next)  // 로그인 유저 막는 페이지인지 체크
-  } else {
+  } 
+  else if (to.matched.some(m => m.meta.needAuthUser)) {
+    blockNoneAuthUser(to, from, next)
+  } 
+  else {
     next() // 로그인 유저 막는 페이지가 아니라면 바로 페이지 이동.
   }
 })
