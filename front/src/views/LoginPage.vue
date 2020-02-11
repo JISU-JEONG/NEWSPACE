@@ -97,6 +97,7 @@ export default {
                 auth : localStorage.removeItem("auth"),
                 member_keyword: res.data.member_keyword,
               };
+              localStorage.setItem("member_name", res.data.name);
               this.$store.dispatch("login", payload);
               this.$store.dispatch("setMemberNews") // 키워드 뉴스 받아오기
               this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
@@ -217,6 +218,7 @@ export default {
               member_name: parentFunc.username,
               auth : localStorage.removeItem("auth")
             };
+            localStorage.setItem("member_name", parentFunc.username);
             this.$store.dispatch("login", payload);
             this.$store.dispatch("setMemberNews")
             this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});

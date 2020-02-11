@@ -36,19 +36,17 @@ public class WebSocketEventListener {
 
 	@EventListener
 	public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-//        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-//        System.out.println("==========> " + request)
 		
 		MessageHeaderAccessor accessor = NativeMessageHeaderAccessor.getAccessor(event.getMessage(),
 				SimpMessageHeaderAccessor.class);
 		GenericMessage generic = (GenericMessage) accessor.getHeader("simpConnectMessage");
+		
 		Map nativeHeaders = (Map) generic.getHeaders().get("nativeHeaders");
 		Map simpSessionAttributes = (Map) generic.getHeaders().get("simpSessionAttributes");
 		
 		String username = nativeHeaders.get("username").toString().replace("[", "").replace("]", "");
-		String memberId = nativeHeaders.get("member_id").toString().replace("[", "").replace("]", "");
-
-		user.put(memberId, username);
+		
+		user.put(simpSessionAttributes.get("sessionId").toString(), username);
 		usercont();
 		logger.info("Received a new web socket connection");
 
@@ -57,21 +55,32 @@ public class WebSocketEventListener {
 	@EventListener
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
+		String sessionId = (String) headerAccessor.getSessionAttributes().get("sessionId");
 		String username = (String) headerAccessor.getSessionAttributes().get("username");
-		String memberId = (String) headerAccessor.getSessionAttributes().get("member_id");
+		String member_id = (String) headerAccessor.getSessionAttributes().get("member_id");
+		
+		ChatMessage chatMessage = new ChatMessage();
+		
 		if (username != null && username != "" && !username.equals("undefined")) {
 			logger.info("User Disconnected : " + username);
-
-			ChatMessage chatMessage = new ChatMessage();
+			
 			chatMessage.setType(ChatMessage.MessageType.LEAVE);
 			chatMessage.setSender(username);
-			chatMessage.setSessionid(username);
-			user.remove(memberId);
-			usercont();
-
-			messagingTemplate.convertAndSend("/topic/publicChatRoom", chatMessage);
-
+			chatMessage.setSessionid(member_id);
+			user.remove(sessionId);
 		}
+
+		else {
+			logger.info("Disconnected : " + sessionId);
+			chatMessage.setType(ChatMessage.MessageType.LEAVE);
+			chatMessage.setSender(user.get(sessionId));
+			chatMessage.setSessionid(member_id);
+			user.remove(sessionId);
+		}
+		
+		usercont();
+		messagingTemplate.convertAndSend("/topic/publicChatRoom", chatMessage);
 	}
 
 	public void usercont() {
