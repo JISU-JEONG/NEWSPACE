@@ -109,11 +109,11 @@ export default {
       axios
         .get(`http://192.168.31.85:8080/api/news/${this.$route.params.id}`,token)
         .then(response => {
-          console.log(response.data)
           this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
+          if(this.searchWord !== ' ' && this.searchWord !== '')
+            this.news.body =this.news.body.split(`${this.searchWord}`).join('<strong><strong>'+`${this.searchWord}`+'</strong></strong>')
           this.is_like = response.data.is_like
-          console.log(response.data.is_like)
         })
         .catch(error => {
           console.log(error);
@@ -124,7 +124,6 @@ export default {
         .get(`http://192.168.31.85:8080/api/comment/${this.$route.params.id}`)
         .then(response => {
           this.comments = response.data;
-          console.log(this.comments);
         })
         .catch(error => {
           console.log(error);
@@ -164,9 +163,11 @@ export default {
     },
   },
   beforeMount() {
+    am4core.disposeAllCharts();
     info();
   },
   mounted() {
+    this.searchWord = this.$route.params.keyword
     this.getNews();
     this.CommentGet();
   },
@@ -218,5 +219,9 @@ export default {
   margin-right: 20px;
   cursor: pointer;
 }
-
+.page >>> strong > strong{
+  color: indigo !important;
+  background-color:yellow !important;
+  font-size: 18px !important;
+}
 </style>

@@ -136,7 +136,9 @@ export default {
       this.SamsungRecentNewsList();
       this.LgRecentNewsList();
       this.SkRecentNewsList();
-    }
+    },
+  mounted(){
+  }
 }
 </script>
 <style scoped>

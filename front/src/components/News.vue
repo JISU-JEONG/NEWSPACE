@@ -42,24 +42,31 @@ import router from '../router'
 
 export default {
   name: 'News',
+  props: {
+    company : { type: String },
+    news : { type: Object},
+    keyword : { type: String, default: '' },
+  },
   data() {
     return {
     }
-  },
-  props: {
-    news : {type: Object},
-    company : {type: String}
   },
   methods: {  
     onClickNews(event, news) {
       if (event.target.classList.contains('tagfont')) {  // news 클릭시
         this.onClickKeyword(event.target.dataset.key) // tag 이면 검색으로
       } else {
-        this.goDetail(news.news_id) // 그 외에는 상세보기로
+        if(this.keyword==='')
+        {
+          this.goDetail(news.news_id,' ') // 그 외에는 상세보기로
+        }
+        else{
+          this.goDetail(news.news_id, this.keyword) // 그 외에는 상세보기로
+        }
       }
     },
-    goDetail(id) {
-      router.push({ name: 'detail', params: { id: id }})
+    goDetail(id, keyword) {
+      router.push({ name: 'detail', params: { "id": id, "keyword": keyword }})
     },
     onClickKeyword(key){
       this.$router.push({ 

@@ -6,7 +6,7 @@
     </v-overlay>
     <transition name="list">
       <v-container class="main_web" v-show="show">
-        <div id="chartdiv"></div>
+        <div id="chartdiv" class="chart"></div>
         <!-- <h1>{{searchValue}} 검색결과</h1> -->
         <v-tabs
           v-model="tab"
@@ -24,6 +24,7 @@
                 <News
                   :news = showingNews[company][i-1]
                   :company = company
+                  :keyword = searchValue
                 >
                 </News>
                 
@@ -112,7 +113,6 @@ export default {
     onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (this.canLoadNews[this.tab]){
-          console.log('스크롤이 내려왔읍니다.', this.tab)
           this.moveToShowingNews()
         }
       }
@@ -121,7 +121,6 @@ export default {
       switch (this.tab) {
         case 0:
           if (this.canLoadNews[0]) {
-            console.log('모든 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.AllList.slice(this.limit * (this.canLoadNews[0] - 1), this.limit * this.canLoadNews[0])
             this.showingNews.AllList = this.showingNews.AllList.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -133,7 +132,6 @@ export default {
           }
         case 1:
           if (this.canLoadNews[1]) {
-            console.log('삼성 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.Samsunglist.slice(this.limit * (this.canLoadNews[1] - 1), this.limit * this.canLoadNews[1])
             this.showingNews.Samsunglist = this.showingNews.Samsunglist.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -145,7 +143,6 @@ export default {
           }
         case 2:
           if (this.canLoadNews[2]) {
-            console.log('LG 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.LGlist.slice(this.limit * (this.canLoadNews[2] - 1), this.limit * this.canLoadNews[2])
             this.showingNews.LGlist =this.showingNews.LGlist.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -157,7 +154,6 @@ export default {
           }
         case 3:
           if (this.canLoadNews[3]) {
-            console.log('SK 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.SKlist.slice(this.limit * (this.canLoadNews[3] - 1), this.limit * this.canLoadNews[3])
             this.showingNews.SKlist = this.showingNews.SKlist.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -170,20 +166,19 @@ export default {
       }   
     },
     startGraph(){
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-        var label;
-
-        var chart = am4core.create("chartdiv", am4charts.XYChart);
-        console.log(chart)
-        chart.paddingRight = 1;
-        chart.dateFormatter.dateFormat = "yyyy-MM";
-        var data = [];
-        http.get(`/getSearchChartKeyword/${this.$route.params.searchValue}`)
+      http.get(`/getSearchChartKeyword/${this.$route.params.searchValue}`)
         .then((response) => {
+                am4core.disposeAllCharts();
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+                var label;
+
+                var chart = am4core.create("chartdiv", am4charts.XYChart);
+                chart.paddingRight = 1;
+                var data = [];
+        
                 const Gdata = response.data
-                console.log(Gdata)
                 for(let i=0;i<12;i++)
                 {
                   const day = Gdata[i].date.split('-')
@@ -193,6 +188,10 @@ export default {
               // console.log(chart.data)
               var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
               dateAxis.renderer.grid.template.location = 0;
+              dateAxis.gridIntervals.count=1
+              dateAxis.gridIntervals.timeUnit = "month"
+              dateAxis.paddingRight = am4core.percent(5)
+              // console.log(dateAxis.gridIntervals)
               var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
               valueAxis.tooltip.disabled = true;
               // valueAxis.renderer.minWidth = 35;
@@ -230,13 +229,13 @@ export default {
 
               var vm = this
               function animateForward() {
-                  label.text = "'"+vm.searchValue+"'" + ' 검색결과'
+                  label.text = "'"+vm.searchValue+"'"
                   var animation = label.animate({ property: "locationOnPath", from: 0, to: 1 }, 12000);
                   animation.events.on("animationended", animateBackwards);
               }
 
               function animateBackwards() {
-                  label.text = "'"+vm.searchValue+"'" + ' 검색결과'
+                  label.text = "'"+vm.searchValue+"'" 
                   var animation = label.animate({ property: "locationOnPath", from: 1, to: 0 }, 8000);
                   animation.events.on("animationended", animateForward);
               }
@@ -248,6 +247,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.onScroll)
+    am4core.disposeAllCharts();
   },
 }
 </script>
