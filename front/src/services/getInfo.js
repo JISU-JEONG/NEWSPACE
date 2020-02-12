@@ -14,8 +14,6 @@ function getinfo() {
         }
       )
       .then(res => {
-        // this.username = res.data.data.name;
-        console.log("토큰 정보조회 성공");
         localStorage.setItem("member_id", res.data.member_id);
         localStorage.setItem("member_name", res.data.data.name);
         localStorage.setItem("member_email", res.data.data.email);
@@ -33,11 +31,6 @@ function getinfo() {
           member_news: JSON.parse(localStorage.getItem('member_news'))
         };
         store.dispatch("login", payload);
-
-        // console.log(storage.getItem("member_id"));
-        // console.log(storage.getItem("member_email"));
-        // console.log(storage.getItem("member_name"));
-        // console.log(storage.getItem("member_type"));
       })
       .catch(() => {
         alert("세션이 만료돠었습니다.");
@@ -53,7 +46,7 @@ function getinfo() {
         store.dispatch("logout");
       });
   } else {
-    // console.log("토큰이 없을때는 아무것도 안해요~");
+    //토큰없을때
   }
 }
 

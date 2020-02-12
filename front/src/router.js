@@ -9,6 +9,7 @@ import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
 import Admin from './views/Admin.vue'
 import Offline from './views/Offline.vue'
+import chatlog from './components/Chatlog.vue'
 import AboutUs from './views/AboutUs.vue'
 
 Vue.use(Router)
@@ -77,19 +78,27 @@ const routes = [
     component: Offline
   },
   {
+    path: "/chatlog",
+    name: "chatlog",
+    component: chatlog
+  },
+  {
     path: "/AboutUs",
     name: "AboutUs",
     component: AboutUs
   },
-  
+  {
+    path: '*',
+    meta: {
+      goHome: true
+    }
+  }
 ]
 
 const scrollBehavior = function (to, from, savedPosition) {
   if (savedPosition) {
-    console.log('savedPosition', savedPosition)
     return savedPosition
   } else if (savedPosition === null) {
-    console.log('null일때!!')
     return {x:0, y:0}    
   }
 }
@@ -121,11 +130,11 @@ function blockNoneAuthUser(to, from, next) {
 router.beforeEach((to, from, next) => {
   if (to.matched.some(m => m.meta.needBlockAuthUser)) {
     blockAuthUser(to, from, next)  // 로그인 유저 막는 페이지인지 체크
-  } 
-  else if (to.matched.some(m => m.meta.needAuthUser)) {
-    blockNoneAuthUser(to, from, next)
-  } 
-  else {
+  } else if (to.matched.some(m => m.meta.needAuthUser)) {
+    blockNoneAuthUser(to, from, next) 
+  } else if (to.matched.some(m => m.meta.goHome)) {
+    next('/')
+  } else {
     next() // 로그인 유저 막는 페이지가 아니라면 바로 페이지 이동.
   }
 })

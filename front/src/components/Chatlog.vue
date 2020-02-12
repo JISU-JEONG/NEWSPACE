@@ -102,6 +102,7 @@ export default {
           this.flag = false;
           stompClient.disconnect();
           this.receivemessage.push({from_me:true, content:"연결이 종료되었습니다.", sender:"system"});
+          localStorage.removeItem("member_name");
           this.username = "익명의 사용자";
           this.disabled = true,
           this.label = '로그인이 필요합니다.'
@@ -119,7 +120,7 @@ export default {
   methods: {
     openChat() { // 채팅창 버튼 클릭시
       this.show = !this.show // 채팅창 열고 닫기
-      if (!this.show) { // 닫혔을 때, show ==== false가 되었을때 카운트
+      if (!this.show) {
         this.countReadMessages = this.receivemessage.length;
       }
       else{
@@ -134,13 +135,13 @@ export default {
       var socket = new sockjs("http://192.168.31.84:8080/ws");
       stompClient = Stomp.over(socket);
 
-      stompClient.connect({username : this.username, member_id : this.member_id}, this.onConnected, this.onError);
+      stompClient.connect({username : this.username, member_id : this.member_id, room: "1"}, this.onConnected, this.onError);
     },
     onConnected() {
       stompClient.subscribe("/topic/publicChatRoom", this.onMessageReceived);
 
       stompClient.send(
-        "/app/chat.addUser",
+        "/app/chat.addUser/test",
         {},
         JSON.stringify({ sender: this.username, type: "JOIN" })
       );
@@ -157,11 +158,12 @@ export default {
         var chatMessage = {
           sender: this.username,
           sessionid: localStorage.getItem("member_id"),
+          room : "1",
           content: this.message,
           type: "CHAT"
         };
         stompClient.send(
-          "/app/chat.sendMessage",
+          "/app/chat.sendMessage/test",
           {},
           JSON.stringify(chatMessage)
         );
