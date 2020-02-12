@@ -71,7 +71,6 @@ export default {
       timeout: 2000,
       snackbarInnerText: '',
       is_like : false,
-      void : '',
       searchWord: ''
     };
   },
@@ -175,6 +174,16 @@ export default {
   watch: {
     '$route': ['getNews', 'CommentGet']
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'search') {
+      next(vm => {
+        vm.searchWord = from.params.searchValue
+      })
+    } else {
+      next()
+    }
+  }
+
   };
 </script>
 
