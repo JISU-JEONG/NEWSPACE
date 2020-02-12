@@ -99,7 +99,9 @@ export default {
 				 * https://www.amcharts.com/docs/v4/
 				 * ---------------------------------------
 				 */
+				am4core.disposeAllCharts();
 				// Themes begin
+				am4core.useTheme(am4themes_animated);
 				// Themes end
 				var chart1 = am4core.create("chartdiv1", am4plugins_wordCloud.WordCloud);
 				var chart2 = am4core.create("chartdiv2", am4plugins_wordCloud.WordCloud);
@@ -272,6 +274,9 @@ export default {
 	mounted(){
 		this.getKeyword()
 		this.getStatus()
+	},
+	beforeDestroy(){
+		am4core.disposeAllCharts();
 	}
 
 }

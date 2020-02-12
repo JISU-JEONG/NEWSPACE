@@ -10,6 +10,7 @@ import Profile from './views/Profile.vue'
 import Admin from './views/Admin.vue'
 import Offline from './views/Offline.vue'
 import chatlog from './components/Chatlog.vue'
+import AboutUs from './views/AboutUs.vue'
 
 Vue.use(Router)
 
@@ -25,7 +26,7 @@ const routes = [
 		component: SearchPage
 	},
 	{
-		path: '/detail/:id',
+		path: '/detail/:id/:keyword',
 		name: 'detail',
     component: Detail,
     meta: {
@@ -80,6 +81,11 @@ const routes = [
     path: "/chatlog",
     name: "chatlog",
     component: chatlog
+  },
+  {
+    path: "/AboutUs",
+    name: "AboutUs",
+    component: AboutUs
   },
   {
     path: '*',

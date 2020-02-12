@@ -102,7 +102,6 @@ export default {
           this.flag = false;
           stompClient.disconnect();
           this.receivemessage.push({from_me:true, content:"연결이 종료되었습니다.", sender:"system"});
-          localStorage.removeItem("member_name");
           this.username = "익명의 사용자";
           this.disabled = true,
           this.label = '로그인이 필요합니다.'
@@ -120,7 +119,7 @@ export default {
   methods: {
     openChat() { // 채팅창 버튼 클릭시
       this.show = !this.show // 채팅창 열고 닫기
-      if (!this.show) {
+      if (!this.show) { // 닫혔을 때, show ==== false가 되었을때 카운트
         this.countReadMessages = this.receivemessage.length;
       }
       else{
