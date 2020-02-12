@@ -2,7 +2,7 @@
   <v-container>
     <div class="header_box">
       <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
-      <div class="header_email">{{user.member.email}}</div>
+      <!-- <div class="header_email">{{user.member.email}}</div> -->
       <div class="header_email" >
         <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
         <span v-else>이메일 인증 완료</span>
