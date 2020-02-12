@@ -2,14 +2,19 @@
   <div class="earth">
     <div class="room">
       <div class="wall">
-        <span class="team-name">A.M.T</span> <br>
-        <span class="team-name-detail">A.I Machine-learning Team</span>
+        <div class="team-name">A.M.T</div> <br>
+        <div style="position:relative">
+          <div class="team-name-detail-fake">A.I Machine-learning Team</div>
+          <div class="team-name-detail-real">All Man Team</div>
+        </div>
+        
       </div>
       <div class="wall left">생각처럼 안되네 개같은거</div>
       <div class="wall right">
         웹마스터 영길이 캐리한 팀입니다. <br>
         다음 프로젝트 캐리받을 사람 선착순 두명 받습니다. <br>
         그 다음 두명은 커피 하루 한잔 사준다는 전제하에 팀원으로 받아드립니다.
+        <div class="mouse-hole"></div>
       </div>
     </div>
     <div class="profile-container">
@@ -139,13 +144,50 @@ export default {
     top: 0;
     background: #fff;
     transform: translateZ(-50vw);
+    transform-style: preserve-3d;
     font-family: 'Black Han Sans', sans-serif;
   }
   .team-name {
     font-size: 12rem;
   }
-  .team-name-detail {
+  .team-name-detail-fake {
     font-size: 3rem;
+    position: absolute;
+    padding: 0 8px;
+    top: 0;
+    left: 0;
+    background: #fff;
+    z-index:2;
+    transform: rotate(2deg);
+    border: 0.1px solid black;
+    animation: drop 2s 3s forwards;
+  }
+  @keyframes drop {
+    0% {
+      opacity: 1;
+    } 
+    35% {
+      opacity: 1;
+      transform: 
+        rotate(10deg);
+    }
+    40% {
+      opacity: 1;
+      transform: 
+        rotate(8deg);      
+    }
+    60% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+      transform:
+        translateY(150vh)
+    }   
+  }
+  .team-name-detail-real {
+    font-size: 3rem;
+    padding-left:8px;
   }
   .left {
     left: -50vw;
@@ -160,6 +202,16 @@ export default {
     transform: rotateY(-90deg);
     font-size: 2rem;
   }
+  .mouse-hole {
+    display: flex;
+    position: absolute;
+    left: 10vw;
+    bottom: 0;
+    width: 5vw;
+    height: 7vw;
+    background: #000;
+    border-radius: 50px 50px 0 0;
+  } 
   .profile-container {
     width: 100vw;
     height: 100vh;
@@ -185,11 +237,11 @@ export default {
     background-repeat: none;
     background-size:cover;
     cursor: pointer;
-    transition: 0.3s;
+    /* transition: 0.1s; */
   }
-  .member-icon:hover {
+  /* .member-icon:hover {
     transform: scale(1.1)
-  }
+  } */
   .ji-su {
     background-image: url('../assets/images/jisu.jpg')
   }
