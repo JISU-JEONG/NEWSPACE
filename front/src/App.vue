@@ -4,7 +4,6 @@
     <v-content class="background">
       <router-view />
     </v-content>
-    <!-- <chat /> -->
     <AppFooter />
   </v-app>
 </template>
@@ -19,7 +18,7 @@ export default {
   name: "App",
   data() {
     return {
-      //
+      isChecked: false
     };
   },
   icons: {
@@ -29,7 +28,7 @@ export default {
     Navigation,
     AppFooter,
     Chat
-  }
+  },
 };
 </script>
 
