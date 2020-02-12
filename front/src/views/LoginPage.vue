@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="11" sm=7>
+      <v-col cols="11" sm="7">
         <v-card raised>
           <v-alert color="error" icon="warning" v-show="this.$store.state.error">로그인 정보를 확인해주세요</v-alert>
           <v-card-title>로그인</v-card-title>
@@ -30,8 +30,16 @@
           <v-subheader>기존에 사용하시는 계정으로 간단하게 가입/로그인할 수 있습니다.</v-subheader>
           <v-container d-flex justify-space-around>
             <input type="hidden" v-model="socialemail" />
-            <img src="../../images/Facebook.png" @click="FacebookLogin" style="cursor:pointer; width:64px; height:64px;">
-            <img src="../../images/Google.png" @click="GoogleLogin" style="cursor:pointer; width:64px; height:64px;">
+            <img
+              src="../../images/Facebook.png"
+              @click="FacebookLogin"
+              style="cursor:pointer; width:64px; height:64px;"
+            />
+            <img
+              src="../../images/Google.png"
+              @click="GoogleLogin"
+              style="cursor:pointer; width:64px; height:64px;"
+            />
           </v-container>
         </v-card>
       </v-col>
@@ -44,7 +52,7 @@ import firebase from "firebase/app";
 import firebaseservice from "../services/FirebaseService";
 import http from "../services/http-common";
 import axios from "axios";
-import info from '../services/getInfo'
+import info from "../services/getInfo";
 export default {
   name: "login",
   computed: {
@@ -69,7 +77,7 @@ export default {
       ],
       passwordRules: [v => !!v || "비밀번호를 입력하세요"],
       emptyRules: [v => !!v || "값을 입력해주세요"],
-      preRouter: '',
+      preRouter: ""
     };
   },
   methods: {
@@ -79,7 +87,7 @@ export default {
         // axios
         //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.85:8080/member/signin", {
+          .post("http://192.168.31.84:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -87,20 +95,23 @@ export default {
           })
           .then(res => {
             if (res.data.status) {
-              
               localStorage.setItem("login-token", res.headers["login-token"]);
               localStorage.setItem("loginStatus", res.data.name);
               const payload = {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
                 member_name: res.data.name,
-                auth : localStorage.removeItem("auth"),
-                member_keyword: res.data.member_keyword,
+                auth: localStorage.removeItem("auth"),
+                member_keyword: res.data.member_keyword
               };
               localStorage.setItem("member_name", res.data.name);
               this.$store.dispatch("login", payload);
-              this.$store.dispatch("setMemberNews") // 키워드 뉴스 받아오기
-              this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
+              this.$store.dispatch("setMemberNews"); // 키워드 뉴스 받아오기
+              localStorage.setItem("loginStatus", true);
+              this.$router.push(
+                this.preRouter === "/login" ? "/" : this.preRouter,
+                () => {}
+              );
             } else {
               this.$store.dispatch("error");
               // alert("입력 정보를 확인하세요.");
@@ -121,7 +132,7 @@ export default {
             .auth()
             .signInWithPopup(provider)
             .then(res => {
-              // console.log(res.user);
+              console.log(res.email);
               parentFunc.username = res.user.displayName;
               parentFunc.socialemail = res.user.uid;
               parentFunc.type = "facebook";
@@ -174,7 +185,6 @@ export default {
               email: parentFunc.socialemail
             })
             .then(res => {
-              console.log(res.data);
               if (res.data == "Notexist") {
                 //아이디 중복 없다.
                 parentFunc.duplicationflag = 1;
@@ -200,37 +210,40 @@ export default {
               .then(res => {
                 localStorage.setItem("login-token", res.headers["login-token"]);
                 localStorage.setItem("loginStatus", parentFunc.username);
+                localStorage.setItem("member_keyword", res.data.member_keyword);
+                localStorage.setItem("member_name", res.data.member_name);
                 resolve("ㄲ");
               });
           });
         };
         _promise2().then(() => {
-          console.log(parentFunc.duplicationflag);
           if (parentFunc.duplicationflag == 1) {
             //처음 로그인시 키워드 선택
             this.$router.push("/SocialSignup", () => {});
           } else {
-            //이미 로그인한적이 있을시 홈으루
-            
+            console.log("keyword : " + localStorage.getItem("member_keyword"));
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",
-              member_name: parentFunc.username,
-              auth : localStorage.removeItem("auth")
+              member_name: localStorage.getItem("member_name"),
+              auth: localStorage.removeItem("auth"),
+              member_keyword: localStorage.getItem("member_keyword")
             };
-            localStorage.setItem("member_name", parentFunc.username);
             this.$store.dispatch("login", payload);
-            this.$store.dispatch("setMemberNews")
-            this.$router.push(this.preRouter === '/login' ? '/' : this.preRouter, () => {});
+            this.$store.dispatch("setMemberNews"); // 키워드 뉴스 받아오기
+            this.$router.push(
+              this.preRouter === "/login" ? "/" : this.preRouter,
+              () => {}
+            );
           }
         });
       });
-    },
+    }
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.preRouter = from.fullPath
-    })
+      vm.preRouter = from.fullPath;
+    });
   }
 };
 </script>

@@ -1,92 +1,105 @@
 <template>
-  <div v-if="$store.state.auth==='1'">
+  <div>
     <div class="admin_header">
       <h1 class="admin_font">NEWSPACE ADMIN PAGE</h1>
     </div>
     <div>
       <div class="adminbody">
         <div class="bodyfont">User 관리</div>
-        <v-card>
-          여기에는 유저관리 목록
+        <v-card v-for="u in userlist" :key="u.id">
+          {{u.email}}
         </v-card>
         <div class="bodyfont">comment 관리</div>
+        <v-card v-for="c in checkCrawlinglist" :key="c.id">
+        {{c}}
+        </v-card>
+        <div>
+
+        </div>
         <v-card>
-          여기에는 코멘트 목록
+
         </v-card>
       </div>
       <div class="subbody">
-        czxvzx
-        asdasddas
-        <v-card>
-          나는 뭐쓸래?
-        </v-card>
+        <v-card>나는 뭐쓸래?</v-card>
       </div>
     </div>
   </div>
-  <div v-else></div>
 </template>
 
 <script>
-import router from '../router'
-import axios from 'axios'
+import router from "../router";
+import axios from "axios";
+import store from "../store";
 export default {
-  name :'admin',
-  methods: {
-    getout(){
-      if(this.$store.state.auth !=='1')
-      {
-        alert("잘못된 접근입니다. 꺼져 주세요.")
-        router.push('/')
-      }
-  },
-  mounted(){
-    this.getout()
-    axios
-        .post("http://192.168.31.85:8080/member/adminManage/", {},
-        {
-          headers: {
-            "login-token": localStorage.getItem("login-token")
-          }
-        })
-        .then(response => {
-            console.log(response)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    read(){
-      
+  name: "admin",
+  data() {
+    return {
+      userlist : [],
+      checkCrawlinglist : []
     }
+  },
+  methods: {
+    getout() {
+      if (this.$store.state.auth !== "1") {
+        alert("잘못된 접근입니다. 꺼져 주세요.");
+        router.push("/");
+      }
+    },
+    test() {
+      axios
+        .post(
+          "http://192.168.31.84:8080/member/adminManage/",
+          {},
+          {
+            headers: {
+              "login-token": localStorage.getItem("login-token")
+            }
+          }
+        )
+        .then(response => {
+          console.log(response);
+          this.userlist = response.data.memberList;
+          this.checkCrawlinglist = response.data.checkCrawling;
+          console.log(this.checkCrawlinglist)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  },
+  beforeMount(){
+    // this.getout();
+  },
+  mounted() {
+    this.test();
   }
-
-}
+};
 </script>
 
 <style scoped>
-.admin_header{
+.admin_header {
   width: 100%;
   background-color: grey;
   height: 150px;
 }
-.admin_font{
+.admin_font {
   display: block;
-  color : white;
+  color: white;
   text-align-last: center;
   line-height: 150px;
 }
-.adminbody{
+.adminbody {
   display: inline-block;
   width: 70%;
   padding: 30px;
 }
-.subbody{
+.subbody {
   display: inline-block;
   width: 30%;
   padding: 10px;
-
 }
-.bodyfont{
+.bodyfont {
   width: 70%;
 }
 </style>

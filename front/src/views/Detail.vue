@@ -109,11 +109,9 @@ export default {
       axios
         .get(`http://192.168.31.85:8080/api/news/${this.$route.params.id}`,token)
         .then(response => {
-          console.log(response.data)
           this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
           this.is_like = response.data.is_like
-          console.log(response.data.is_like)
         })
         .catch(error => {
           console.log(error);
@@ -124,7 +122,6 @@ export default {
         .get(`http://192.168.31.85:8080/api/comment/${this.$route.params.id}`)
         .then(response => {
           this.comments = response.data;
-          console.log(this.comments);
         })
         .catch(error => {
           console.log(error);

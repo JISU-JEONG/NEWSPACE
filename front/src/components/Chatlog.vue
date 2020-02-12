@@ -135,13 +135,13 @@ export default {
       var socket = new sockjs("http://192.168.31.84:8080/ws");
       stompClient = Stomp.over(socket);
 
-      stompClient.connect({username : this.username, member_id : this.member_id}, this.onConnected, this.onError);
+      stompClient.connect({username : this.username, member_id : this.member_id, room: "1"}, this.onConnected, this.onError);
     },
     onConnected() {
       stompClient.subscribe("/topic/publicChatRoom", this.onMessageReceived);
 
       stompClient.send(
-        "/app/chat.addUser",
+        "/app/chat.addUser/test",
         {},
         JSON.stringify({ sender: this.username, type: "JOIN" })
       );
@@ -158,11 +158,12 @@ export default {
         var chatMessage = {
           sender: this.username,
           sessionid: localStorage.getItem("member_id"),
+          room : "1",
           content: this.message,
           type: "CHAT"
         };
         stompClient.send(
-          "/app/chat.sendMessage",
+          "/app/chat.sendMessage/test",
           {},
           JSON.stringify(chatMessage)
         );

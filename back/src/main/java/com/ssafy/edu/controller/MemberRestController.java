@@ -160,14 +160,21 @@ public class MemberRestController {
 		log.info("\"MemberRestController Excute ! socialtoken " + member);
 
 		Map<String, Object> resultMap = new HashMap<>();
-		if(memberservice.getEmail(member.getEmail()) != null) {			
+		Member loginUser = new Member();
+		System.out.println(member);
+		if(memberservice.getEmail(member.getEmail()) != null) {
+			loginUser = memberservice.getEmail(member.getEmail());
 			member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
 			member.setCertifiedkey(memberservice.getEmail(member.getEmail()).getCertifiedkey());
 		}
 
 		String token = jwtService.create(member);
 		res.setHeader("login-token", token);
+		resultMap.put("member_name", loginUser.getName());
+		resultMap.put("member_keyword", loginUser.getKeyword());
+		
 		resultMap.put("status", true);
+		System.out.println(resultMap);
 		HttpStatus status = HttpStatus.ACCEPTED;
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
@@ -181,6 +188,7 @@ public class MemberRestController {
 		result.setMember(memberservice.getMember(member.getMember_id()));
 		result.setList(newsService.getMeberNews(member.getMember_id()));
 		result.setCount(commentService.getCount(member.getMember_id()));
+		
 //		System.out.println("log test ==============================================");
 //		System.out.println(result.getMember());
 //		System.out.println(result.getCount());

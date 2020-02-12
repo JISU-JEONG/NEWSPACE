@@ -112,7 +112,6 @@ export default {
     onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (this.canLoadNews[this.tab]){
-          console.log('스크롤이 내려왔읍니다.', this.tab)
           this.moveToShowingNews()
         }
       }
@@ -121,7 +120,6 @@ export default {
       switch (this.tab) {
         case 0:
           if (this.canLoadNews[0]) {
-            console.log('모든 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.AllList.slice(this.limit * (this.canLoadNews[0] - 1), this.limit * this.canLoadNews[0])
             this.showingNews.AllList = this.showingNews.AllList.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -133,7 +131,6 @@ export default {
           }
         case 1:
           if (this.canLoadNews[1]) {
-            console.log('삼성 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.Samsunglist.slice(this.limit * (this.canLoadNews[1] - 1), this.limit * this.canLoadNews[1])
             this.showingNews.Samsunglist = this.showingNews.Samsunglist.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -145,7 +142,6 @@ export default {
           }
         case 2:
           if (this.canLoadNews[2]) {
-            console.log('LG 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.LGlist.slice(this.limit * (this.canLoadNews[2] - 1), this.limit * this.canLoadNews[2])
             this.showingNews.LGlist =this.showingNews.LGlist.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -157,7 +153,6 @@ export default {
           }
         case 3:
           if (this.canLoadNews[3]) {
-            console.log('SK 뉴스를 더 불러옵니다.')
             const loadNews = this.savedNews.SKlist.slice(this.limit * (this.canLoadNews[3] - 1), this.limit * this.canLoadNews[3])
             this.showingNews.SKlist = this.showingNews.SKlist.concat(loadNews)
             if (loadNews.length === this.limit) {
@@ -176,14 +171,12 @@ export default {
         var label;
 
         var chart = am4core.create("chartdiv", am4charts.XYChart);
-        console.log(chart)
         chart.paddingRight = 1;
         chart.dateFormatter.dateFormat = "yyyy-MM";
         var data = [];
         http.get(`/getSearchChartKeyword/${this.$route.params.searchValue}`)
         .then((response) => {
                 const Gdata = response.data
-                console.log(Gdata)
                 for(let i=0;i<12;i++)
                 {
                   const day = Gdata[i].date.split('-')
