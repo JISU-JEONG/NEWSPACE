@@ -23,7 +23,7 @@ const routes = [
 		component: SearchPage
 	},
 	{
-		path: '/detail/:id',
+		path: '/detail/:id/:keyword',
 		name: 'detail',
     component: Detail,
     meta: {
