@@ -1,6 +1,6 @@
 ﻿# DEMO SITE
 
-[<img src="/readmeimage/newspace.png" width="200" height="180">](http://i02b208.p.ssafy.io/)
+[<img src="/readmeimage/newspace.png" width="200" height="180">](https://i02b208.p.ssafy.io/)
 <br>
 이미지를 클릭시 NEWSPACE로 이동됩니다.
 
