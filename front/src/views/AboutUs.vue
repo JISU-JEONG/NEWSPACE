@@ -7,9 +7,8 @@
           <div class="team-name-detail-fake">A.I Machine-learning Team</div>
           <div class="team-name-detail-real">All Man Team</div>
         </div>
-        
       </div>
-      <div class="wall left">생각처럼 안되네 개같은거</div>
+      <div class="wall left"></div>
       <div class="wall right">
         웹마스터 영길이 캐리한 팀입니다. <br>
         다음 프로젝트 캐리받을 사람 선착순 두명 받습니다. <br>
@@ -19,6 +18,9 @@
     </div>
     <div class="profile-container">
       <div class="profile-nav" @click="selectMember">
+        <div class="home-icon">
+          <v-icon>mdi-home</v-icon>
+        </div>
         <div v-for="member in Object.keys(members)" :key="member" class="member-icon" :class="[members[member].cssClass]" :data-name="member"></div>
       </div>
       <div v-if="selectedMember" class="profile-content">
@@ -26,9 +28,36 @@
           <img class="profile-picture" :src="require(`../assets/images/${selectedMember}.jpg`)">
         </div>
         <div class="profile-info">
-          <div class="info-box">{{members[selectedMember].name}}</div>
-          <div class="info-box">{{members[selectedMember].info01}}</div>
-          <div class="info-box">{{members[selectedMember].info02}}</div>
+          <div class="first-box">
+            <div class="info-box name">{{members[selectedMember].name}}</div>
+            <div class="info-box git">
+              <a :href="members[selectedMember].gitUrl" target="_blank">
+                <v-icon @click="moveToGithub">fa-github</v-icon>
+              </a>
+            </div>
+          </div>
+          <div class="info-box second-box">{{members[selectedMember].info01}}</div>
+          <div class="info-box third-box">
+            <div style="padding: 0.5vw 3vw; font-size: 2vw;">기술 스택</div>
+            <v-row>
+              <v-col cols="6"  v-for="skill in members[selectedMember].skills" :key="skill.name" class="pt-1">
+                <v-row>
+                  <v-col cols="3" class="d-flex justify-center align-center pa-0">
+                    <v-icon class="skill-icon">{{skill.name}}</v-icon>
+                  </v-col>
+                  <v-col cols="8" class="d-flex justify-center align-center pa-0">
+                    <v-progress-linear
+                      :color="members[selectedMember].color"
+                      height="1.5vw"
+                      :value="skill.rate"
+                      striped
+                    ></v-progress-linear>
+                  </v-col>
+                </v-row>
+                
+              </v-col>
+            </v-row>
+          </div>
         </div>
       </div>
     </div>
@@ -47,38 +76,65 @@ export default {
         jisu: {
           name: '정지수',
           imgUrl: './images/jisu.jpg',
-          gitUrl: '',
-          info01: '지수는 지수다',
-          info02: '지수는 지수다2',
+          gitUrl: 'https://github.com/JISU-JEONG',
+          info01: 'Front-end',
           cssClass: 'ji-su',
-          color: '#64B5F6'
+          color: '#64B5F6',
+          skills: [
+            { name: 'mdi-language-c',rate: 80 },
+            { name: 'mdi-language-cpp',rate: 80 },
+            { name: 'mdi-language-python',rate: 90 },
+            { name: 'mdi-language-javascript',rate: 60 },
+            { name: 'mdi-vuejs',rate: 80 },
+          ],
         },
         younghoon: {
           name: '정영훈',
           imgUrl: './images/younghoon.jpg',
-          gitUrl: '',
-          info01: '영훈이는 영훈이다.',
-          info02: '영훈이는 영훈이다2',
+          gitUrl: 'https://github.com/hoonyhoony',
+          info01: 'Back-end',
           cssClass: 'young-hoon',
-          color: '#BA68C8'
+          color: '#BA68C8',
+          skills: [
+            { name: 'mdi-language-java',rate: 100 },
+            { name: 'mdi-language-cpp',rate: 60 },
+            { name: 'mdi-language-javascript',rate: 75 },
+            { name: 'mdi-aws',rate: 100 },
+            { name: 'mdi-vuejs',rate: 30 },
+            { name: 'mdi-language-python',rate: 10 },
+          ],
         },
         younggil: {
           name: '정영길',
           imgUrl: './images/younggil.jpg',
-          gitUrl: '',
-          info01: '영길이는 영길이다',
-          info02: '영길이는 영길이다2',
+          gitUrl: 'https://github.com/yg1110',
+          info01: 'Back-end',
           cssClass: 'young-gil',
-          color: '#FFB74D'
+          color: '#FFB74D',
+          skills: [
+            { name: 'mdi-language-java',rate: 60 },
+            { name: 'mdi-language-javascript',rate: 60 },
+            { name: 'mdi-aws',rate: 50 },
+            { name: 'mdi-vuejs',rate: 80 },
+            // { name: 'mdi-language-mysql',rate: 50 }, 아이콘 없는 애들
+            // { name: 'mdi-language-spring',rate: 70 },
+            // { name: 'mdi-language-mongoDB',rate: 50 },
+          ],
         },
         taewoo: {
           name: '김태우',
           imgUrl: './images/taewoo.jpg',
-          gitUrl: '',
-          info01: '태우는 태우다',
-          info02: '태우는 태우다2',
-          cssClass: 'tae-woo',
+          gitUrl: 'https://github.com/EHwooKim',
+          info01: 'Front-end',
+        cssClass: 'tae-woo',
           color: '#81C784',
+          skills: [
+            { name: 'mdi-language-python',rate: 65 },
+            { name: 'mdi-language-javascript',rate: 55 },
+            { name: 'mdi-vuejs',rate: 75 },
+            { name: 'mdi-language-html5',rate: 70 },
+            { name: 'mdi-language-css3',rate: 60 },
+          ],
         }
       }
     }
@@ -91,14 +147,19 @@ export default {
       document.querySelector('.profile-container').style.transform = `rotateX(${this.mousePos.y * 8}deg) rotateY(${this.mousePos.x * 8}deg)`
     },
     selectMember(e) {
+      const earthElem = document.querySelector('.earth')
       if (e.target.classList.contains('member-icon')) {
-        const earthElem = document.querySelector('.earth')
-
         this.selectedMember = e.target.dataset.name
         earthElem.style.background = this.members[this.selectedMember].color
-
+      } else if (e.target.classList.contains('home-icon') || e.target.parentNode.classList.contains('home-icon')) {
+        this.selectedMember = ''
+        earthElem.style.background = '#E0E0E0'
+        this.$router.push({ path: '/' })
       }
     },
+    moveToGithub() {
+      console.log(this.selectedMember)
+    }
   },
   mounted() {
     window.addEventListener('mousemove', this.onMouseMove)
@@ -113,6 +174,9 @@ export default {
   div {
     box-sizing: border-box;
   }
+  a {
+    text-decoration: none;
+  } 
   .earth {
     width: 100vw;
     height: 100vh;
@@ -133,6 +197,12 @@ export default {
     left: 0;
     top: 0;
     transform-style: preserve-3d;
+  }
+  .go-back {
+    position:absolute;
+    left: 50vw;
+    top: 0;
+    font-size: 2rem;
   }
   .wall {
     width: 100vw;
@@ -239,6 +309,23 @@ export default {
     cursor: pointer;
     /* transition: 0.1s; */
   }
+  .home-icon {
+    width: 10vh;
+    height: 10vh;
+    margin: 0 1vw -1vw 0;
+    color: white;
+    border-radius: 100px;
+    box-shadow: 0 0 3px 2px black;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+  .home-icon i {
+    font-size: 3rem;
+    color:black;
+  }
   /* .member-icon:hover {
     transform: scale(1.1)
   } */
@@ -265,7 +352,7 @@ export default {
     justify-content: center;
     align-items: center;
     width: 40%;
-    transform: translateZ(-10vw);
+    transform: translateZ(-20vw);
   }
   .profile-picture {
     box-shadow: 2px 3px 8px lightgray;
@@ -273,18 +360,60 @@ export default {
   }
   .profile-info {
     width: 60%;
-    transform: translateZ(-20vw);
-    transform-style: preserve-3d;
+    transform: translateZ(-20vw) rotateY(-15deg);
+    /* box-shadow:0 0 10px 10px #000; */
+  }
+  .first-box {
+    display: flex;
+    margin-bottom: 2vw;
+    height: 26%;
+  }
+  .second-box {
+    height: 26%;
+    margin-bottom: 2vw;
+    padding: 1vw 3vw;
+    font-size: 2vw;
+  }
+  .third-box {
+    /* margin: 4%; */
+    height: 39%;
   }
   .info-box {
-    margin: 4%;
-    height: 26%;
-    padding: 30px;
-    font-size: 3rem;
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 2px 3px 8px lightgray;
-    transform: rotateY(-15deg);
     font-family: 'Black Han Sans', sans-serif;
   }
+  .name {
+    width: 75%;
+    padding: 0 0 0 3vw;
+    font-size: 8vw;
+  }
+  .git {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    margin-left:2vw;
+    /* height: 100%; */
+  }
+  .git i {
+    font-size: 10vw;
+    opacity: 1;
+    color: black;
+    cursor: pointer;
+  }
+  .skill-box {
+    display: flex;
+    box-shadow:0 0 10px 10px #000;
+  }
+  .skill-icon {
+    font-size: 3vw;
+    color: black;
+
+  }
+  .skill-rate {
+    width: 70%;
+  }
+
 
 </style>
