@@ -299,6 +299,31 @@ public class NewsService implements INewsService {
 	}
 	
 	@Override
+	public boolean checkNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		return dao.checkNewsLog(nih);
+	}
+	
+	@Override
+	public void updateNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		dao.updateNewsLog(nih);
+	}
+
+	@Override
+	public void insertNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		dao.insertNewsLog(nih);
+	}
+
+	@Override
+	public List<NewsDTO> getMyRecentNews(int member_id) {
+		// TODO Auto-generated method stub
+		return dao.getMyRecentNews(member_id);
+	}
+
+
+	@Override
 	public List<NewsStatusHelp> getNewsStatus() {
 		List<NewsStatusHelp> list = new ArrayList<NewsStatusHelp>();
 		

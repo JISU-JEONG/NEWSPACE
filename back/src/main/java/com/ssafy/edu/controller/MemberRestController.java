@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
 
+@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 public class MemberRestController {
 	private static final Logger log = LoggerFactory.getLogger(JwtService.class);
@@ -188,12 +190,8 @@ public class MemberRestController {
 		result.setMember(memberservice.getMember(member.getMember_id()));
 		result.setList(newsService.getMeberNews(member.getMember_id()));
 		result.setCount(commentService.getCount(member.getMember_id()));
+		result.setRecentlist(newsService.getMyRecentNews(member.getMember_id()));
 		
-//		System.out.println("log test ==============================================");
-//		System.out.println(result.getMember());
-//		System.out.println(result.getCount());
-//		System.out.println(result.getList().toString());
-
 		if (result.getList().size() < 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
@@ -270,8 +268,6 @@ public class MemberRestController {
 			resultMap.put("message", e.getMessage());
 		}
 		int auth = (int) resultMap.get("auth");
-		System.out.println(auth);
-		
 		if(auth != 1) {
 			System.out.println("check error");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);

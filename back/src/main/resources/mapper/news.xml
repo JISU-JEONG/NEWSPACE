@@ -325,5 +325,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getNewsStatusSKT" resultType="java.lang.Integer">
 		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "SK"
 	</select>
+	
+	<select id="checkNewsLog" resultType="com.ssafy.edu.help.NewsLogHelp" parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		select * from amt.news_log where news_id = #{news_id} and member_id = #{member_id}
+	</select>
+	
+	<update id="updateNewsLog" parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		update amt.news_log set news_log_date = CURRENT_TIMESTAMP where news_id = #{news_id} and member_id = #{member_id}
+	</update>
+	
+	<insert id="insertNewsLog" parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		insert into amt.news_log(member_id, news_id) values(#{member_id}, #{news_id})
+	</insert>
+	
+	<select id="getMyRecentNews" parameterType="java.lang.Integer" resultType="com.ssafy.edu.dto.NewsDTO">
+		select * from amt.news n where n.news_id in (select nl.news_id from amt.news_log nl where nl.member_id = #{member_id}) order by n.date desc
+	</select>
 
 </mapper>
