@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssafy.log">
+
+	<select id="getRecentLog" resultType="com.ssafy.edu.dto.ServerLog">
+		select * from amt.log order by log_date desc limit 5
+	</select>
+	
+	<insert id="insertLog" parameterType="com.ssafy.edu.dto.ServerLog">
+		insert into amt.log(member_id, log_content) values(#{member_id}, #{log_content})
+	</insert>
+	
+</mapper>

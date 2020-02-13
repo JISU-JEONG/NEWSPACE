@@ -1,101 +1,221 @@
 <template>
-  <v-container>
-    <div class="header_box">
+<div>
+  <div class="header_box">
       <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
       <div class="header_email">{{user.member.email}}</div>
       <div class="header_email">
         <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
         <span v-else>이메일 인증 완료</span>
       </div>
-    </div>
-    <div class="comment_font">
-      <div>
-        <h1>{{user.count}}</h1>
-      </div>
+      <div class="comment_font">
+        <div>
+          <h1>{{user.count}}</h1>
+        </div>
       <div>
         <p>comments</p>
       </div>
     </div>
-    <v-card>
-      <v-card-title>
-        "{{user.member.name}}"님이 선택한 키워드
-        <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
-      </v-card-title>
-      <v-card-text>
-        <span v-for="i in selectedKeywords" :key="i">#{{i}}</span>
-      </v-card-text>
-    </v-card>
+  </div>
+  <v-container class="px-1" style="min-height:850px">
+      <v-tabs
+      vertical
+      >
+        <v-tab>
+          관심 뉴스
+        </v-tab>
+        <v-tab>
+          최근 본 뉴스
+        </v-tab>
+        <v-tab>
+          관심 키워드
+        </v-tab>
+  
+        
+      <v-tab-item class="px-2">
+          <v-container fluid v-if="like_list.length !== 0">
+            <div style="min-height:800px">
 
-    <div class="body_box">
-      <div class="newsbody">{{user.member.name}}'s NEWS ROOM</div>
-      <v-card v-for="i in user.list.length" :key="i" @click="goDetail(user.list[i-1].news_id)">
-        <v-container>[{{user.list[i-1].brand}}] {{user.list[i-1].title}}</v-container>
-      </v-card>
-    </div>
+            <div class="likeheader">
+              <strong>{{user.member.name}}'s NEWS ROOM</strong>
+              <hr>
+            </div>
+            <v-row>
+              <v-col
+                v-for="i in like_list[page-1].length"
+                :key="i"
+                @click="goDetail(like_list[page-1][i-1].news_id)"
+                xs=12
+                sm=5
+                md=4
+                lg=3>
+                <v-card
+                  height=350px
+                  class="cardhover"
+                >
+                  <v-img
+                    :src="like_list[page-1][i-1].thumb"
+                    height=150px
+                  ></v-img>
 
-    <v-dialog v-model="dialog" max-width="400">
-      <v-card>
-        <v-container style="min-height:430px;">
-          <v-card-title>관심 키워드 수정</v-card-title>
-          <v-divider></v-divider>
-          <v-card style="min-height:120px;">
-            <span px-3>선택된 아해들</span>
-            <v-divider></v-divider>
-            <v-container>
-              <ul @click.stop="unselectKeyword">
-                <transition-group name="list">
-                  <li
-                    v-for="keyword in selectedKeywords"
-                    :key="keyword"
-                    class="text--darken-3"
-                  >{{keyword}}</li>
-                </transition-group>
-              </ul>
-            </v-container>
-          </v-card>
-          <hr />
-          <v-card style="min-height:120px;" class="mt-3">
-            <span>선택되지 못한 아해들</span>
-            <br />
-            <v-divider></v-divider>
-            <v-container>
-              <ul @click.stop="selectKeyword">
-                <transition-group name="list" id="selectedSpan">
-                  <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
-                </transition-group>
-              </ul>
-            </v-container>
-          </v-card>
-          <v-text-field
-            style="margin-top:16px;"
-            label="추가하고싶은 키워드"
-            v-model="userInputKeyword"
-            append-icon="mdi-plus"
-            @click:append="userInputKeywordToList"
-            @keyup.enter.stop="userInputKeywordToList"
-            :error="error"
-            :error-messages="errorMessages"
-            @input="inputKeyword"
-          />
-        </v-container>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+                  <v-card-title>
+                  <h4  v-line-clamp="2">
+                    {{like_list[page-1][i-1].title}}
+                  </h4>
+                  </v-card-title>
 
-          <v-btn color="green darken-1" text @click.stop="OkClick()">ok</v-btn>
+                  <v-card-subtitle>
+                  <p  v-line-clamp="5">
+                    {{like_list[page-1][i-1].bodytext}}
+                  </p>
+                  </v-card-subtitle>
+                </v-card>
+              </v-col>
+            </v-row>
+            </div>
+            <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length=pagetotal
+              circle
+              total-visible="6"
+            >
+            </v-pagination>
+          </div>
+          </v-container>
+          <v-container v-else
+          >
+            관심 뉴스를 등록해 보세요~
+          </v-container>
+        </v-tab-item>
+        <v-tab-item class="px-2">
+          <v-container fluid v-if="recent.length !== 0">
+            <div style="min-height:800px">
 
-          <v-btn color="green darken-1" text @click.stop="cancleClick()">Cancle</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            <div class="likeheader">
+              <strong>{{user.member.name}}님이 최근 보신 뉴스</strong>
+              <hr>
+            </div>
+            <v-row>
+              <v-col
+                v-for="i in recent.length"
+                :key="i"
+                @click="goDetail(recent[i-1].news_id)"
+                xs=12
+                sm=5
+                md=4
+                lg=3>
+                <v-card
+                  height=350px
+                  class="cardhover"
+                >
+                  <v-img
+                    :src="recent[i-1].thumb"
+                    height=150px
+                  ></v-img>
+
+                  <v-card-title>
+                  <h4  v-line-clamp="2">
+                    {{recent[i-1].title}}
+                  </h4>
+                  </v-card-title>
+
+                  <v-card-subtitle>
+                  <p v-line-clamp="5">
+                    {{recent[i-1].bodytext}}
+                  </p>
+                  </v-card-subtitle>
+                </v-card>
+              </v-col>
+            </v-row>
+            </div>
+          </v-container>
+          <v-container v-else
+          >
+            보신 뉴스가 없습니다.
+          </v-container>
+        </v-tab-item>
+        <v-tab-item>
+                
+          <v-container> 
+            <div class="likeheader">
+                <strong>{{user.member.name}}님 관심 키워드</strong> <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
+                <hr>
+              </div>
+            <Treechart
+              :keyword="selectedKeywords"
+              />
+              
+          <v-dialog v-model="dialog" max-width="400">
+            <v-card>
+              <v-container style="min-height:430px;">
+                <v-card-title>관심 키워드 수정</v-card-title>
+                <v-divider></v-divider>
+                <v-card style="min-height:120px;">
+                  <span px-3>선택된 아해들</span>
+                  <v-divider></v-divider>
+                  <v-container>
+                    <ul @click.stop="unselectKeyword">
+                      <transition-group name="list">
+                        <li
+                          v-for="keyword in selectedKeywords"
+                          :key="keyword"
+                          class="text--darken-3"
+                        >{{keyword}}</li>
+                      </transition-group>
+                    </ul>
+                  </v-container>
+                </v-card>
+                <hr />
+                <v-card style="min-height:120px;" class="mt-3">
+                  <span>선택되지 못한 아해들</span>
+                  <br />
+                  <v-divider></v-divider>
+                  <v-container>
+                    <ul @click.stop="selectKeyword">
+                      <transition-group name="list" id="selectedSpan">
+                        <li v-for="keyword in unselectedKeywords" :key="keyword">{{keyword}}</li>
+                      </transition-group>
+                    </ul>
+                  </v-container>
+                </v-card>
+                <v-text-field
+                  style="margin-top:16px;"
+                  label="추가하고싶은 키워드"
+                  v-model="userInputKeyword"
+                  append-icon="mdi-plus"
+                  @click:append="userInputKeywordToList"
+                  @keyup.enter.stop="userInputKeywordToList"
+                  :error="error"
+                  :error-messages="errorMessages"
+                  @input="inputKeyword"
+                />
+              </v-container>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn color="green darken-1" text @click.stop="OkClick">ok</v-btn>
+
+                <v-btn color="green darken-1" text @click.stop="cancleClick">Cancle</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          </v-container>
+        </v-tab-item>
+      </v-tabs>
   </v-container>
+</div>
 </template>
 <script>
 import http from "../services/http-common.js";
 import router from "../router";
 import info from "../services/getInfo";
+import Treechart from '../components/Treechart'
 
 export default {
   name: "Profile",
+  components:{
+    Treechart,
+  },
   data() {
     return {
       user: {
@@ -105,11 +225,17 @@ export default {
       },
       dialog: false,
       userInputKeyword: "",
+      originselectedKeywords: [],
+      originunselectedKeywords:[],
       selectedKeywords: [],
       unselectedKeywords: [],
       error: false,
       errorMessages: "",
-      isemailcheck: localStorage.getItem("certifiedkey")
+      isemailcheck: localStorage.getItem("certifiedkey"),
+      page: 1,
+      like_list : [],
+      pagetotal : 0,
+      recent: [],
     };
   },
   methods: {
@@ -130,8 +256,27 @@ export default {
         .then(response => {
           this.user = response.data;
           this.selectedKeywords = this.user.member.keyword.split(" ");
+          this.originselectedKeywords = this.user.member.keyword.split(" ");
           this.isemailcheck = localStorage.getItem("certifiedkey");
+          this.recent = this.user.recentlist
           this.keywordSetting();
+          let newslist = []
+          if( this.user.list !==[]){
+            for(let i=0;i<this.user.list.length;i++)
+            {
+              newslist.push(this.user.list[i])
+              if (newslist.length===8)
+              {
+                this.like_list.push(newslist)
+                newslist = []
+              }
+            }
+            if (newslist.length!==0)
+            {
+              this.like_list.push(newslist)
+            }
+            this.pagetotal = this.like_list.length
+          }
         })
         .catch(error => {
           console.log(error);
@@ -146,7 +291,6 @@ export default {
       http
         .get("/sendmail/", token)
         .then(response => {
-          console.log(response.data);
         })
         .catch(error => {
           console.log(error);
@@ -177,7 +321,6 @@ export default {
             this.selectedKeywords.push(value);
           } else {
             errorKeyword = errorKeyword.concat(` ${value}`);
-            console.log(errorKeyword);
           }
         });
         errorKeyword = errorKeyword.trim();
@@ -217,15 +360,18 @@ export default {
     keywordSetting() {
       http.get("/getUserKeyword").then(response => {
         this.unselectedKeywords = response.data;
-        for (let i = 0; this.selectedKeywords.length; i++) {
-          const keyword = this.selectedKeywords[i];
-          const index = this.unselectedKeywords.findIndex(v => v === keyword);
-          if (index < 0) {
-            return;
-          }
-          this.unselectedKeywords.splice(index, 1);
+        for (let i = 0; i<this.selectedKeywords.length; i++) {
+            const keyword = this.selectedKeywords[i];
+            const index = this.unselectedKeywords.findIndex(v => v === keyword);
+            if (index >= 0) {
+              this.unselectedKeywords.splice(index, 1);
+            }
         }
-      });
+        this.originunselectedKeywords = this.unselectedKeywords.slice();
+      })
+      .catch(error => {
+          console.log(error);
+      })
     },
     OkClick() {
       const token = {
@@ -249,27 +395,30 @@ export default {
         });
     },
     cancleClick() {
+      this.selectedKeywords = this.originselectedKeywords.slice()
+      this.unselectedKeywords = this.originunselectedKeywords.slice()
       this.userInputKeyword = "";
       this.dialog = false;
     }
   },
-  created() {
+  mounted() {
     this.get_user();
   },
-  mounted() {
-    // this.polling = setInterval( () =>{
-    //   console.log("dd");
-    // },1000)
-  }
 };
 </script>
 <style scoped>
 .header_box {
-  margin: 50px 0px;
+  width: 100%;
+  height: 360px;
+  background-color : rgba(130, 215, 255, 0.863);
+  /* background-image: url('../../'); */
+  margin-bottom: 30px;
+  padding-top: 50px;
 }
 .header_name {
   font-size: 30px;
   text-align: center;
+  color : white;
 }
 .header_email {
   font-size: 20px;
@@ -296,6 +445,10 @@ export default {
   color: black;
   margin-left: 7px;
 }
+.likeheader{
+  font-size : 20px;
+  margin-bottom: 20px;
+}
 ul {
   margin: 0;
   padding: 0;
@@ -315,5 +468,8 @@ li:hover {
 .list-enter {
   opacity: 0;
   transform: translateY(30px);
+}
+.cardhover:hover {
+  box-shadow: 1px 2px 4px gray;
 }
 </style>

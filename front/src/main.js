@@ -10,7 +10,7 @@ import router from "./router";
 import store from "./store";
 import VModal from "vue-js-modal";
 import VueMinesweeper from "vue-minesweeper";
-import VueSession from 'vue-session'
+import lineClamp from 'vue-line-clamp'
 
 Vue.config.productionTip = false;
 
@@ -19,7 +19,7 @@ Vue.use(VueSimplemde);
 Vue.use(Vuetify);
 Vue.use(VModal, { dynamic: true });
 Vue.use(VueMinesweeper);
-
+Vue.use(lineClamp, {})
 new Vue({
   router,
   store,

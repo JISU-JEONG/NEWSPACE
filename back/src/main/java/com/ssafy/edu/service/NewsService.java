@@ -59,7 +59,7 @@ public class NewsService implements INewsService {
 	private WebDriver driver;
 	private WebElement webElement;
 	private List<WebElement> webElements;
-	
+
 	// Properties
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	public static final String WEB_DRIVER_PATH = "lib/selenium/chromedriver.exe"; // 윈도우 서버
@@ -297,35 +297,59 @@ public class NewsService implements INewsService {
 	public boolean checkLikeNews(NewsInsertHelp nih) {
 		return dao.checkLikeNews(nih);
 	}
-	
+
+	@Override
+	public boolean checkNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		return dao.checkNewsLog(nih);
+	}
+
+	@Override
+	public void updateNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		dao.updateNewsLog(nih);
+	}
+
+	@Override
+	public void insertNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		dao.insertNewsLog(nih);
+	}
+
+	@Override
+	public List<NewsDTO> getMyRecentNews(int member_id) {
+		// TODO Auto-generated method stub
+		return dao.getMyRecentNews(member_id);
+	}
+
 	@Override
 	public List<NewsStatusHelp> getNewsStatus() {
 		List<NewsStatusHelp> list = new ArrayList<NewsStatusHelp>();
-		
+
 		int c1 = dao.getNewsStatus("ALLALL");
 		list.add(new NewsStatusHelp("ALLALL", c1));
-		
+
 		int c2 = dao.getNewsStatus("SAMSUNGALL");
 		list.add(new NewsStatusHelp("SAMSUNGALL", c2));
-		
+
 		int c3 = dao.getNewsStatus("LGALL");
 		list.add(new NewsStatusHelp("LGALL", c3));
-		
+
 		int c4 = dao.getNewsStatus("SKALL");
 		list.add(new NewsStatusHelp("SKALL", c4));
-		
+
 		int c5 = dao.getNewsStatus("ALLTODAY");
 		list.add(new NewsStatusHelp("ALLTODAY", c5));
-		
+
 		int c6 = dao.getNewsStatus("SAMSUNGTODAY");
 		list.add(new NewsStatusHelp("SAMSUNGTODAY", c6));
-		
+
 		int c7 = dao.getNewsStatus("LGTODAY");
 		list.add(new NewsStatusHelp("LGTODAY", c7));
-		
+
 		int c8 = dao.getNewsStatus("SKTODAY");
 		list.add(new NewsStatusHelp("SKTODAY", c8));
-		
+
 		return list;
 	}
 
@@ -432,30 +456,29 @@ public class NewsService implements INewsService {
 
 		List<NewsDTO> alist = null;
 		alist = dao.getChartKeyword();
-		
+
 		List<NewsDTO> samsunglist = null;
 		samsunglist = dao.getChartKeyword("SAMSUNG");
-		
+
 		List<NewsDTO> lglist = null;
 		lglist = dao.getChartKeyword("LG");
-		
+
 		List<NewsDTO> sklist = null;
 		sklist = dao.getChartKeyword("SK");
-		
 
 		result.add(chartKeywordSet(alist));
 		result.add(chartKeywordSet(samsunglist));
 		result.add(chartKeywordSet(lglist));
 		result.add(chartKeywordSet(sklist));
-		
+
 		return result;
 
 	}
-	
-	public List<NewsKeywordCounter> chartKeywordSet(List<NewsDTO> list){
-		
+
+	public List<NewsKeywordCounter> chartKeywordSet(List<NewsDTO> list) {
+
 		List<NewsKeywordCounter> resultList = new ArrayList<>();
-		
+
 		if (list.isEmpty()) {
 			return null;
 		} else {
@@ -507,78 +530,79 @@ public class NewsService implements INewsService {
 		}
 		return resultList;
 	}
-	
+
 	@Override
 	public List<SearchChart> getSearchChartKeyword(String search) {
 		// TODO Auto-generated method stub
-		
+
 		List<SearchChart> result = new ArrayList<SearchChart>();
-		
+
 		List<List<NewsDTO>> list = new ArrayList<List<NewsDTO>>();
-		
+
 		String[] find = search.split(" ");
-		
-		for(int i=11; i>=0; i--) {
+
+		for (int i = 11; i >= 0; i--) {
 			List<NewsDTO> temp = dao.getSearchChartKeyword(new SearchChart("ALL", i, 0, find));
 			list.add(temp);
 		}
-		
+
 		int max = 0;
-		
+
 		int index = 11;
-		for(List<NewsDTO> l : list) {
-			
+		for (List<NewsDTO> l : list) {
+
 			int lmax = 0;
-			
-			for(NewsDTO n : l) {
-				
+
+			for (NewsDTO n : l) {
+
 				int[] count = new int[find.length];
 
 				for (int c = 0; c < count.length; c++) {
 					count[c] = StringUtils.countMatches(n.getKeyword(), find[c]);
 				}
-				
-				for(int c=0; c<count.length; c++) {
+
+				for (int c = 0; c < count.length; c++) {
 					lmax += count[c];
 				}
 			}
-			
-			if(max == 0) {
+
+			if (max == 0) {
 				max = lmax;
-			}else {
-				result.add(new SearchChart("ALL", index--, max-lmax, find, search));
+			} else {
+				result.add(new SearchChart("ALL", index--, max - lmax, find, search));
 			}
 		}
-		
+
 		result.add(new SearchChart("ALL", index, max, find, search));
-		
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
 		Calendar cal = Calendar.getInstance();
-		
-		for(SearchChart sc : result) {
+
+		for (SearchChart sc : result) {
 			cal = Calendar.getInstance();
 			cal.add(cal.MONTH, -sc.getDatecount());
 			sc.setDate(df.format(cal.getTime()));
 		}
-		
+
 		return result;
 	}
-	
+
 	private boolean samsungCrawling;
 	private boolean lgCrawling;
 	private boolean skCrawling;
 	private boolean keywordSet;
+	private boolean serverCheck;
 
 	@Override
 	public List<Boolean> getServerStatus() {
 		// TODO Auto-generated method stub
 		List<Boolean> list = new ArrayList<>();
-		
+
 		list.add(samsungCrawling);
 		list.add(lgCrawling);
 		list.add(skCrawling);
 		list.add(keywordSet);
-		
+
 		return list;
 	}
 
@@ -1115,7 +1139,7 @@ public class NewsService implements INewsService {
 	}
 
 	public void allKeywordSet() {
-		//어쩌다 전체 키워드 셋팅 시킬때 씀
+		// 어쩌다 전체 키워드 셋팅 시킬때 씀
 		List<NewsDTO> list = dao.getAllNews();
 
 		for (NewsDTO n : list) {
@@ -1187,7 +1211,7 @@ public class NewsService implements INewsService {
 
 			if (nk == null) {
 				dao.addNewsKeyword(new NewsKeyword(news_id, keyword));
-			}else {
+			} else {
 				dao.updateNewsKeyword(new NewsKeyword(news_id, keyword));
 			}
 
@@ -1198,6 +1222,7 @@ public class NewsService implements INewsService {
 //	@Scheduled(cron = "0 31 10 * * *")
 	@Scheduled(fixedDelay = 1800000)
 	public void Scheduler() throws IOException, ParseException {
+		serverCheck = true;
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
 		samsungCrawling = true;
 //		samsung_Crawling1();
@@ -1216,5 +1241,33 @@ public class NewsService implements INewsService {
 		keywordSet = true;
 //		allKeywordSet();
 		keywordSet = false;
+		serverCheck = false;
+	}
+	
+	public void adminServerOn() throws IOException, ParseException {
+		if(serverCheck) {
+			logger.info("Already Server. CRAWLING NOT EXCUTE" + new Date());
+		}else {
+			serverCheck = true;
+			logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
+			samsungCrawling = true;
+			samsung_Crawling1();
+			logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
+			samsung_Crawling2();
+			samsungCrawling = false;
+			logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
+			lgCrawling = true;
+			lg_Crawling();
+			lgCrawling = false;
+			logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
+			skCrawling = true;
+			sk_Crawling();
+			skCrawling = false;
+			logger.info("CRAWLING DONE." + "\t" + new Date());
+			keywordSet = true;
+			allKeywordSet();
+			keywordSet = false;
+			serverCheck = false;
+		}
 	}
 }
