@@ -6,24 +6,35 @@
         <h1>{{ news.title }}</h1>
       </div>
       <div class="tagfont d-flex justify-space-between align-end">
-          <span>
-            <span
-              v-for="key in keywords"
-              :key="key"
-              @click="onClickKeyword(key)"
-              style="cursor: pointer;"
-            >#{{ key }} </span>
-          </span>
+        <span>
+          <span
+            v-for="key in keywords"
+            :key="key"
+            @click="onClickKeyword(key)"
+            style="cursor: pointer;"
+          >#{{ key }} </span>
+        </span>
         <span v-if="is_like===true && $store.state.token" class="like" @click="like()">
             <v-icon size=40px color="yellow">
               mdi-star
             </v-icon>
         </span>
-        <span v-else class="like" @click="like()">
-            <v-icon size=40px color="yellow">
-              mdi-star-outline
-            </v-icon>
-        </span>
+        <v-menu v-else top offset-y left open-on-click>
+          <template v-slot:activator="{ on }">
+            <span class="like" @click="like()" v-on="on">
+              <v-icon size=40px color="yellow">
+                mdi-star-outline
+              </v-icon>
+            </span>
+          </template>
+          <v-card>
+            <v-container>
+              <p>기사 스크랩 기능은   로그인이 필요합니다.<br>로그인 페이지로 이동하시겠습니까?</p>
+              <v-btn dark color="blue lighten-2" @click="$router.push({path: '/login'})">이동</v-btn>
+              <v-btn text color="red lighten-2" absolute right >취소</v-btn>
+            </v-container>
+          </v-card>
+        </v-menu>
       </div>
       <hr />
       <br />
@@ -156,9 +167,6 @@ export default {
           .catch(e => {
             console.log(e);
           });
-      }
-      else{
-        alert("로그인을 해주세요")
       }
     },
   },
