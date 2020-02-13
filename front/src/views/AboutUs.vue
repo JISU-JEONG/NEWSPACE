@@ -157,9 +157,6 @@ export default {
         this.$router.push({ path: '/' })
       }
     },
-    moveToGithub() {
-      console.log(this.selectedMember)
-    }
   },
   mounted() {
     window.addEventListener('mousemove', this.onMouseMove)
@@ -230,7 +227,7 @@ export default {
     z-index:2;
     transform: rotate(2deg);
     border: 0.1px solid black;
-    animation: drop 2s 3s forwards;
+    animation: drop 2s 2s forwards;
   }
   @keyframes drop {
     0% {

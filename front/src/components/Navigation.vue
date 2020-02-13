@@ -185,7 +185,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .SAMSUNG {
   background-color: rgba(20, 40, 160, 0.1);
 }
