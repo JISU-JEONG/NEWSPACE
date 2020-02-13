@@ -95,17 +95,15 @@ export default {
   },
   watch:{
     member_name: function(){
-      console.log("member_name : " + this.member_name)
-      console.log("username : " + this.username)
       if(this.member_name === null || this.member_name === undefined){
-        if(!stompClient){
+        if(!stompClient && stompClient!==null){
           this.flag = false;
           stompClient.disconnect();
           this.receivemessage.push({from_me:true, content:"연결이 종료되었습니다.", sender:"system"});
           this.username = "익명의 사용자";
           this.disabled = true,
           this.label = '로그인이 필요합니다.'
-          console.log("disconnet");
+          // console.log("disconnet");
         }
       }
       else{
@@ -198,7 +196,6 @@ export default {
     if(this.username === null){
       this.username = "익명의 사용자";
     }
-    console.log("접속유저 : " + this.username);
   },
 	updated() {
     // 채팅창 스크롤 맨 아래로 내리기

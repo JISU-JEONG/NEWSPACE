@@ -29,6 +29,8 @@ export default {
     AppFooter,
     Chat
   },
+  mounted(){
+  }
 };
 </script>
 

@@ -10,9 +10,11 @@ import router from "./router";
 import store from "./store";
 import VModal from "vue-js-modal";
 import VueMinesweeper from "vue-minesweeper";
+import VueSession from 'vue-session'
 
 Vue.config.productionTip = false;
 
+Vue.use(VueSession)
 Vue.use(VueSimplemde);
 Vue.use(Vuetify);
 Vue.use(VModal, { dynamic: true });

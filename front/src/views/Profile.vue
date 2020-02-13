@@ -22,7 +22,7 @@
         <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
       </v-card-title>
       <v-card-text>
-        <span v-for="i in selectedKeywords" :key="i"> #{{i}} </span>
+        <span v-for="i in selectedKeywords" :key="i">#{{i}}</span>
       </v-card-text>
     </v-card>
 
@@ -257,6 +257,9 @@ export default {
     this.get_user();
   },
   mounted() {
+    // this.polling = setInterval( () =>{
+    //   console.log("dd");
+    // },1000)
   }
 };
 </script>
