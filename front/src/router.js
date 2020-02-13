@@ -87,12 +87,12 @@ const routes = [
     name: "AboutUs",
     component: AboutUs
   },
-  {
-    path: '*',
-    meta: {
-      goHome: true
-    }
-  }
+  // {
+  //   path: '*',
+  //   meta: {
+  //     goHome: true
+  //   }
+  // }
 ]
 
 const scrollBehavior = function (to, from, savedPosition) {
