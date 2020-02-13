@@ -338,11 +338,9 @@ public class MemberRestController {
 	
 	@PostMapping("/member/logout")
 	public void logout(@RequestBody Member member) {
-	
 		ServerLog sl = new ServerLog();
 		sl.setMember_id(memberservice.getMemberId(member.getEmail()));
 		sl.setLog_content("Logout Success Member : " + member.getEmail());
 		logService.insertLog(sl);
-	
 	}
 }
