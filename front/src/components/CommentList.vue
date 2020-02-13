@@ -42,7 +42,6 @@ export default {
           "login-token": storage.getItem("login-token")
         }
       };
-      console.log(storage.getItem("login-token"));
       axios
         .delete(
           `http://192.168.31.85:8080/api/comment/${comment.comment_id}`,

@@ -166,7 +166,16 @@ export default {
       }   
     },
     startGraph(){
-      http.get(`/getSearchChartKeyword/${this.$route.params.searchValue}`)
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+        var label;
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+        chart.paddingRight = 1;
+        chart.dateFormatter.dateFormat = "yyyy-MM";
+        var data = [];
+        http.get(`/getSearchChartKeyword/${this.$route.params.searchValue}`)
         .then((response) => {
                 am4core.disposeAllCharts();
                 // Themes begin

@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="$route.name !== 'Admin'">
+  <nav v-if="$route.name !== ('Admin' && 'AboutUs')">
     <chat />
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short>
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
@@ -101,7 +101,7 @@
 <script>
 import store from "../store";
 import http from "../services/http-common"
-import Info from "../services/getInfo";
+import info from "../services/getInfo";
 import router from '../router'
 import Chat from "../components/Chat"
 
@@ -151,6 +151,7 @@ export default {
       localStorage.removeItem("loginStatus");
       localStorage.removeItem("auth");
       localStorage.removeItem("member_news");
+      localStorage.setItem("loginStatus", false);
       this.auth = 0
       this.$store.dispatch("logout");
       if(this.$route.name === 'Profile')
@@ -160,24 +161,10 @@ export default {
     },
     moveToDetail(news_id) {
       router.push({ name: 'detail', params: { id: news_id }})
-    },
-    init() { // 이거 여기 왜 있나요 영길아?
-      if (
-        localStorage.getItem("loginStatus") != null &&
-        localStorage.getItem("login-token") != null
-      ) {
-        const payload = {
-          token: localStorage.getItem("login-token"),
-          member_id: localStorage.getItem("member_id"),
-          member_name: localStorage.getItem("loginStatus"),
-          auth : localStorage.getItem("auth")
-        };
-        this.$store.dispatch("login", payload);
-      }
     }
   },
   beforeMount() {
-    Info();
+    info();
   },
 };
 </script>
