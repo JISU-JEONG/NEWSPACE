@@ -300,7 +300,7 @@ export default {
 	height: 500px;
 	text-align: center;
 	padding: 30px 20px 0 20px;
-	box-shadow: 1px 2px 7px lightgray;
+	box-shadow: 1px 2px 4px grey; 
   	background-image: url("../components/images/sideback.jpg")
 }
 .under{
