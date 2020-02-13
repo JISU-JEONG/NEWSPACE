@@ -65,5 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getNormalMember" resultType="com.ssafy.edu.dto.Member">
 		select * from amt.member where auth = 0
 	</select>
+	
+	<select id="getMemberId" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select member_id from amt.member where email like #{email}
+	</select>
 
 </mapper>

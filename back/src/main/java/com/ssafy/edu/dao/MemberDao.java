@@ -62,4 +62,9 @@ public class MemberDao {
 		return SQL.selectList(ns+"getNormalMember");
 		
 	}
+
+	public int getMemberId(String email) {
+		// TODO Auto-generated method stub
+		return SQL.selectOne(ns+"getMemberId", email);
+	}
 }

@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
 import com.ssafy.edu.dto.NewsDTO;
+import com.ssafy.edu.dto.ServerLog;
 import com.ssafy.edu.help.MemberNewsHelp;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.NewsLogHelp;
 import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
 import com.ssafy.edu.help.UserKeywordNews;
 import com.ssafy.edu.help.getNewsHelp;
+import com.ssafy.edu.service.ILogService;
 import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
@@ -45,6 +48,9 @@ public class NewsController {
 
 	@Autowired
 	INewsService newsService;
+	
+	@Autowired
+	ILogService logService;
 
 	@Autowired
 	private JwtService jwtService;
@@ -143,6 +149,14 @@ public class NewsController {
 				news.setIs_like(true);
 			}else {
 				news.setIs_like(false);
+			}
+			
+			boolean checkNewsLog = newsService.checkNewsLog(nih);
+			
+			if(checkNewsLog) {
+				newsService.updateNewsLog(nih);
+			}else {
+				newsService.insertNewsLog(nih);
 			}
 			
 			if (news.getNews() == null) {
@@ -275,10 +289,18 @@ public class NewsController {
 			if(checkMyList) {
 				logger.error("NewsRestController Excute ! DELETE NEWS : " + news.getNews_id() + " " + member_id);
 				newsService.deleteLikeNews(nih);
+				ServerLog sl = new ServerLog();
+				sl.setMember_id(member_id);
+				sl.setLog_content("News DisLike it " + news.getNews_id() + " from " + member_id);
+				logService.insertLog(sl);
 				return false;
 			}else {
 				logger.info("NewsRestController Excute ! INSERT NEWS : " + news.getNews_id() + " " + member_id);
 				newsService.addLikeNews(nih);
+				ServerLog sl = new ServerLog();
+				sl.setMember_id(member_id);
+				sl.setLog_content("News Like it " + news.getNews_id() + " from " + member_id);
+				logService.insertLog(sl);
 				return true;
 			}
 			

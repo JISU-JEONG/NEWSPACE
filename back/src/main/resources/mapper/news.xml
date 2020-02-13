@@ -16,7 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="addNews" parameterType="com.ssafy.edu.dto.NewsDTO">
 		insert into news(title, date,
-		body, brand, category, keyword, url, bodytext, thumb) values (#{title},
+		body, brand, category, keyword, url, bodytext, thumb) values
+		(#{title},
 		#{date},
 		#{body}, #{brand}, #{category}, #{keyword}, #{url},
 		#{bodytext}, #{thumb})
@@ -244,43 +245,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="getMeberNews" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.dto.NewsDTO">
-		select * from news where news_id in (select news_id from amt.member_news
+		select * from news where news_id in (select news_id from
+		amt.member_news
 		where member_id = #{member_id}) order by date desc
 	</select>
-	
-	<insert id="addLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp">
-		insert into amt.member_news values(#{news_id}, #{member_id})
+
+	<insert id="addLikeNews"
+		parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		insert into amt.member_news values(#{news_id},
+		#{member_id})
 	</insert>
-	
-	<delete id="deleteLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp">
-		delete from amt.member_news where news_id = #{news_id} and member_id = #{member_id}
+
+	<delete id="deleteLikeNews"
+		parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		delete from amt.member_news where news_id = #{news_id}
+		and member_id = #{member_id}
 	</delete>
-	
-	<select id="checkLikeNews" parameterType="com.ssafy.edu.help.NewsInsertHelp"
-	resultType="com.ssafy.edu.help.NewsInsertHelp">
-		select * from amt.member_news where news_id = #{news_id} and member_id = #{member_id}
+
+	<select id="checkLikeNews"
+		parameterType="com.ssafy.edu.help.NewsInsertHelp"
+		resultType="com.ssafy.edu.help.NewsInsertHelp">
+		select * from amt.member_news where news_id = #{news_id}
+		and member_id = #{member_id}
 	</select>
-	
-	<select id="getChartKeyword" resultType="com.ssafy.edu.dto.NewsDTO">
-		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+
+	<select id="getChartKeyword"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND,
+		n.CATEGORY,
 		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
-		FROM news n JOIN newskeyword k
-		WHERE n.NEWS_ID = k.NEWS_ID AND n.DATE >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY n.DATE DESC
+		FROM news n JOIN
+		newskeyword k
+		WHERE n.NEWS_ID = k.NEWS_ID AND n.DATE >= DATE_SUB(NOW(),
+		INTERVAL 31 DAY) ORDER BY n.DATE DESC
 	</select>
-	
-	<select id="getChartKeywordBrand" resultType="com.ssafy.edu.dto.NewsDTO" parameterType="java.lang.String">
-		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND, n.CATEGORY,
+
+	<select id="getChartKeywordBrand"
+		resultType="com.ssafy.edu.dto.NewsDTO"
+		parameterType="java.lang.String">
+		SELECT n.NEWS_ID, n.TITLE, n.DATE, n.BODY, n.BRAND,
+		n.CATEGORY,
 		k.KEYWORD, n.URL, n.BODYTEXT, n.THUMB
-		FROM news n JOIN newskeyword k
-		WHERE n.NEWS_ID = k.NEWS_ID AND n.DATE >= DATE_SUB(NOW(), INTERVAL 31 DAY) 
+		FROM news n JOIN
+		newskeyword k
+		WHERE n.NEWS_ID = k.NEWS_ID AND n.DATE >= DATE_SUB(NOW(),
+		INTERVAL 31 DAY)
 		AND n.brand like #{string} ORDER BY n.DATE DESC
 	</select>
-	
-	<select id="getSearchChartKeyword" resultType="com.ssafy.edu.dto.NewsDTO" parameterType="com.ssafy.edu.help.SearchChart">
+
+	<select id="getSearchChartKeyword"
+		resultType="com.ssafy.edu.dto.NewsDTO"
+		parameterType="com.ssafy.edu.help.SearchChart">
 		select NEWS_ID, TITLE, DATE, BODY, BRAND, CATEGORY,
-		KEYWORD, URL, BODYTEXT, THUMB
+		KEYWORD, URL,
+		BODYTEXT, THUMB
 		from news
-		where 
+		where
 		<choose>
 			<when test="search.length != 0">
 				(
@@ -291,39 +311,78 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				)
 			</when>
 		</choose>
-		AND date_format(date, '%Y-%m-%d') between DATE_FORMAT(CONCAT(DATE_FORMAT( date_add(now(), INTERVAL - #{datecount} month) ,'%Y-%m'),'-1'),'%Y-%m-%d') and last_day(now())
+		AND date_format(date, '%Y-%m-%d') between
+		DATE_FORMAT(CONCAT(DATE_FORMAT( date_add(now(), INTERVAL -
+		#{datecount} month) ,'%Y-%m'),'-1'),'%Y-%m-%d') and last_day(now())
 	</select>
-	
+
 	<select id="getNewsStatusAA" resultType="java.lang.Integer">
-		select count(*) from news
+		select count(*) from
+		news
 	</select>
-	
+
 	<select id="getNewsStatusAT" resultType="java.lang.Integer">
-		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY)
+		select count(*) from
+		news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY)
 	</select>
-	
+
 	<select id="getNewsStatusSA" resultType="java.lang.Integer">
-		select count(*) from news where brand like "SAMSUNG"
+		select count(*) from
+		news where brand like "SAMSUNG"
 	</select>
-	
+
 	<select id="getNewsStatusST" resultType="java.lang.Integer">
-		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "SAMSUNG"
+		select count(*) from
+		news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like
+		"SAMSUNG"
 	</select>
-	
+
 	<select id="getNewsStatusLA" resultType="java.lang.Integer">
-		select count(*) from news where brand like "LG"
+		select count(*) from
+		news where brand like "LG"
 	</select>
-	
+
 	<select id="getNewsStatusLT" resultType="java.lang.Integer">
-		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "LG"
+		select count(*) from
+		news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "LG"
 	</select>
-	
+
 	<select id="getNewsStatusSKA" resultType="java.lang.Integer">
-		select count(*) from news where brand like "SK"
+		select count(*) from
+		news where brand like "SK"
 	</select>
-	
+
 	<select id="getNewsStatusSKT" resultType="java.lang.Integer">
-		select count(*) from news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "SK"
+		select count(*) from
+		news where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) and brand like "SK"
+	</select>
+
+	<select id="checkNewsLog"
+		resultType="com.ssafy.edu.help.NewsLogHelp"
+		parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		select * from amt.news_log where news_id = #{news_id}
+		and member_id = #{member_id}
+	</select>
+
+	<update id="updateNewsLog"
+		parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		update amt.news_log set news_log_date =
+		CURRENT_TIMESTAMP where news_id = #{news_id} and member_id =
+		#{member_id}
+	</update>
+
+	<insert id="insertNewsLog"
+		parameterType="com.ssafy.edu.help.NewsInsertHelp">
+		insert into amt.news_log(member_id, news_id)
+		values(#{member_id}, #{news_id})
+	</insert>
+
+	<select id="getMyRecentNews" parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.dto.NewsDTO">
+		select n.news_id, n.title, n.date, n.body, n.brand,
+		n.category, n.keyword, n.url, n.bodytext, n.thumb from amt.news n join
+		amt.news_log nl where n.news_id = nl.news_id and nl.member_id =
+		#{member_id} order by nl.news_log_date desc limit 8
 	</select>
 
 </mapper>

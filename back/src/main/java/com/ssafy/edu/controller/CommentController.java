@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.CommentDTO;
+import com.ssafy.edu.dto.ServerLog;
 import com.ssafy.edu.service.ICommentService;
+import com.ssafy.edu.service.ILogService;
 import com.ssafy.edu.service.JwtService;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
@@ -32,6 +34,9 @@ public class CommentController {
 
 	@Autowired
 	ICommentService commentService;
+	
+	@Autowired
+	ILogService logService;
 
 	@Autowired
 	private JwtService jwtService;
@@ -66,6 +71,10 @@ public class CommentController {
         
         if(comment.getMember_id() != 0) {
         	commentService.addComment(comment);
+        	ServerLog sl = new ServerLog();
+			sl.setMember_id(member_id);
+			sl.setLog_content("Comment Added Content : " + comment.getComment_text() + " from " + member_id + " news : " + comment.getNews_id());
+			logService.insertLog(sl);
         }else {
         	logger.error("CommentControler Error ! member_id load faild"); 	
         }
@@ -89,6 +98,10 @@ public class CommentController {
 		}else {
 			logger.info("CommentController Delete ! comment_id : " + comment.getComment_id() + "\t" + new Date());
 			commentService.deleteComment(comment.getComment_id());
+			ServerLog sl = new ServerLog();
+			sl.setMember_id(member_id);
+			sl.setLog_content("Comment Delete Content : " + comment.getComment_text() + " from " + member_id + " news : " + comment.getNews_id());
+			logService.insertLog(sl);
 		}
 	}
 }

@@ -20,7 +20,6 @@
                   color="blue lighten-2"
                   type="submit"
                   class="white--text mt-3"
-                  v-on:click="login"
                 >로그인</v-btn>
               </v-container>
             </v-form>
@@ -53,6 +52,8 @@ import firebaseservice from "../services/FirebaseService";
 import http from "../services/http-common";
 import axios from "axios";
 import info from "../services/getInfo";
+
+
 export default {
   name: "login",
   computed: {
@@ -87,7 +88,7 @@ export default {
         // axios
         //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.84:8080/member/signin", {
+          .post("http://192.168.31.85:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -132,7 +133,6 @@ export default {
             .auth()
             .signInWithPopup(provider)
             .then(res => {
-              console.log(res.email);
               parentFunc.username = res.user.displayName;
               parentFunc.socialemail = res.user.uid;
               parentFunc.type = "facebook";
@@ -157,7 +157,6 @@ export default {
             .auth()
             .signInWithPopup(provider)
             .then(res => {
-              console.log(res.user);
               parentFunc.username = res.user.displayName;
               parentFunc.socialemail = res.user.email;
               parentFunc.type = "google";
@@ -181,7 +180,7 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/signupcheck", {
           axios
-            .post("http://192.168.31.84:8080/member/signupcheck", {
+            .post("http://192.168.31.85:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -202,7 +201,7 @@ export default {
             // axios
             //   .post("http://52.79.249.4:8080/member/socialtoken", {
             axios
-              .post("http://192.168.31.84:8080/member/socialtoken", {
+              .post("http://192.168.31.85:8080/member/socialtoken", {
                 email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type
@@ -221,7 +220,6 @@ export default {
             //처음 로그인시 키워드 선택
             this.$router.push("/SocialSignup", () => {});
           } else {
-            console.log("keyword : " + localStorage.getItem("member_keyword"));
             const payload = {
               token: localStorage.getItem("login-token"),
               member_id: "",

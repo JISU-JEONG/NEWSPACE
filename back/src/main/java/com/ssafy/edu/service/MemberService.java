@@ -59,4 +59,9 @@ public class MemberService {
 		return dao.getNormalMember();
 	}
 
+	public int getMemberId(String email) {
+		// TODO Auto-generated method stub
+		return dao.getMemberId(email);
+	}
+
 }

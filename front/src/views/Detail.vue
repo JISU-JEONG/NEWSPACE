@@ -84,7 +84,7 @@ export default {
           comment_text: text
         };
         axios
-          .post("http://192.168.31.85:8080/api/comment", data, {
+          .post("http://192.168.31.84:8080/api/comment", data, {
             headers: {
               "login-token": storage.getItem("login-token")
             }
@@ -111,9 +111,9 @@ export default {
         .then(response => {
           this.news = response.data.news;
           this.keywords = this.news.keyword.split(" ");
-          if(this.searchWord !== ' ' && this.searchWord !== '')
-            this.news.body =this.news.body.split(`${this.searchWord}`).join('<strong><strong>'+`${this.searchWord}`+'</strong></strong>')
-          this.is_like = response.data.is_like
+          // if(this.searchWord !== ' ' && this.searchWord !== '')
+          //   this.news.body =this.news.body.split(`${this.searchWord}`).join('<strong><strong>'+`${this.searchWord}`+'</strong></strong>')
+          // this.is_like = response.data.is_like
         })
         .catch(error => {
           console.log(error);
@@ -189,11 +189,11 @@ export default {
 
 <style scoped>
 .newsbody {
-  border: solid 2px black;
+  box-shadow: 1px 3px 7px grey;
   padding: 3vw 3vw 5vw;
   margin: 50px auto;
   background-color: #fff;
-  border-radius: 50px;
+  border-radius: 10px;
 }
 .tagfont {
   width: 100%;
