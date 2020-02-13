@@ -33,9 +33,12 @@
 					<strong>삼성, LG, SK의 기업 최신 뉴스</strong> 업데이트를 속도를 따라 신속하게
 				</div>
 				<div class="sidebody">
-					검색 기능, <strong>텍스트 마이닝</strong>을 통한 뉴스의 중요 키워드,
-					<strong>관심 기업</strong>의 동향을 빠르게 파악할 수 있는 새로운 뉴스 사이트
+          검색 기능, <strong>텍스트 마이닝</strong>을 통한 뉴스의 중요 키워드,
+          <strong>관심 기업</strong>의 동향을 빠르게 파악할 수 있는 새로운 뉴스 사이트
 				</div>
+        <div class="side-btn" @click="$router.push({ path: '/AboutUs' })">ABOUT US</div>
+        <div class="side-btn" >주요 대상</div>
+        <div class="side-btn" >NEWSPACE 사용방법</div>
 			</div>
 		</v-col>
 	  </v-row>
@@ -300,8 +303,8 @@ export default {
 	height: 500px;
 	text-align: center;
 	padding: 30px 20px 0 20px;
-	box-shadow: 1px 2px 4px grey; 
-  	background-image: url("../components/images/sideback.jpg")
+	box-shadow: 1px 2px 7px lightgray;
+  background-image: url("../components/images/sideback.jpg")
 }
 .under{
 	width: 100%;
@@ -333,5 +336,19 @@ export default {
 .under strong{
 	font-size: 25px;
 	color: #FF5500;
+}
+.side-btn {
+  width: 100%;
+  height: 7%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(11,43,73,.3);
+  border: 1px solid rgba(11,43,73,.6);
+  font-size: 14px;
+  font-weight: 300;
+  color: white;
+  cursor: pointer;
 }
 </style>
