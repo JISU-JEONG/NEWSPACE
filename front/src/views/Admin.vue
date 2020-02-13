@@ -5,20 +5,37 @@
     </div>
     <div>
       <div class="adminbody">
+        <div class="bodyfont">Server 상태</div>
+        <v-card>
+          <table>
+            <tr>SAMSUNG CRAWLING STATUS
+              <td>
+                {{status[0]}}
+              </td>
+            </tr>
+            <tr>LG CRAWLING STATUS
+              <td>
+                {{status[1]}}
+              </td>
+            </tr>
+            <tr>SK CRAWLING STATUS
+              <td>
+                {{status[2]}}
+              </td>
+            </tr>
+            <tr>NEWS KEYWORD SETTING STATUS
+              <td>
+                {{status[3]}}
+              </td>
+            </tr>
+          </table>
+        </v-card>
+        <br>
         <div class="bodyfont">User 관리</div>
         <v-card>
-          여기에는 유저관리 목록
-        </v-card>
-        <div class="bodyfont">comment 관리</div>
-        <v-card>
-          여기에는 코멘트 목록
-        </v-card>
-      </div>
-      <div class="subbody">
-        czxvzx
-        asdasddas
-        <v-card>
-          나는 뭐쓸래?
+          <div class="box" v-for="i in users.length" :key="i">
+            <div>{{users[i-1].name}} {{users[i-1].email}}</div>
+          </div>
         </v-card>
       </div>
     </div>
@@ -29,7 +46,14 @@
 <script>
 import router from '../router'
 import axios from 'axios'
+
 export default {
+  data() {
+    return {
+      status: [],
+      users: [],
+    };
+  },
   name :'admin',
   methods: {
     getout(){
@@ -38,10 +62,9 @@ export default {
         alert("잘못된 접근입니다. 꺼져 주세요.")
         router.push('/')
       }
-  },
-  mounted(){
-    this.getout()
-    axios
+    },
+    read(){
+      axios
         .post("http://192.168.31.85:8080/member/adminManage/", {},
         {
           headers: {
@@ -49,15 +72,21 @@ export default {
           }
         })
         .then(response => {
-            console.log(response)
+            this.users = response.data.memberList;
+            this.status = response.data.checkCrawling;
+            console.log(this.users);
+            console.log(this.status);
         })
         .catch((error) => {
           console.log(error)
         })
     },
-    read(){
-      
-    }
+  },
+
+  mounted(){
+    alert("mount test");
+    this.getout();
+    this.read();
   }
 
 }
@@ -89,4 +118,5 @@ export default {
 .bodyfont{
   width: 70%;
 }
+
 </style>
