@@ -1,5 +1,7 @@
 package com.ssafy.edu.service;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import com.ssafy.edu.dto.NewsDTO;
@@ -39,4 +41,5 @@ public interface INewsService {
 	void updateNewsLog(NewsInsertHelp nih);
 	void insertNewsLog(NewsInsertHelp nih);
 	List<NewsDTO> getMyRecentNews(int member_id);
+	void adminServerOn() throws IOException, ParseException;
 }

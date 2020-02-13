@@ -1,6 +1,7 @@
 package com.ssafy.edu.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,20 +23,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.dto.Member;
+import com.ssafy.edu.dto.ServerLog;
 import com.ssafy.edu.help.AdminManageHelp;
 import com.ssafy.edu.help.MemberNewsHelp;
 import com.ssafy.edu.help.TempKey;
 import com.ssafy.edu.service.EmailService;
 import com.ssafy.edu.service.ICommentService;
+import com.ssafy.edu.service.ILogService;
 import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
+import com.sun.management.OperatingSystemMXBean;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
@@ -44,7 +47,7 @@ public class MemberRestController {
 
 	@Value("${jwt.salt}")
 	private String salt;
-	
+
 	@Value("${AWS.IP")
 	private String aws_ip;
 
@@ -59,6 +62,9 @@ public class MemberRestController {
 
 	@Autowired
 	ICommentService commentService;
+	
+	@Autowired
+	ILogService logService;
 
 	@Autowired
 	private EmailService emailService;
@@ -92,6 +98,11 @@ public class MemberRestController {
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
+		ServerLog sl = new ServerLog();
+		sl.setMember_id(memberservice.getMemberId(member.getEmail()));
+		sl.setLog_content("Login Success Member : " + member.getEmail());
+		logService.insertLog(sl);
+		
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
@@ -115,7 +126,7 @@ public class MemberRestController {
 
 	// 아이디 중복체크
 	public String search(String email) {
-		
+
 		if (memberservice.getEmail(email) == null) {
 			return "Notexist";
 		} else {
@@ -164,7 +175,7 @@ public class MemberRestController {
 		Map<String, Object> resultMap = new HashMap<>();
 		Member loginUser = new Member();
 		System.out.println(member);
-		if(memberservice.getEmail(member.getEmail()) != null) {
+		if (memberservice.getEmail(member.getEmail()) != null) {
 			loginUser = memberservice.getEmail(member.getEmail());
 			member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
 			member.setCertifiedkey(memberservice.getEmail(member.getEmail()).getCertifiedkey());
@@ -174,7 +185,7 @@ public class MemberRestController {
 		res.setHeader("login-token", token);
 		resultMap.put("member_name", loginUser.getName());
 		resultMap.put("member_keyword", loginUser.getKeyword());
-		
+
 		resultMap.put("status", true);
 		System.out.println(resultMap);
 		HttpStatus status = HttpStatus.ACCEPTED;
@@ -191,7 +202,7 @@ public class MemberRestController {
 		result.setList(newsService.getMeberNews(member.getMember_id()));
 		result.setCount(commentService.getCount(member.getMember_id()));
 		result.setRecentlist(newsService.getMyRecentNews(member.getMember_id()));
-		
+
 		if (result.getList().size() < 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
@@ -203,20 +214,20 @@ public class MemberRestController {
 		log.info("MemberRestController Excute ! profileupdate : " + member);
 		Map<String, Object> resultMap = new HashMap<>();
 
-		String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",","");
+		String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",", "");
 		try {
 			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
 		} catch (RuntimeException e) {
 			log.error("정보조회 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
 		}
-		
-		member.setMember_id((int)resultMap.get("member_id"));
+
+		member.setMember_id((int) resultMap.get("member_id"));
 		member.setKeyword(keyword);
 		memberservice.updatemember(member);
-		
-		Member m = memberservice.getMember((int)resultMap.get("member_id"));
-		if(m == null) {
+
+		Member m = memberservice.getMember((int) resultMap.get("member_id"));
+		if (m == null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<Member>(m, HttpStatus.OK);
@@ -232,7 +243,6 @@ public class MemberRestController {
 			resultMap.put("message", e.getMessage());
 		}
 
-//		System.out.println(resultMap);
 		StringBuffer emailcontent = new StringBuffer();
 		emailcontent.append("<!DOCTYPE html>");
 		emailcontent.append("<html>");
@@ -241,25 +251,23 @@ public class MemberRestController {
 		emailcontent.append("<body>");
 		emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
 		emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
-		emailcontent.append("<a href='http://192.168.31.84:8080" +"/member/");
+		emailcontent.append("<a href='http://192.168.31.84:8080" + "/member/");
 		emailcontent.append(resultMap.get("member_certifiedkey"));
 		emailcontent.append("/" + resultMap.get("member_email"));
 		emailcontent.append("'>이메일 인증 확인</a>");
 		emailcontent.append("</body>");
 		emailcontent.append("</html>");
-		emailService.sendMail((String)resultMap.get("member_email"), "[New Space 이메일 인증]", emailcontent.toString());
+		emailService.sendMail((String) resultMap.get("member_email"), "[New Space 이메일 인증]", emailcontent.toString());
 
 		return "emailsent";
 	}
-	
+
 	@PostMapping("/member/adminManage")
-	public ResponseEntity<AdminManageHelp> adminManage(HttpServletRequest req) {
-		log.info("Administrator Page Access ! " + req.getLocalAddr()+":" + req.getLocalPort() + "\t" + new Date() );
+	public ResponseEntity<List<Member>> adminManage(HttpServletRequest req) {
+		log.info("Administrator Page Access ! " + req.getLocalAddr() + ":" + req.getLocalPort() + "\t" + new Date());
 
 		List<Member> list = null;
-		List<Boolean> checkCrawling = null;
-		AdminManageHelp amh = new AdminManageHelp();
-		
+
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
@@ -268,18 +276,73 @@ public class MemberRestController {
 			resultMap.put("message", e.getMessage());
 		}
 		int auth = (int) resultMap.get("auth");
+		if (auth != 1) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		} else {
+			list = memberservice.getNormalMember();
+
+			return new ResponseEntity<List<Member>>(list, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping("/member/adminStatus")
+	public ResponseEntity<AdminManageHelp> adminStatus(HttpServletRequest req) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		AdminManageHelp amh = new AdminManageHelp();
+		
+		try {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		} catch (RuntimeException e) {
+			log.error("정보조회 실패", e.getMessage());
+			resultMap.put("message", e.getMessage());
+		}
+		int auth = (int) resultMap.get("auth");
 		if(auth != 1) {
-			System.out.println("check error");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}else {
-			System.out.println("check");
-			list = memberservice.getNormalMember();
-			checkCrawling =  newsService.getServerStatus();
 			
-			amh.setMemberList(list);
-			amh.setCheckCrawling(checkCrawling);
+			List<Boolean> serverCheck = newsService.getServerStatus();
+			List<ServerLog> log = null;
 			
+			//SERVER STATUS
+			amh.setServerSamsung(serverCheck.get(0));
+			amh.setServerLg(serverCheck.get(1));
+			amh.setServerSk(serverCheck.get(2));
+			
+			//CPU STATUS
+			OperatingSystemMXBean osBean = (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+		    double load = 0 ;
+
+		    while(true){
+		      load = osBean.getSystemCpuLoad();
+		      try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+		      if( load*100.0 > 0.0) break;
+		    }
+		    
+		    amh.setCpuusage(Math.round(load*100.0));
+		    amh.setCpuidle((100 - Math.round(load*100.0)));
+		    
+		    //MEMORY STATUS
+		    amh.setTotalmemory(Math.round( osBean.getTotalPhysicalMemorySize() / (1024*1024)));
+		    amh.setFreememory(Math.round( osBean.getFreePhysicalMemorySize() / (1024*1024)));
+		    
+		    log = logService.getRecentLog();
+		    
+		    amh.setLog(log);
+		    
 			return new ResponseEntity<AdminManageHelp>(amh, HttpStatus.OK);
 		}
+	}
+	
+	@PostMapping("/member/logout")
+	public void logout(@RequestBody Member member) {
+	
+		ServerLog sl = new ServerLog();
+		sl.setMember_id(memberservice.getMemberId(member.getEmail()));
+		sl.setLog_content("Logout Success Member : " + member.getEmail());
+		logService.insertLog(sl);
+	
 	}
 }
