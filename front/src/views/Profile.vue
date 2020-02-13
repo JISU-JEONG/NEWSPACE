@@ -1,13 +1,12 @@
 <template>
-  <v-container>
-    <div class="header_box">
+<div>
+  <div class="header_box">
       <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
       <div class="header_email">{{user.member.email}}</div>
       <div class="header_email">
         <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
         <span v-else>이메일 인증 완료</span>
       </div>
-    </div>
     <div class="comment_font">
       <div>
         <h1>{{user.count}}</h1>
@@ -16,7 +15,116 @@
         <p>comments</p>
       </div>
     </div>
-    <v-card>
+  </div>
+  <v-container class="px-1" style="min-height:850px">
+      <v-tabs
+      vertical
+      >
+        <v-tab>
+          관심 뉴스
+        </v-tab>
+        <v-tab>
+          최근 본 뉴스
+        </v-tab>
+        <v-tab>
+          관심 키워드
+        </v-tab>
+  
+        <v-tab-item class="px-2">
+          <v-container fluid v-if="like_list.length !== 0">
+            <div style="min-height:800px">
+
+            <div class="likeheader">
+              <strong>{{user.member.name}}'s NEWS ROOM</strong>
+              <hr>
+            </div>
+            <v-row>
+              <v-col
+                v-for="i in like_list[page-1].length"
+                :key="i"
+                @click="goDetail(like_list[page-1][i-1].news_id)"
+                xs=12
+                sm=5
+                md=4
+                lg=3>
+                <v-card
+                  height=350px
+                >
+                  <v-img
+                    :src="user.list[i-1].thumb"
+                    height=150px
+                  ></v-img>
+
+                  <v-card-title>
+                  <h4  v-line-clamp="2">
+                    {{user.list[i-1].title}}
+                  </h4>
+                  </v-card-title>
+
+                  <v-card-subtitle>
+                  <p  v-line-clamp="5">
+                    {{user.list[i-1].bodytext}}
+                  </p>
+                  </v-card-subtitle>
+                </v-card>
+              </v-col>
+            </v-row>
+            </div>
+            <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length=pagetotal
+              circle
+              total-visible="6"
+            >
+            </v-pagination>
+          </div>
+          </v-container>
+          <v-container v-else
+          >
+            관심 뉴스를 등록해 보세요~
+          </v-container>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <p>
+                Morbi nec metus. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a orci. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Nunc sed turpis.
+              </p>
+  
+              <p>
+                Suspendisse feugiat. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In hac habitasse platea dictumst. Fusce ac felis sit amet ligula pharetra condimentum.
+              </p>
+  
+              <p>
+                Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Nam commodo suscipit quam. In consectetuer turpis ut velit. Sed cursus turpis vitae tortor. Aliquam eu nunc.
+              </p>
+  
+              <p>
+                Etiam ut purus mattis mauris sodales aliquam. Ut varius tincidunt libero. Aenean viverra rhoncus pede. Duis leo. Fusce fermentum odio nec arcu.
+              </p>
+  
+              <p class="mb-0">
+                Donec venenatis vulputate lorem. Aenean viverra rhoncus pede. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. Fusce commodo aliquam arcu. Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi.
+              </p>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <p>
+                Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.
+              </p>
+  
+              <p class="mb-0">
+                Cras sagittis. Phasellus nec sem in justo pellentesque facilisis. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nam at tortor in tellus interdum sagittis.
+              </p>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    <!-- <v-card>
       <v-card-title>
         "{{user.member.name}}"님이 선택한 키워드
         <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
@@ -76,8 +184,8 @@
             :error="error"
             :error-messages="errorMessages"
             @input="inputKeyword"
-          />
-        </v-container>
+          /> -->
+        <!-- </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
 
@@ -86,8 +194,9 @@
           <v-btn color="green darken-1" text @click.stop="cancleClick()">Cancle</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
   </v-container>
+</div>
 </template>
 <script>
 import http from "../services/http-common.js";
@@ -109,7 +218,10 @@ export default {
       unselectedKeywords: [],
       error: false,
       errorMessages: "",
-      isemailcheck: localStorage.getItem("certifiedkey")
+      isemailcheck: localStorage.getItem("certifiedkey"),
+      page: 1,
+      like_list : [],
+      pagetotal : 0,
     };
   },
   methods: {
@@ -132,6 +244,23 @@ export default {
           this.selectedKeywords = this.user.member.keyword.split(" ");
           this.isemailcheck = localStorage.getItem("certifiedkey");
           this.keywordSetting();
+          let newslist = []
+          if( this.user.list !==[]){
+            for(let i=0;i<this.user.list.length;i++)
+            {
+              newslist.push(this.user.list[i])
+              if (newslist.length===8)
+              {
+                this.like_list.push(newslist)
+                newslist = []
+              }
+            }
+            if (newslist.length!==0)
+            {
+              this.like_list.push(newslist)
+            }
+            this.pagetotal = this.like_list.length
+          }
         })
         .catch(error => {
           console.log(error);
@@ -146,7 +275,6 @@ export default {
       http
         .get("/sendmail/", token)
         .then(response => {
-          console.log(response.data);
         })
         .catch(error => {
           console.log(error);
@@ -177,7 +305,6 @@ export default {
             this.selectedKeywords.push(value);
           } else {
             errorKeyword = errorKeyword.concat(` ${value}`);
-            console.log(errorKeyword);
           }
         });
         errorKeyword = errorKeyword.trim();
@@ -257,16 +384,22 @@ export default {
     this.get_user();
   },
   mounted() {
-  }
+    this.get_user();
+  },
 };
 </script>
 <style scoped>
 .header_box {
-  margin: 50px 0px;
+  width: 100%;
+  height: 360px;
+  background-color : rgba(130, 215, 255, 0.863);
+  padding-top:100px;
+  margin-bottom: 30px;
 }
 .header_name {
   font-size: 30px;
   text-align: center;
+  color : white;
 }
 .header_email {
   font-size: 20px;
@@ -292,6 +425,10 @@ export default {
   font-size: 14px;
   color: black;
   margin-left: 7px;
+}
+.likeheader{
+  font-size : 20px;
+  margin-bottom: 20px;
 }
 ul {
   margin: 0;

@@ -102,4 +102,5 @@ export default {
 .bodyfont {
   width: 70%;
 }
+
 </style>
