@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeyword;
+import com.ssafy.edu.help.NewsLogHelp;
 import com.ssafy.edu.help.NewsSearch;
 import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
@@ -195,5 +196,34 @@ public class NewsServiceDao {
 		}else {
 			return 0;
 		}
+	}
+
+	public boolean checkNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		
+		NewsLogHelp nlh = null;
+		
+		nlh = SQL.selectOne(ns + "checkNewsLog", nih);
+		
+		if(nlh == null) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+
+	public void updateNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		SQL.update(ns + "updateNewsLog", nih);
+	}
+
+	public void insertNewsLog(NewsInsertHelp nih) {
+		// TODO Auto-generated method stub
+		SQL.insert(ns + "insertNewsLog", nih);
+	}
+
+	public List<NewsDTO> getMyRecentNews(int member_id) {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns + "getMyRecentNews", member_id);
 	}
 }

@@ -31,5 +31,20 @@ public class WebSocketController {
         websocket.usercont();
         return chatMessage;
     }
+    
+    @MessageMapping("/chat.sendMessage/test")
+    @SendTo("/topic/publicChatRoom/test")
+    public ChatMessage sendMessagetest(@Payload ChatMessage chatMessage) {
+    	System.out.println("test : " + chatMessage);
+        return chatMessage;
+    }
+ 
+    @MessageMapping("/chat.addUser/test")
+    @SendTo("/topic/publicChatRoom/test")
+    public ChatMessage addUsertest(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+    	System.out.println("test : " + chatMessage);
+        websocket.usercont();
+        return chatMessage;
+    }
  
 }

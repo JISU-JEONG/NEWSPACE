@@ -56,8 +56,6 @@ export default new Vuex.Store({
       context.commit("setError");
     },
     setMemberNews(context) {
-      console.log('멤버 뉴스가 채워지기 시작했습니다.')
-      console.log('마운트시 멤버 키워드',context.state.member_keyword)
       context.state.member_news = []
       const settingArray = []
         if (context.state.member_keyword) {

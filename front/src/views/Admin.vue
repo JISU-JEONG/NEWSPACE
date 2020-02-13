@@ -1,121 +1,105 @@
 <template>
-  <div v-if="$store.state.auth==='1'">
+  <div>
     <div class="admin_header">
       <h1 class="admin_font">NEWSPACE ADMIN PAGE</h1>
     </div>
     <div>
       <div class="adminbody">
-        <div class="bodyfont">Server 상태</div>
-        <v-card>
-          <table>
-            <tr>SAMSUNG CRAWLING STATUS
-              <td>
-                {{status[0]}}
-              </td>
-            </tr>
-            <tr>LG CRAWLING STATUS
-              <td>
-                {{status[1]}}
-              </td>
-            </tr>
-            <tr>SK CRAWLING STATUS
-              <td>
-                {{status[2]}}
-              </td>
-            </tr>
-            <tr>NEWS KEYWORD SETTING STATUS
-              <td>
-                {{status[3]}}
-              </td>
-            </tr>
-          </table>
-        </v-card>
-        <br>
         <div class="bodyfont">User 관리</div>
-        <v-card>
-          <div class="box" v-for="i in users.length" :key="i">
-            <div>{{users[i-1].name}} {{users[i-1].email}}</div>
-          </div>
+        <v-card v-for="u in userlist" :key="u.id">
+          {{u.email}}
         </v-card>
+        <div class="bodyfont">comment 관리</div>
+        <v-card v-for="c in checkCrawlinglist" :key="c.id">
+        {{c}}
+        </v-card>
+        <div>
+
+        </div>
+        <v-card>
+
+        </v-card>
+      </div>
+      <div class="subbody">
+        <v-card>나는 뭐쓸래?</v-card>
       </div>
     </div>
   </div>
-  <div v-else></div>
 </template>
 
 <script>
-import router from '../router'
-import axios from 'axios'
-
+import router from "../router";
+import axios from "axios";
+import store from "../store";
 export default {
+  name: "admin",
   data() {
     return {
-      status: [],
-      users: [],
-    };
+      userlist : [],
+      checkCrawlinglist : []
+    }
   },
-  name :'admin',
   methods: {
-    getout(){
-      if(this.$store.state.auth !=='1')
-      {
-        alert("잘못된 접근입니다. 꺼져 주세요.")
-        router.push('/')
+    getout() {
+      if (this.$store.state.auth !== "1") {
+        alert("잘못된 접근입니다. 꺼져 주세요.");
+        router.push("/");
       }
     },
-    read(){
+    test() {
       axios
-        .post("http://192.168.31.85:8080/member/adminManage/", {},
-        {
-          headers: {
-            "login-token": localStorage.getItem("login-token")
+        .post(
+          "http://192.168.31.84:8080/member/adminManage/",
+          {},
+          {
+            headers: {
+              "login-token": localStorage.getItem("login-token")
+            }
           }
-        })
+        )
         .then(response => {
-            this.users = response.data.memberList;
-            this.status = response.data.checkCrawling;
-            console.log(this.users);
-            console.log(this.status);
+          console.log(response);
+          this.userlist = response.data.memberList;
+          this.checkCrawlinglist = response.data.checkCrawling;
+          console.log(this.checkCrawlinglist)
         })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
+        .catch(error => {
+          console.log(error);
+        });
+    }
   },
-
-  mounted(){
-    alert("mount test");
-    this.getout();
-    this.read();
+  beforeMount(){
+    // this.getout();
+  },
+  mounted() {
+    this.test();
   }
-
-}
+};
 </script>
 
 <style scoped>
-.admin_header{
+.admin_header {
   width: 100%;
   background-color: grey;
   height: 150px;
 }
-.admin_font{
+.admin_font {
   display: block;
-  color : white;
+  color: white;
   text-align-last: center;
   line-height: 150px;
 }
-.adminbody{
+.adminbody {
   display: inline-block;
   width: 70%;
   padding: 30px;
 }
-.subbody{
+.subbody {
   display: inline-block;
   width: 30%;
   padding: 10px;
-
 }
-.bodyfont{
+.bodyfont {
   width: 70%;
 }
 

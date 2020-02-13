@@ -15,6 +15,7 @@ import com.ssafy.edu.dto.NewsDTO;
 import com.ssafy.edu.help.MemberNewsHelp;
 import com.ssafy.edu.help.NewsInsertHelp;
 import com.ssafy.edu.help.NewsKeywordCounter;
+import com.ssafy.edu.help.NewsLogHelp;
 import com.ssafy.edu.help.NewsStatusHelp;
 import com.ssafy.edu.help.SearchChart;
 import com.ssafy.edu.help.UserKeywordNews;
@@ -143,6 +144,14 @@ public class NewsController {
 				news.setIs_like(true);
 			}else {
 				news.setIs_like(false);
+			}
+			
+			boolean checkNewsLog = newsService.checkNewsLog(nih);
+			
+			if(checkNewsLog) {
+				newsService.updateNewsLog(nih);
+			}else {
+				newsService.insertNewsLog(nih);
 			}
 			
 			if (news.getNews() == null) {

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ import com.ssafy.edu.service.INewsService;
 import com.ssafy.edu.service.JwtService;
 import com.ssafy.edu.service.MemberService;
 
+@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 public class MemberRestController {
 	private static final Logger log = LoggerFactory.getLogger(JwtService.class);
@@ -160,14 +162,21 @@ public class MemberRestController {
 		log.info("\"MemberRestController Excute ! socialtoken " + member);
 
 		Map<String, Object> resultMap = new HashMap<>();
-		if(memberservice.getEmail(member.getEmail()) != null) {			
+		Member loginUser = new Member();
+		System.out.println(member);
+		if(memberservice.getEmail(member.getEmail()) != null) {
+			loginUser = memberservice.getEmail(member.getEmail());
 			member.setMember_id((memberservice.getEmail(member.getEmail())).getMember_id());
 			member.setCertifiedkey(memberservice.getEmail(member.getEmail()).getCertifiedkey());
 		}
 
 		String token = jwtService.create(member);
 		res.setHeader("login-token", token);
+		resultMap.put("member_name", loginUser.getName());
+		resultMap.put("member_keyword", loginUser.getKeyword());
+		
 		resultMap.put("status", true);
+		System.out.println(resultMap);
 		HttpStatus status = HttpStatus.ACCEPTED;
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
@@ -181,11 +190,8 @@ public class MemberRestController {
 		result.setMember(memberservice.getMember(member.getMember_id()));
 		result.setList(newsService.getMeberNews(member.getMember_id()));
 		result.setCount(commentService.getCount(member.getMember_id()));
-//		System.out.println("log test ==============================================");
-//		System.out.println(result.getMember());
-//		System.out.println(result.getCount());
-//		System.out.println(result.getList().toString());
-
+		result.setRecentlist(newsService.getMyRecentNews(member.getMember_id()));
+		
 		if (result.getList().size() < 0) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
@@ -262,8 +268,6 @@ public class MemberRestController {
 			resultMap.put("message", e.getMessage());
 		}
 		int auth = (int) resultMap.get("auth");
-		System.out.println(auth);
-		
 		if(auth != 1) {
 			System.out.println("check error");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);

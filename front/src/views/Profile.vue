@@ -3,7 +3,7 @@
   <div class="header_box">
       <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
       <div class="header_email">{{user.member.email}}</div>
-      <div class="header_email" >
+      <div class="header_email">
         <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
         <span v-else>이메일 인증 완료</span>
       </div>
@@ -130,20 +130,14 @@
         <v-btn text class="updatedfont" @click.stop="dialog = true">수정</v-btn>
       </v-card-title>
       <v-card-text>
-        <span v-for="k in user.member.keyword.split(' ')" :key="k">#{{ k }}</span>
+        <span v-for="i in selectedKeywords" :key="i"> #{{i}} </span>
       </v-card-text>
     </v-card>
 
     <div class="body_box">
       <div class="newsbody">{{user.member.name}}'s NEWS ROOM</div>
-      <v-card
-        v-for="i in user.list.length"
-        :key="i"
-        @click="goDetail(user.list[i-1].news_id)"
-      >
-        <v-container>
-          [{{user.list[i-1].brand}}] {{user.list[i-1].title}}
-        </v-container>
+      <v-card v-for="i in user.list.length" :key="i" @click="goDetail(user.list[i-1].news_id)">
+        <v-container>[{{user.list[i-1].brand}}] {{user.list[i-1].title}}</v-container>
       </v-card>
     </div>
 
@@ -213,7 +207,11 @@ export default {
   name: "Profile",
   data() {
     return {
-      user: null,
+      user: {
+        list: [],
+        member: "",
+        count: 0
+      },
       dialog: false,
       userInputKeyword: "",
       selectedKeywords: [],
@@ -382,8 +380,8 @@ export default {
       this.dialog = false;
     }
   },
-  beforeMount() {
-    info();
+  created() {
+    this.get_user();
   },
   mounted() {
     this.get_user();
@@ -445,7 +443,7 @@ li {
 li:hover {
   transform: scale(1.2);
 }
-.list-enter-active{
+.list-enter-active {
   transition: all 1s;
 }
 .list-enter {

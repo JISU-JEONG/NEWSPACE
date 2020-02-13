@@ -10,8 +10,17 @@ public class ChatMessage {
     private String[] users;
     private int usernumber;
     private String sessionid;
+    private int room;
     
-    public String getSessionid() {
+    public int getRoom() {
+		return room;
+	}
+
+	public void setRoom(int room) {
+		this.room = room;
+	}
+
+	public String getSessionid() {
 		return sessionid;
 	}
 

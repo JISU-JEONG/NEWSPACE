@@ -1,12 +1,8 @@
 package com.ssafy.edu.listener;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,23 +26,24 @@ public class WebSocketEventListener {
 	private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
 
 	static HashMap<String, String> user = new HashMap<>();
-	
+
 	@Autowired
 	private SimpMessageSendingOperations messagingTemplate;
 
 	@EventListener
 	public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-		
+
 		MessageHeaderAccessor accessor = NativeMessageHeaderAccessor.getAccessor(event.getMessage(),
 				SimpMessageHeaderAccessor.class);
-		GenericMessage generic = (GenericMessage) accessor.getHeader("simpConnectMessage");
 		
+		GenericMessage generic = (GenericMessage) accessor.getHeader("simpConnectMessage");
+
 		Map nativeHeaders = (Map) generic.getHeaders().get("nativeHeaders");
 		Map simpSessionAttributes = (Map) generic.getHeaders().get("simpSessionAttributes");
-		
 		String username = nativeHeaders.get("username").toString().replace("[", "").replace("]", "");
-		
+		String room = nativeHeaders.get("room").toString().replace("[", "").replace("]", "");
 		user.put(simpSessionAttributes.get("sessionId").toString(), username);
+		System.out.println(room);
 		usercont();
 		logger.info("Received a new web socket connection");
 
@@ -59,12 +56,12 @@ public class WebSocketEventListener {
 		String sessionId = (String) headerAccessor.getSessionAttributes().get("sessionId");
 		String username = (String) headerAccessor.getSessionAttributes().get("username");
 		String member_id = (String) headerAccessor.getSessionAttributes().get("member_id");
-		
+		String room = (String) headerAccessor.getSessionAttributes().get("room");
 		ChatMessage chatMessage = new ChatMessage();
-		
+		System.out.println(headerAccessor);
 		if (username != null && username != "" && !username.equals("undefined")) {
 			logger.info("User Disconnected : " + username);
-			
+
 			chatMessage.setType(ChatMessage.MessageType.LEAVE);
 			chatMessage.setSender(username);
 			chatMessage.setSessionid(member_id);
@@ -78,7 +75,7 @@ public class WebSocketEventListener {
 			chatMessage.setSessionid(member_id);
 			user.remove(sessionId);
 		}
-		
+
 		usercont();
 		messagingTemplate.convertAndSend("/topic/publicChatRoom", chatMessage);
 	}
@@ -91,7 +88,7 @@ public class WebSocketEventListener {
 
 			String key = mapIter.next();
 			String value = user.get(key);
-            System.out.println(key + " " + value);
+			System.out.println(key + " " + value);
 			userlist[i++] = value;
 		}
 
