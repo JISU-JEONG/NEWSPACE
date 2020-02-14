@@ -8,7 +8,7 @@ const steps = [
     }
   },
   {
-    element: 'chartdiv',
+    element: '#chartdiv',
     popover: {
       title: 'Breadcrumb',
       description: 'Indicate the current page location',
