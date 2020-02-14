@@ -1264,7 +1264,7 @@ public class NewsService implements INewsService {
 			sk_Crawling();
 			skCrawling = false;
 			logger.info("CRAWLING DONE." + "\t" + new Date());
-			keywordSet = true;
+			keywordSet = true; 
 			allKeywordSet();
 			keywordSet = false;
 			serverCheck = false;
