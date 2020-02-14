@@ -13,6 +13,7 @@
         웹마스터 영길이 캐리한 팀입니다. <br>
         다음 프로젝트 캐리받을 사람 선착순 두명 받습니다. <br>
         그 다음 두명은 커피 하루 한잔 사준다는 전제하에 팀원으로 받아드립니다.
+        <div class="taewoo-text"></div>
         <div class="mouse-hole"></div>
       </div>
     </div>
@@ -29,14 +30,20 @@
         </div>
         <div class="profile-info">
           <div class="first-box">
-            <div class="info-box name">{{members[selectedMember].name}}</div>
+            <div class="info-box name">
+              {{members[selectedMember].name}}
+              <span style="font-size:2vw">{{members[selectedMember].major}}</span>
+            </div>
             <div class="info-box git">
               <a :href="members[selectedMember].gitUrl" target="_blank">
-                <v-icon @click="moveToGithub">fa-github</v-icon>
+                <v-icon>fa-github</v-icon>
               </a>
             </div>
           </div>
-          <div class="info-box second-box">{{members[selectedMember].info01}}</div>
+          <div class="info-box second-box">
+            {{members[selectedMember].info01}}
+            <div class="info01-detail">이것저것 했습니다. </div>
+          </div>
           <div class="info-box third-box">
             <div style="padding: 0.5vw 3vw; font-size: 2vw;">기술 스택</div>
             <v-row>
@@ -75,6 +82,7 @@ export default {
       members: {
         jisu: {
           name: '정지수',
+          major: '메카트로닉스공학부',
           imgUrl: './images/jisu.jpg',
           gitUrl: 'https://github.com/JISU-JEONG',
           info01: 'Front-end',
@@ -90,6 +98,7 @@ export default {
         },
         younghoon: {
           name: '정영훈',
+          major: '정보통신공학과',
           imgUrl: './images/younghoon.jpg',
           gitUrl: 'https://github.com/hoonyhoony',
           info01: 'Back-end',
@@ -106,6 +115,7 @@ export default {
         },
         younggil: {
           name: '정영길',
+          major: '컴퓨터공학과',
           imgUrl: './images/younggil.jpg',
           gitUrl: 'https://github.com/yg1110',
           info01: 'Back-end',
@@ -123,6 +133,7 @@ export default {
         },
         taewoo: {
           name: '김태우',
+          major: '수학과',
           imgUrl: './images/taewoo.jpg',
           gitUrl: 'https://github.com/EHwooKim',
           info01: 'Front-end',
@@ -157,9 +168,6 @@ export default {
         this.$router.push({ path: '/' })
       }
     },
-    moveToGithub() {
-      console.log(this.selectedMember)
-    }
   },
   mounted() {
     window.addEventListener('mousemove', this.onMouseMove)
@@ -230,7 +238,7 @@ export default {
     z-index:2;
     transform: rotate(2deg);
     border: 0.1px solid black;
-    animation: drop 2s 3s forwards;
+    animation: drop 2s 2s forwards;
   }
   @keyframes drop {
     0% {
@@ -341,6 +349,13 @@ export default {
   .tae-woo {
     background-image: url('../assets/images/taewoo.jpg');
   }
+  .taewoo-text {
+    width:15%;
+    height:15%;
+    background-image: url('../assets/images/taewooText.png');
+    background-repeat: none;
+    background-size: cover;
+  }
   .profile-content {
     width: 100%;
     height: 90%;
@@ -372,6 +387,9 @@ export default {
     height: 26%;
     margin-bottom: 2vw;
     padding: 1vw 3vw;
+    font-size: 2.5vw;
+  }
+  .info01-detail {
     font-size: 2vw;
   }
   .third-box {
