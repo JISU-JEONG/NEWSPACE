@@ -85,7 +85,7 @@ export default {
     padding: 10px 10px;
     box-shadow: 1px 2px 7px lightgray;
     /* border-radius: 10px; */
-    /* background-color: #F5F5F5; */
+    /* background-color: #FFFFFF; */
     box-sizing: border-box;
     cursor: pointer;
     border-radius: 7px;
