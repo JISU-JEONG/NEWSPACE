@@ -33,12 +33,12 @@
 					<strong>삼성, LG, SK의 기업 최신 뉴스</strong> 업데이트를 속도를 따라 신속하게
 				</div>
 				<div class="sidebody">
-          검색 기능, <strong>텍스트 마이닝</strong>을 통한 뉴스의 중요 키워드,
-          <strong>관심 기업</strong>의 동향을 빠르게 파악할 수 있는 새로운 뉴스 사이트
+					검색 기능, <strong>텍스트 마이닝</strong>을 통한 뉴스의 중요 키워드,
+					<strong>관심 기업</strong>의 동향을 빠르게 파악할 수 있는 새로운 뉴스 사이트
 				</div>
-        <div class="side-btn" @click="$router.push({ path: '/AboutUs' })">ABOUT US</div>
-        <div class="side-btn" >주요 대상</div>
-        <div class="side-btn" >NEWSPACE 사용방법</div>
+				<div class="side-btn" >주요 대상</div>
+				<div class="side-btn" >NEWSPACE 사용방법</div>
+				<div class="side-btn" @click="$router.push({ path: '/AboutUs' })">ABOUT US</div>
 			</div>
 		</v-col>
 	  </v-row>
