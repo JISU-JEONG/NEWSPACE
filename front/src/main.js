@@ -14,7 +14,6 @@ import lineClamp from 'vue-line-clamp'
 
 Vue.config.productionTip = false;
 
-
 Vue.use(VueSimplemde);
 Vue.use(Vuetify);
 Vue.use(VModal, { dynamic: true });
