@@ -1,37 +1,48 @@
 <template>
   <div>
-    <!-- <Cpuchart/> -->
-    <!-- <Memorychart/> -->
-    <Status v-bind:cpuidle="cpuidle" />
+    <Status v-bind:serverSamsung="serverSamsung" v-bind:serverLg="serverLg" v-bind:serverSk="serverSk"/>
+    <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
+    <Memorychart v-bind:freememory="freememory" v-bind:totalmemory="totalmemory" />
+    
   </div>
 </template>
 
 <script>
-import Cpuchart from '../components/Cpuchart'
-import Memorychart from '../components/Memorychart'
-import Status from '../components/Serverstatus'
+import Cpuchart from "../components/Cpuchart";
+import Memorychart from "../components/Memorychart";
+import Status from "../components/Serverstatus";
+import Logs from "../components/LogList";
 import axios from "axios";
+
 export default {
   name: "Chart",
   components: {
     Cpuchart,
     Memorychart,
-    Status
+    Status,
+    Logs
   },
   data: function() {
     return {
-      cpuidle : 0
+      cpuidle: 0,
+      cpuusage: 0,
+      freememory: 0,
+      totalmemory: 0,
+      serverSamsung: false,
+      serverLg: false,
+      serverSk: false
     };
   },
-  methods:{
+  mounted() {
+    this.loop();
+  },
+  methods: {
+    loop() {
+      this.s = setInterval(() => {
+        this.init();
+      }, 1000);
+    },
     init() {
-      // const BUF_SIZE = 86400000;
-      // let d = new Date().getTime();
-
-      // if (this.series[0].data.length >= BUF_SIZE) {
-      //   this.series[0].data.shift();
-      //   this.series[1].data.shift();
-      // }
       axios
         .post(
           "http://192.168.31.85:8080/member/adminStatus/",
@@ -44,32 +55,19 @@ export default {
         )
         .then(response => {
           this.cpuidle = response.data.cpuidle;
-          console.log(this.cpuidle);
-          // this.series[0].data.push([d, response.data.totalmemory - response.data.freememory]);
-          // this.series[1].data.push([d, response.data.totalmemory]);
-          // this.$refs.realtime.updateSeries([
-          //   {
-          //     name: "usememory",
-          //     data: this.series[0].data
-          //   },
-          //   { name: "totalmemory", data: this.series[1].data }
-          // ]);
-
-          console.log(response)
+          this.cpuusage = response.data.cpuusage;
+          this.freememory = response.data.freememory;
+          this.totalmemory = response.data.totalmemory;
+          this.serverSamsung = response.data.serverSamsung;
+          this.serverLg = response.data.serverLg;
+          this.serverSk = response.data.serverSk;
         })
         .catch(error => {
           console.log(error);
         });
-    },
-    loop() {
-      this.s = setInterval(() => {
-        this.init();
-      }, 3000);
     }
   },
-  mounted() {
-    this.loop();
-  },
+
   destroyed() {
     console.log("destroyed");
     clearInterval(this.s);

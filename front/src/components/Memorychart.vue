@@ -1,20 +1,51 @@
 <template>
-  <div class="app">
+  <div>
     <apexcharts ref="realtime" type="line" height="300" :options="options" :series="series"></apexcharts>
   </div>
 </template>
 
 <script>
 import VueApexCharts from "vue-apexcharts";
-import axios from "axios";
 
 export default {
   name: "Memorychart",
   components: {
     apexcharts: VueApexCharts
   },
+  props: ["freememory", "totalmemory"],
+  mounted() {
+    this.loop();
+  },
+  destroyed() {
+    console.log("destroyed");
+    clearInterval(this.s);
+  },
   methods: {
-    
+    init() {
+      const BUF_SIZE = 86400000;
+      let d = new Date().getTime();
+
+      if (this.series[0].data.length >= BUF_SIZE) {
+        this.series[0].data.shift();
+        this.series[1].data.shift();
+      }
+
+      this.series[0].data.push([d, this.totalmemory - this.freememory]);
+      this.series[1].data.push([d, this.totalmemory]);
+      this.$refs.realtime.updateSeries([
+        {
+          name: "freememory",
+          data: this.series[0].data
+        },
+        { name: "totalmemory", data: this.series[1].data }
+      ]);
+    },
+
+    loop() {
+      this.s = setInterval(() => {
+        this.init();
+      }, 1000);
+    }
   },
   data: function() {
     return {
@@ -24,7 +55,7 @@ export default {
             enabled: true,
             easing: "linear",
             dynamicAnimation: {
-              speed: 3000
+              speed: 1000
             }
           },
           toolbar: {
@@ -56,7 +87,7 @@ export default {
           }
         },
         yaxis: {
-          max: 16316
+          max: 16384
         },
         legend: {
           show: true
@@ -69,19 +100,15 @@ export default {
       },
       series: [
         {
-          name: "cpuusage",
+          name: "freememory",
           data: [[new Date().getTime(), 0]]
         },
         {
-          name: "cpuidle",
+          name: "totalmemory",
           data: [[new Date().getTime(), 0]]
         }
       ]
     };
-  },
-  destroyed() {
-    console.log("destroyed");
-    clearInterval(this.s);
   }
 };
 </script>
