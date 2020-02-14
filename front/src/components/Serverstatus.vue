@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <div class="demos">
       <div class="demo-up" v-if="serverSamsung">
         <span class="server-status" type="up"></span>
@@ -26,24 +26,13 @@
         <span>SK Hynix Crawling Server Down.</span>
       </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
-import axios from "axios";
-
 export default {
   name: "Serverstatus",
-  methods: {},
-  props: ["serverSamsung", "serverLg", "serverSk"],
-  data: function() {
-    return {
-      Samsung: false,
-      LG: false,
-      SK: false
-    };
-  }
+  props: ["serverSamsung", "serverLg", "serverSk"]
 };
 </script>
 
