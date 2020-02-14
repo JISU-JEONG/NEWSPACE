@@ -1,8 +1,8 @@
 <template>
   <nav v-if="$route.name !== ('Admin' && 'AboutUs')">
     <chat />
-    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short>
-      <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
+    <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short  id="navbar">
+      <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp" id="homebutton">
         <span>New space</span>
       </v-btn>
       <v-btn to="/" icon v-else>
@@ -12,7 +12,7 @@
         <span>Admin</span>
       </v-btn>
       <v-spacer />
-      <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)">
+      <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)" id="searchbar">
         <v-text-field
           v-model="searchValue"
           label="검색"

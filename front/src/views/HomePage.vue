@@ -2,11 +2,11 @@
   <div>
 	  <div>
 	       <!-- <chat /> -->
-			<div class="keyheader">
-				<div v-show="number===0" id="chartdiv1"></div>
-				<div v-show="number===1" id="chartdiv2"></div>
-				<div v-show="number===2" id="chartdiv3"></div>
-				<div v-show="number===3" id="chartdiv4"></div>
+			<div v-if="keywords.length !== 0" class="keyheader">
+					<Cloudchart
+				:keywords="keywords"
+				:num="number"
+				/>
 			</div>
 				<div class="under" >
 					{{todaytext}} : <strong> {{ commaToay }} </strong> 건 | {{alltext}} : <strong>{{ commaAll }}</strong> 건
@@ -23,8 +23,23 @@
 		class="d-none d-sm-none d-md-flex"
 		md=3>
 			<div class="side">
-				<div class="sidehead">
-					NEWSPACE?
+				<div id="intro">
+					<div class="sidehead">
+						NEWSPACE?
+					</div>
+					<div class="sidebody">
+						<strong>당신을 위한 새로운 공간</strong>
+					</div>
+					<div class="sidebody">
+						<strong>삼성, LG, SK의 기업 최신 뉴스</strong> 업데이트를 속도를 따라 신속하게
+					</div>
+					<div class="sidebody">
+						검색 기능, <strong>텍스트 마이닝</strong>을 통한 뉴스의 중요 키워드,
+						<strong>관심 기업</strong>의 동향을 빠르게 파악할 수 있는 새로운 뉴스 사이트
+					</div>
+					<div class="side-btn" @click="$router.push({ path: '/AboutUs' })">ABOUT US</div>
+					<div class="side-btn" >주요 대상</div>
+					<div class="side-btn"  @click.prevent.stop="guide" >NEWSPACE 사용방법</div>
 				</div>
 				<div class="sidebody">
 					<strong>당신을 위한 새로운 공간</strong>
@@ -52,6 +67,10 @@ import http from '../services/http-common.js'
 import Info from '../services/getInfo';
 import store from "../store";
 import Chat from "../components/Chat"
+import Cloudchart from "../components/Cloudchart"
+import Driver from 'driver.js' // import driver.js
+import 'driver.js/dist/driver.min.css' // import driver.js css
+import steps from '../components/guide/steps.js'
 
 export default {
 	name: 'HomePage',
@@ -63,11 +82,14 @@ export default {
 			alltext : "전체 뉴스",
 			allcount : 0,
 			status : [],
+			keywords:[],
+			driver: null,
 		}
 	},
 	components: {
 		NewsList,
 		Chat,
+		Cloudchart,
 	},
 	computed: {
 		commaToay(){
@@ -83,130 +105,11 @@ export default {
 			http.get('/getChartKeyword')
 				.then(response => {
 					const keywords = response.data
-					this.keyword = []
-					this.start(keywords)
+					this.keywords = keywords
 				})
 				.catch(e => {
 					console.log(e);
 				});
-		},
-		start(keywords){
-				/**
-				 * ---------------------------------------
-				 * This demo was created using amCharts 4.
-				 * 
-				 * For more information visit:
-				 * https://www.amcharts.com/
-				 * 
-				 * Documentation is available at:
-				 * https://www.amcharts.com/docs/v4/
-				 * ---------------------------------------
-				 */
-				am4core.disposeAllCharts();
-				// Themes begin
-				am4core.useTheme(am4themes_animated);
-				// Themes end
-				var chart1 = am4core.create("chartdiv1", am4plugins_wordCloud.WordCloud);
-				var chart2 = am4core.create("chartdiv2", am4plugins_wordCloud.WordCloud);
-				var chart3 = am4core.create("chartdiv3", am4plugins_wordCloud.WordCloud);
-				var chart4 = am4core.create("chartdiv4", am4plugins_wordCloud.WordCloud);
-
-				chart1.fontFamily = "Courier New";
-				chart2.fontFamily = "Courier New";
-				chart3.fontFamily = "Courier New";
-				chart4.fontFamily = "Courier New";
-				var series1 = chart1.series.push(new am4plugins_wordCloud.WordCloudSeries());
-				var series2 = chart2.series.push(new am4plugins_wordCloud.WordCloudSeries());
-				var series3 = chart3.series.push(new am4plugins_wordCloud.WordCloudSeries());
-				var series4 = chart4.series.push(new am4plugins_wordCloud.WordCloudSeries());
-				series1.randomness = 0.1;
-				series1.rotationThreshold = 0.5;
-				series1.minFontSize = am4core.percent(5)
-				series1.maxFontSize = am4core.percent(25)
-				series2.randomness = 0.1;
-				series2.rotationThreshold = 0.5;
-				series2.minFontSize = am4core.percent(5)
-				series2.maxFontSize = am4core.percent(25)
-				series3.randomness = 0.1;
-				series3.rotationThreshold = 0.5;
-				series3.minFontSize = am4core.percent(5)
-				series3.maxFontSize = am4core.percent(25)
-				series4.randomness = 0.1;
-				series4.rotationThreshold = 0.5;
-				series4.minFontSize = am4core.percent(5)
-				series4.maxFontSize = am4core.percent(25)
-				
-				series1.data = keywords[0]
-				series2.data = keywords[1]
-				series3.data = keywords[2]
-				series4.data = keywords[3]
-
-				series1.dataFields.word = "keyword";
-				series1.dataFields.value = "count";
-				series2.dataFields.word = "keyword";
-				series2.dataFields.value = "count";
-				series3.dataFields.word = "keyword";
-				series3.dataFields.value = "count";
-				series4.dataFields.word = "keyword";
-				series4.dataFields.value = "count";
-
-				series1.heatRules.push({
-				"target": series1.labels.template,
-				"property": "fill",
-				"min": am4core.color("#0000CC"),
-				"max": am4core.color("#CC00CC"),
-				"dataField": "value"
-				});
-				series2.heatRules.push({
-				"target": series2.labels.template,
-				"property": "fill",
-				"min": am4core.color("#AADDDD"),
-				"max": am4core.color("#1428A0"),
-				"dataField": "value"
-				});
-				series3.heatRules.push({
-				"target": series3.labels.template,
-				"property": "fill",
-				"min": am4core.color("#AA00CC"),
-				"max": am4core.color("#EE0034"),
-				"dataField": "value"
-				});
-				series4.heatRules.push({
-				"target": series4.labels.template,
-				"property": "fill",
-				"min": am4core.color("#CCAACC"),
-				"max": am4core.color("#00CC33"),
-				"dataField": "value"
-				});
-
-				series1.labels.template.url = "http://192.168.31.85:8081/search/{word}";
-				series1.labels.template.urlTarget = "_self";
-				series1.labels.template.tooltipText = "{word}: {value}";
-				series2.labels.template.url = "http://192.168.31.85:8081/search/{word}";
-				series2.labels.template.urlTarget = "_self";
-				series2.labels.template.tooltipText = "{word}: {value}";
-				series3.labels.template.url = "http://192.168.31.85:8081/search/{word}";
-				series3.labels.template.urlTarget = "_self";
-				series3.labels.template.tooltipText = "{word}: {value}";
-				series4.labels.template.url = "http://192.168.31.85:8081/search/{word}";
-				series4.labels.template.urlTarget = "_self";
-				series4.labels.template.tooltipText = "{word}: {value}";
-
-				var hoverState1 = series1.labels.template.states.create("hover");
-				hoverState1.properties.fill = am4core.color("#FF0000");
-				var hoverState2 = series2.labels.template.states.create("hover");
-				hoverState2.properties.fill = am4core.color("#FF0000");
-				var hoverState3 = series3.labels.template.states.create("hover");
-				hoverState3.properties.fill = am4core.color("#FF0000");
-				var hoverState4 = series4.labels.template.states.create("hover");
-				hoverState4.properties.fill = am4core.color("#FF0000");
-
-				// var subtitle = chart.titles.create();
-				// subtitle.text = "(click to open)";
-
-				// var title = chart.titles.create();
-				// title.fontSize = 20;
-				// title.fontWeight = "800";
 		},
 		brandCheck(number){
 			if(number===0) {
@@ -269,12 +172,19 @@ export default {
 			}
 			result = num + result;
 			return result;
-		}
+		},
+		guide() {
+      this.driver.defineSteps(steps)
+      this.driver.start()
+    }
 	},
 	beforeMount() {
 		Info();
 	},
 	mounted(){
+		this.driver = new Driver()
+
+		console.log(this.driver)
 		this.getKeyword()
 		this.getStatus()
 	},
@@ -298,13 +208,15 @@ export default {
 .side{
 	position: sticky;
 	top:100px;
+}
+#intro{
 	margin-top: 81px;
 	width: 300px;
 	height: 500px;
 	text-align: center;
 	padding: 30px 20px 0 20px;
 	box-shadow: 1px 2px 7px lightgray;
-  background-image: url("../components/images/sideback.jpg")
+  background-image: url("../components/images/sideback.jpg");
 }
 .under{
 	width: 100%;
