@@ -1,37 +1,19 @@
 <template>
-  <div>
-    
-  </div>
+  <v-container>
+    <div class="v-alert v-alert--notification mb-3 info elevation-6" v-for="l in logs" :key="l.log_id">
+      <div>
+        {{l.log_content}}
+        <br />
+        {{l.log_date}}
+      </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
 
 export default {
-  name: "Memorychart",
-  components: {
-    apexcharts: VueApexCharts
-  },
-  props: ["freememory", "totalmemory"],
-  mounted() {
-    this.loop();
-  },
-  destroyed() {
-    console.log("destroyed");
-    clearInterval(this.s);
-  },
-  methods: {
-
-    loop() {
-      this.s = setInterval(() => {
-        this.init();
-      }, 1000);
-    }
-  },
-  data: function() {
-    return {
-      
-    };
-  }
+  name: "LogList",
+  props: ["logs"],
 };
 </script>
