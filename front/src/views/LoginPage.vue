@@ -8,8 +8,9 @@
           <v-container>
             <v-form ref="loginForm" @submit.prevent="login" v-model="loginValid">
               <v-container>
-                <v-text-field label="이메일" type="email" v-model="email" :rules="emailRules" />
+                <v-text-field outlined label="이메일" type="email" v-model="email" :rules="emailRules" />
                 <v-text-field
+                  outlined
                   label="비밀번호"
                   type="password"
                   v-model="password"

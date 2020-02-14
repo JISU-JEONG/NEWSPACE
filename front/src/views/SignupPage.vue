@@ -6,16 +6,16 @@
           <v-container style="min-height:430px;">
             <v-card-title>회원가입</v-card-title>
             <v-form ref="form" v-model="valid" @submit.prevent="Signup">
-              <v-text-field :rules="nameRules" label="이름" v-model="name" type="text" />
-              <v-text-field :rules="emailRules" label="이메일" v-model="email" type="text" />
-              <v-text-field :rules="passwordRules" label="비밀번호" v-model="password" type="password" />
-              <v-text-field :rules="passwordCheckRules" label="비밀번호 확인" v-model="passwordCheck" type="password" />
+              <v-text-field outlined :rules="nameRules" label="이름" v-model="name" type="text" />
+              <v-text-field outlined :rules="emailRules" label="이메일" v-model="email" type="text" />
+              <v-text-field outlined :rules="passwordRules" label="비밀번호" v-model="password" type="password" />
+              <v-text-field outlined :rules="passwordCheckRules" label="비밀번호 확인" v-model="passwordCheck" type="password" />
               <v-btn id="signupBtn" :disabled="!valid" color="blue lighten-2" class="mt-3 white--text" type="submit">가입하기</v-btn>
             </v-form>
           </v-container>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="8">
+      <v-col cols="12" sm="6">
         <v-card mb-5>
           <v-container style="min-height:430px;">
             <v-card-title>관심 키워드 등록</v-card-title>
@@ -51,6 +51,7 @@
               </v-container>
             </v-card>
             <v-text-field 
+              outlined
               style="margin-top:16px;"
               label="추가하고싶은 키워드"
               v-model="userInputKeyword"

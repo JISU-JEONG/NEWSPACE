@@ -190,6 +190,7 @@
                   </v-container>
                 </v-card>
                 <v-text-field
+                  outlined
                   style="margin-top:16px;"
                   label="추가하고싶은 키워드"
                   v-model="userInputKeyword"

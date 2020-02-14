@@ -31,7 +31,7 @@
             <v-container>
               <p>기사 스크랩 기능은   로그인이 필요합니다.<br>로그인 페이지로 이동하시겠습니까?</p>
               <v-btn dark color="blue lighten-2" @click="$router.push({path: '/login'})">이동</v-btn>
-              <v-btn text color="red lighten-2" absolute right >취소</v-btn>
+              <v-btn dark color="red lighten-2" absolute right >취소</v-btn>
             </v-container>
           </v-card>
         </v-menu>
