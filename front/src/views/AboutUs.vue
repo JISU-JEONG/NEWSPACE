@@ -32,7 +32,7 @@
             <div class="info-box name">{{members[selectedMember].name}}</div>
             <div class="info-box git">
               <a :href="members[selectedMember].gitUrl" target="_blank">
-                <v-icon @click="moveToGithub">fa-github</v-icon>
+                <v-icon>fa-github</v-icon>
               </a>
             </div>
           </div>
