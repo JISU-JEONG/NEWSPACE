@@ -1,22 +1,53 @@
 <template>
-  <div class="app">
+  <div>
     <apexcharts ref="realtime" type="line" height="300" :options="options" :series="series"></apexcharts>
   </div>
 </template>
 
 <script>
 import VueApexCharts from "vue-apexcharts";
-import axios from "axios";
 
 export default {
   name: "Cpuchart",
   components: {
     apexcharts: VueApexCharts
   },
+  props: ["cpuidle", "cpuusage"],
   mounted() {
     this.loop();
   },
+  destroyed() {
+    console.log("destroyed");
+    clearInterval(this.s);
+  },
   methods: {
+    init(){
+      const BUF_SIZE = 86400000;
+      let d = new Date().getTime();
+
+      if (this.series[0].data.length >= BUF_SIZE) {
+        this.series[0].data.shift();
+        this.series[1].data.shift();
+      }
+
+      this.series[0].data.push([d, this.cpuusage]);
+      this.series[1].data.push([d, this.cpuidle]);
+      this.$refs.realtime.updateSeries([
+         {
+            name: "cpuusage",
+            data: this.series[0].data
+          },
+          { name: "cpuidle", 
+            data: this.series[1].data }
+        ]);
+    },
+
+    loop() {
+      this.s = setInterval(() => {
+        this.init();
+      }, 1000);
+    }
+
   },
   data: function() {
     return {
@@ -26,7 +57,7 @@ export default {
             enabled: true,
             easing: "linear",
             dynamicAnimation: {
-              speed: 3000
+              speed: 1000
             }
           },
           toolbar: {
@@ -80,10 +111,6 @@ export default {
         }
       ]
     };
-  },
-  destroyed() {
-    console.log("destroyed");
-    clearInterval(this.s);
   }
 };
 </script>
