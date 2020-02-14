@@ -15,7 +15,7 @@
           </v-container>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6">
+      <v-col cols="12" sm="8">
         <v-card mb-5>
           <v-container style="min-height:430px;">
             <v-card-title>관심 키워드 등록</v-card-title>
@@ -40,7 +40,7 @@
             </v-card>
             <hr>
             <v-card style="min-height:120px;" class="mt-3" >
-              <span class="mx-3">한달동안 뉴스에서 많이 언급된 키워드</span> <br>
+              <span class="mx-3">추천 키워드</span> <br>
               <v-divider></v-divider>
               <v-container>
                 <ul @click.stop="selectKeyword">

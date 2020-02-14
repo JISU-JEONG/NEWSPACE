@@ -5,7 +5,19 @@
       <div class="header_email">{{user.member.email}}</div>
       <div class="header_email">
         <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
-        <span v-else>이메일 인증 완료</span>
+        <span v-else class="d-flex align-center justify-center"><v-icon color="green">mdi-check-decagram</v-icon>이메일 인증 완료</span>
+        <v-snackbar
+          v-model="snackbar"
+          bottom
+          right
+          color="blue lighten-2 text--white" 
+          :timeout=timeout
+        >
+          인증메일이 전송되었습니다.
+          <v-btn text @click="snackbar=false">
+            닫기
+          </v-btn>
+        </v-snackbar>
       </div>
       <div class="comment_font">
         <div>
@@ -90,7 +102,6 @@
         <v-tab-item class="px-2">
           <v-container fluid v-if="recent.length !== 0">
             <div style="min-height:800px">
-
             <div class="likeheader">
               <strong>{{user.member.name}}님이 최근 보신 뉴스</strong>
               <hr>
@@ -151,7 +162,7 @@
                 <v-card-title>관심 키워드 수정</v-card-title>
                 <v-divider></v-divider>
                 <v-card style="min-height:120px;">
-                  <span px-3>선택된 아해들</span>
+                  <span class="mx-3">선택된 키워드</span>
                   <v-divider></v-divider>
                   <v-container>
                     <ul @click.stop="unselectKeyword">
@@ -167,7 +178,7 @@
                 </v-card>
                 <hr />
                 <v-card style="min-height:120px;" class="mt-3">
-                  <span>선택되지 못한 아해들</span>
+                  <span class="mx-3">추천 키워드</span>
                   <br />
                   <v-divider></v-divider>
                   <v-container>
@@ -223,6 +234,8 @@ export default {
         member: "",
         count: 0
       },
+      snackbar: false,
+      timeout: 2000,
       dialog: false,
       userInputKeyword: "",
       originselectedKeywords: [],
@@ -283,6 +296,7 @@ export default {
         });
     },
     emailcheck() {
+      this.snackbar = true
       const token = {
         headers: {
           "login-token": localStorage.getItem("login-token")
