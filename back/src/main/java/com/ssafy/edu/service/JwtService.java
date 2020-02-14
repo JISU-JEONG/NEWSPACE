@@ -70,7 +70,7 @@ public class JwtService {
             throw new RuntimeException();
         }
 
-        log.info("claims: {}", claims);
+//        log.info("claims: {}", claims);
 
         // Claims는 Map의 구현체이다.
         return claims.getBody();

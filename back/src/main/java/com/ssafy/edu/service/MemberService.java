@@ -64,4 +64,14 @@ public class MemberService {
 		return dao.getMemberId(email);
 	}
 
+	public List<Member> getAdminMember() {
+		// TODO Auto-generated method stub
+		return dao.getAdminMember();
+	}
+
+	public void deleteMember(int member_id) {
+		// TODO Auto-generated method stub
+		dao.deleteMember(member_id);
+	}
+
 }

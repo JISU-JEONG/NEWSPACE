@@ -67,4 +67,14 @@ public class MemberDao {
 		// TODO Auto-generated method stub
 		return SQL.selectOne(ns+"getMemberId", email);
 	}
+
+	public List<Member> getAdminMember() {
+		// TODO Auto-generated method stub
+		return SQL.selectList(ns+"getAdminMember");
+	}
+
+	public void deleteMember(int member_id) {
+		// TODO Auto-generated method stub
+		SQL.delete(ns+"deleteMember");
+	}
 }

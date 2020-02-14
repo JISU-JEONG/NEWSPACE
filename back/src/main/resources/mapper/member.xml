@@ -69,5 +69,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getMemberId" resultType="java.lang.Integer" parameterType="java.lang.String">
 		select member_id from amt.member where email like #{email}
 	</select>
+	
+	<select id="getAdminMember" resultType="com.ssafy.edu.dto.Member">
+		select * from amt.member where auth = 1
+	</select>
+	
+	<delete id="deleteMember" parameterType="java.lang.Integer">
+		delete from amt.member where member_id = #{member_id}
+	</delete>
 
 </mapper>

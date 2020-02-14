@@ -1,154 +1,100 @@
 <template>
   <div>
-    <apexchart
-      ref="realtimeChart1"
-      type="line"
-      height="350"
-      :options="chartOptions"
-      :series="series1"
-    />
+    <Status v-bind:serverSamsung="serverSamsung" v-bind:serverLg="serverLg" v-bind:serverSk="serverSk"/>
+    <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
+    <Memorychart v-bind:freememory="freememory" v-bind:totalmemory="totalmemory" />
+    <Logs v-bind:logs="logs"/>
+    <MemberList v-bind:members="members"/>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import VueApexCharts from "vue-apexcharts";
-
-var lastDate = 0;
-var data1 = [];
-var data2 = [];
-
-function getDayWiseTimeSeries(baseval, count, yrange) {
-  var i = 0;
-  while (i < count) {
-    var x = baseval;
-    var y =
-      yrange.max - yrange.min + 1;
-    data1.push({
-      x,
-      y
-    });
-    data2.push({
-      x,
-      y
-    });
-    lastDate = baseval;
-    baseval += 86400000;
-    i++;
-  }
-}
-
-getDayWiseTimeSeries(new Date("11 Feb 2017 GMT").getTime(), 10, {
-  min: 10,
-  max: 90
-});
-
-function getNewSeries(baseval, yrange) {
-  var newDate = baseval + 86400000;
-  lastDate = newDate;
-  data1.push({
-    x: newDate,
-    y: yrange.max - yrange.min
-  });
-}
-
-function resetData() {
-  data1 = data1.slice(data1.length - 10, data1.length);
-}
-
+import Cpuchart from "../components/Cpuchart";
+import Memorychart from "../components/Memorychart";
+import Status from "../components/Serverstatus";
+import Logs from "../components/LogList";
+import axios from "axios";
+import MemberList from "../components/Memberlist";
 export default {
-  name: "home",
+  name: "Chart",
   components: {
-    apexchart: VueApexCharts
+    Cpuchart,
+    Memorychart,
+    Status,
+    Logs,
+    MemberList
   },
-  data() {
+  data: function() {
     return {
-      series1: [
-        {
-          data: data1.slice()
-        }
-      ],
-      chartOptions: {
-        chart: {
-          animations: {
-            enabled: true,
-            easing: "linear",
-            dynamicAnimation: {
-              speed: 980
-            }
-          },
-          toolbar: {
-            show: false
-          },
-          zoom: {
-            enabled: false
-          },
-          foreColor: "#fff"
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: "smooth"
-        },
-
-        title: {
-          text: "Dynamic Updating Chart",
-          align: "left"
-        },
-        markers: {
-          size: 0
-        },
-        xaxis: {
-          type: "datetime",
-          range: 777600000,
-          labels: {
-            show: true
-            // formatter: value => {
-            //   return this.$moment.unix(value).format("HH:mm:ss");
-            // }
-          }
-        },
-        yaxis: {},
-        legend: {
-          show: false
-        }
-      }
+      cpuidle: 0,
+      cpuusage: 0,
+      freememory: 0,
+      totalmemory: 0,
+      serverSamsung: false,
+      serverLg: false,
+      serverSk: false,
+      logs: [],
+      members: [],
     };
   },
   mounted() {
-    this.intervals1();
+    this.loop();
+    this.getMember();
   },
   methods: {
-    intervals1: function() {
-      var me = this;
-      window.setInterval(function() {
-        getNewSeries(lastDate, {
-          min: 10,
-          max: 90
-        });
-        console.log(data1);
-        me.$refs.realtimeChart1.updateSeries([
+    getMember(){
+      axios.post(
+          "http://192.168.31.85:8080/member/adminManage/",
+          {},
           {
-            data: data1
-          }
-        ]);
-      }, 1000);
-
-      // every 60 seconds, we reset the data to prevent memory leaks
-      window.setInterval(function() {
-        resetData();
-        me.$refs.realtimeChart1.updateSeries(
-          [
-            {
-              data: []
+            headers: {
+              "login-token": localStorage.getItem("login-token")
             }
-          ],
-          false,
-          true
-        );
-      }, 60000);
+          }
+        )
+        .then(response => {
+          this.members = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    loop() {
+      
+      this.s = setInterval(() => {
+        this.init();
+      }, 1000);
+    },
+    init() {
+      axios
+        .post(
+          "http://192.168.31.85:8080/member/adminStatus/",
+          {},
+          {
+            headers: {
+              "login-token": localStorage.getItem("login-token")
+            }
+          }
+        )
+        .then(response => {
+          this.cpuidle = response.data.cpuidle;
+          this.cpuusage = response.data.cpuusage;
+          this.freememory = response.data.freememory;
+          this.totalmemory = response.data.totalmemory;
+          this.serverSamsung = response.data.serverSamsung;
+          this.serverLg = response.data.serverLg;
+          this.serverSk = response.data.serverSk;
+          this.logs = response.data.log;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+  },
+
+  destroyed() {
+    console.log("destroyed");
+    clearInterval(this.s);
   }
 };
 </script>

@@ -177,7 +177,7 @@ export default {
       }
     },
     moveToDetail(news_id) {
-      router.push({ name: "detail", params: { id: news_id } });
+      router.push({ name: "detail", params: { id: news_id, keyword:' ' } });
     }
   },
   beforeMount() {
