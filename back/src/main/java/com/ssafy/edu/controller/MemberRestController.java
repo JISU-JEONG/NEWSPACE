@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -335,12 +336,51 @@ public class MemberRestController {
 			return new ResponseEntity<AdminManageHelp>(amh, HttpStatus.OK);
 		}
 	}
-	
+
 	@PostMapping("/member/logout")
 	public void logout(@RequestBody Member member) {
 		ServerLog sl = new ServerLog();
 		sl.setMember_id(memberservice.getMemberId(member.getEmail()));
 		sl.setLog_content("Logout Success Member : " + member.getEmail());
 		logService.insertLog(sl);
+	}
+	
+	@DeleteMapping("/member/deleteMember")
+	public ResponseEntity<List<Member>> deleteMember(@RequestBody int member_id, HttpServletRequest req){
+		
+		List<Member> list = null;
+		
+		Map<String, Object> resultMap = new HashMap<>();
+
+		try {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		} catch (RuntimeException e) {
+			log.error("Delete Member Error Log : ", e.getMessage());
+			resultMap.put("message", e.getMessage());
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}
+		
+		int auth = (int) resultMap.get("auth");
+		if(auth != 1) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}else {
+			for(Member m : memberservice.getAdminMember()) {
+				if(m.getAuth() == 1 && m.getMember_id() == (int)resultMap.get("member_id") && m.getEmail() == resultMap.get("member_email")) {
+					log.info("Delete Member Excute ! target_id = " + member_id + ", from = " + m.getEmail());
+					memberservice.deleteMember(member_id);
+					
+					ServerLog sl = new ServerLog();
+					sl.setMember_id(m.getMember_id());
+					sl.setLog_content("Delete Member_id : " + member_id + " ,from = " + m.getEmail());
+					logService.insertLog(sl);
+
+					list = memberservice.getNormalMember();
+					
+					break;
+				}
+			}
+		}
+		
+		return new ResponseEntity<List<Member>>(list, HttpStatus.OK);
 	}
 }
