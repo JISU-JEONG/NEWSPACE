@@ -179,16 +179,16 @@ export default {
 				"dataField": "value"
 				});
 
-				series1.labels.template.url = "http://192.168.31.86:8080/search/{word}";
+				series1.labels.template.url = "http://192.168.31.85:8081/search/{word}";
 				series1.labels.template.urlTarget = "_self";
 				series1.labels.template.tooltipText = "{word}: {value}";
-				series2.labels.template.url = "http://192.168.31.86:8080/search/{word}";
+				series2.labels.template.url = "http://192.168.31.85:8081/search/{word}";
 				series2.labels.template.urlTarget = "_self";
 				series2.labels.template.tooltipText = "{word}: {value}";
-				series3.labels.template.url = "http://192.168.31.86:8080/search/{word}";
+				series3.labels.template.url = "http://192.168.31.85:8081/search/{word}";
 				series3.labels.template.urlTarget = "_self";
 				series3.labels.template.tooltipText = "{word}: {value}";
-				series4.labels.template.url = "http://192.168.31.86:8080/search/{word}";
+				series4.labels.template.url = "http://192.168.31.85:8081/search/{word}";
 				series4.labels.template.urlTarget = "_self";
 				series4.labels.template.tooltipText = "{word}: {value}";
 
