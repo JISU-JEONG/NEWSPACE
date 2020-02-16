@@ -1,7 +1,7 @@
 <template>
   <div class="earth">
     <div class="room">
-      <div class="wall">
+      <div class="wall wall-behind">
         <div class="team-name">A.M.T</div> <br>
         <div style="position:relative">
           <div class="team-name-detail-fake">A.I Machine-learning Team</div>
@@ -168,12 +168,25 @@ export default {
         this.$router.push({ path: '/' })
       }
     },
+    onKeyupEsc(e) {
+      const earthElem = document.querySelector('.earth')
+
+      if (e.keyCode === 27){
+        this.selectedMember = ''
+        earthElem.style.background = '#E0E0E0'
+      }
+    }
   },
   mounted() {
-    window.addEventListener('mousemove', this.onMouseMove)
+    setTimeout(()=> {
+      window.addEventListener('mousemove', this.onMouseMove)
+    }, 1900)
+    
+    window.addEventListener('keyup', this.onKeyupEsc)
   },
   beforeDestroy() {
     window.removeEventListener('mousemove', this.onMouseMove)
+    window.removeEventListener('keyup', this.onKeyupEsc)
   },
 }
 </script>
@@ -221,9 +234,17 @@ export default {
     left: 0;
     top: 0;
     background: #fff;
-    transform: translateZ(-50vw);
     transform-style: preserve-3d;
     font-family: 'Black Han Sans', sans-serif;
+    animation: make-room 1.5s 0.3s forwards;
+  }
+  .wall-behind {
+    z-index: 2;
+  }
+  @keyframes make-room {
+    to {
+      transform: translateZ(-50vw)
+    }
   }
   .team-name {
     font-size: 12rem;
@@ -238,7 +259,7 @@ export default {
     z-index:2;
     transform: rotate(2deg);
     border: 0.1px solid black;
-    animation: drop 2s 2s forwards;
+    animation: drop 1.5s 3s forwards;
   }
   @keyframes drop {
     0% {
@@ -254,7 +275,7 @@ export default {
       transform: 
         rotate(8deg);      
     }
-    60% {
+    70% {
       opacity: 0;
     }
     100% {
@@ -268,17 +289,33 @@ export default {
     padding-left:8px;
   }
   .left {
-    left: -50vw;
     width: 100vw;
-    transform: rotateY(90deg);
+    transform: rotateY(90deg) translateZ(-50vw) translateX(-10vw);
     text-align: center; 
     font-size: 2rem;
+    animation:  make-room-left 1.5s 0.3s forwards;
+  }
+  @keyframes make-room-left {
+    from {
+      transform: rotateY(90deg) translateZ(-50vw)  translateX(-50vw);
+    }
+    to {
+      transform: rotateY(90deg) translateZ(-50vw);
+    }
   }
   .right {
-    left: 50vw;
     width: 100vw;
-    transform: rotateY(-90deg);
+    transform:  rotateY(-90deg) translateZ(-50vw);
     font-size: 2rem;
+    animation: make-room-right  1.5s 0.3s forwards;
+  }
+  @keyframes make-room-right {
+    from {
+      transform:  rotateY(-90deg) translateZ(-50vw) translateX(50vw);
+    }
+    to {
+      transform:  rotateY(-90deg) translateZ(-50vw);
+    }
   }
   .mouse-hole {
     display: flex;
