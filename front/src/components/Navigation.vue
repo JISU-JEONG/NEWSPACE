@@ -2,7 +2,7 @@
   <nav v-if="$route.name !== ('Admin' && 'AboutUs')">
     <chat />
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short  id="navbar">
-      <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp" id="homebutton">
+      <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
       </v-btn>
       <v-btn to="/" icon v-else>
@@ -12,7 +12,7 @@
         <span>Admin</span>
       </v-btn>
       <v-spacer />
-      <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)" id="searchbar">
+      <v-form style="width:350px;" @submit.prevent="onSubmit(searchValue)">
         <v-text-field
           v-model="searchValue"
           label="검색"
@@ -31,6 +31,7 @@
     </v-app-bar>
     <!-- 사이드바 -->
     <v-navigation-drawer
+      id="sidenav"
       v-model="drawer"
       app
       right
@@ -177,7 +178,7 @@ export default {
       }
     },
     moveToDetail(news_id) {
-      router.push({ name: "detail", params: { id: news_id, keyword:' ' } });
+      router.push({ name: "detail", params: { id: news_id } });
     }
   },
   beforeMount() {

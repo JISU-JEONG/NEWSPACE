@@ -1,12 +1,6 @@
 <template>
   <div class="chat-world">
-    <v-btn
-      color="green"
-      style="position: fixed; left:24px; bottom: 72px; z-index:50"
-      dark
-      fab
-      @click="openChat"
-    >
+    <v-btn id="chatting" color="green" style="position: fixed; left:24px; bottom: 72px; z-index:50" dark fab @click="openChat" >
       <v-icon v-if="show || !countUnreadMessages">mdi-message-processing</v-icon>
       <v-badge v-else color="red" :content="countUnreadMessages">
         <v-icon>mdi-message-processing</v-icon>

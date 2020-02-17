@@ -20,33 +20,37 @@ const steps = [
     popover: {
       title: 'Page Search',
       description: 'Page search, quick navigation',
-      position: 'bottom'
+      position: 'bottom',
+      offset: 750
     }
   },
   {
-    element: '#searchbar',
+    element: '#sidenav',
     popover: {
       title: 'Screenfull',
       description: 'Set the page into fullscreen',
-      position: 'bottom'
-    }
-  },
-  {
-    element: '#size-select',
-    popover: {
-      title: 'Switch Size',
-      description: 'Switch the system size',
       position: 'left'
     }
   },
   {
-    element: '#tags-view-container',
+    element: '#newstab',
+    popover: {
+      title: 'Switch Size',
+      description: 'Switch the system size',
+      position: 'top'
+    },
+    onNext: () => {
+      console.log(this)
+    },
+  },
+  {
+    element: '#chatting',
+    opacity: 0,
     popover: {
       title: 'Tags view',
       description: 'The history of the page you visited',
-      position: 'bottom'
+      position: 'top'
     },
-    padding: 0
   }
 ]
 
