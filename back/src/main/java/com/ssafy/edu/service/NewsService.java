@@ -565,15 +565,14 @@ public class NewsService implements INewsService {
 					lmax += count[c];
 				}
 			}
-
+			
 			if (max == 0) {
 				max = lmax;
+				result.add(new SearchChart("ALL", index--, max - lmax, find, search));
 			} else {
 				result.add(new SearchChart("ALL", index--, max - lmax, find, search));
 			}
 		}
-
-		result.add(new SearchChart("ALL", index, max, find, search));
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
 		Calendar cal = Calendar.getInstance();
@@ -855,8 +854,9 @@ public class NewsService implements INewsService {
 		ChromeOptions option = new ChromeOptions();
 
 //		option.setBinary("/usr/bin/google-chrome");
-
 		option.addArguments("headless");
+		option.addArguments("--no-sandbox");
+		option.addArguments("--disable-dev-shm-usage");
 
 		driver = new ChromeDriver(option);
 		driver.get(url);
@@ -1006,8 +1006,9 @@ public class NewsService implements INewsService {
 		ChromeOptions option = new ChromeOptions();
 
 //		option.setBinary("/usr/bin/google-chrome");
-
 		option.addArguments("headless");
+		option.addArguments("--no-sandbox");
+		option.addArguments("--disable-dev-shm-usage");
 
 		driver = new ChromeDriver(option);
 
@@ -1225,28 +1226,29 @@ public class NewsService implements INewsService {
 		serverCheck = true;
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
 		samsungCrawling = true;
-		samsung_Crawling1();
+//		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
-		samsung_Crawling2();
+//		samsung_Crawling2();
 		samsungCrawling = false;
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
 		lgCrawling = true;
-		lg_Crawling();
+//		lg_Crawling();
 		lgCrawling = false;
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
 		skCrawling = true;
-		sk_Crawling();
+//		sk_Crawling();
 		skCrawling = false;
 		logger.info("CRAWLING DONE." + "\t" + new Date());
 		keywordSet = true;
-		allKeywordSet();
+//		allKeywordSet();
 		keywordSet = false;
 		serverCheck = false;
 	}
 	
-	public void adminServerOn() throws IOException, ParseException {
+	public boolean adminServerOn() throws IOException, ParseException {
 		if(serverCheck) {
-			logger.info("Already Server. CRAWLING NOT EXCUTE" + new Date());
+			logger.info("Already Server. CRAWLING NOT EXCUTE " + new Date());
+			return false;
 		}else {
 			serverCheck = true;
 			logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
@@ -1268,6 +1270,7 @@ public class NewsService implements INewsService {
 			allKeywordSet();
 			keywordSet = false;
 			serverCheck = false;
+			return true;
 		}
 	}
 }
