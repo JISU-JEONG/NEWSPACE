@@ -41,5 +41,5 @@ public interface INewsService {
 	void updateNewsLog(NewsInsertHelp nih);
 	void insertNewsLog(NewsInsertHelp nih);
 	List<NewsDTO> getMyRecentNews(int member_id);
-	void adminServerOn() throws IOException, ParseException;
+	boolean adminServerOn() throws IOException, ParseException;
 }

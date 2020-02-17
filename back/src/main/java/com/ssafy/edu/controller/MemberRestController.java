@@ -1,10 +1,12 @@
 package com.ssafy.edu.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -344,8 +347,8 @@ public class MemberRestController {
 		logService.insertLog(sl);
 	}
 	
-	@DeleteMapping("/member/deleteMember")
-	public ResponseEntity<List<Member>> deleteMember(@RequestBody int member_id, HttpServletRequest req){
+	@DeleteMapping("/member/deleteMember/{member_id}")
+	public ResponseEntity<List<Member>> deleteMember(@PathVariable int member_id, HttpServletRequest req){
 		
 		List<Member> list = null;
 		
@@ -364,7 +367,7 @@ public class MemberRestController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}else {
 			for(Member m : memberservice.getAdminMember()) {
-				if(m.getAuth() == 1 && m.getMember_id() == (int)resultMap.get("member_id") && m.getEmail() == resultMap.get("member_email")) {
+				if(m.getAuth() == 1 && m.getMember_id() == (int)resultMap.get("member_id") && m.getEmail().equals(resultMap.get("member_email"))) {
 					log.info("Delete Member Excute ! target_id = " + member_id + ", from = " + m.getEmail());
 					memberservice.deleteMember(member_id);
 					
@@ -379,7 +382,45 @@ public class MemberRestController {
 				}
 			}
 		}
-		
 		return new ResponseEntity<List<Member>>(list, HttpStatus.OK);
+	}
+	
+	@PostMapping("/member/adminServerOn")
+	public boolean adminServerOn(HttpServletRequest req) throws IOException, ParseException {
+		
+		ServerLog sl = new ServerLog();
+		
+		Map<String, Object> resultMap = new HashMap<>();
+
+		try {
+			resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+		} catch (RuntimeException e) {
+			log.error("Delete Member Error Log : ", e.getMessage());
+			resultMap.put("message", e.getMessage());
+		}
+		
+		int auth = (int) resultMap.get("auth");
+		
+		if(auth != 1) {
+			sl.setMember_id(0);
+			sl.setLog_content("Admin Page An abnormal approach.");
+			logService.insertLog(sl);
+			return false;
+		}else {
+			
+			int id = (int) resultMap.get("member_id");
+			String email = (String) resultMap.get("member_email");
+			log.info("Administrator Service Crawling Server On By. " + email);
+			
+			boolean check = newsService.adminServerOn();
+			if(!check) {
+				return false;
+			}else {
+				sl.setMember_id(id);
+				sl.setLog_content("Admin Page Crawling Server Excute By. " + email);
+				logService.insertLog(sl);
+				return true;
+			}
+		}
 	}
 }

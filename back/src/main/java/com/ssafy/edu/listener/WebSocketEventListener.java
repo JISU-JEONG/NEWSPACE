@@ -30,6 +30,8 @@ public class WebSocketEventListener {
 	@Autowired
 	private SimpMessageSendingOperations messagingTemplate;
 
+
+	//Connect
 	@EventListener
 	public void handleWebSocketConnectListener(SessionConnectedEvent event) {
 
@@ -37,45 +39,28 @@ public class WebSocketEventListener {
 				SimpMessageHeaderAccessor.class);
 		
 		GenericMessage generic = (GenericMessage) accessor.getHeader("simpConnectMessage");
-
 		Map nativeHeaders = (Map) generic.getHeaders().get("nativeHeaders");
 		Map simpSessionAttributes = (Map) generic.getHeaders().get("simpSessionAttributes");
 		String username = nativeHeaders.get("username").toString().replace("[", "").replace("]", "");
-		String room = nativeHeaders.get("room").toString().replace("[", "").replace("]", "");
-		user.put(simpSessionAttributes.get("sessionId").toString(), username);
-		System.out.println(room);
-		usercont();
+		System.out.println(username);
+		if(username == null || username.equals("null")) {
+			System.out.println("익명의 유저 접속");
+		}
+		else {
+			user.put(simpSessionAttributes.get("sessionId").toString(), username);
+			usercont();
+		}
 		logger.info("Received a new web socket connection");
-
 	}
 
+	//Disconnet
 	@EventListener
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
 		String sessionId = (String) headerAccessor.getSessionAttributes().get("sessionId");
-		String username = (String) headerAccessor.getSessionAttributes().get("username");
-		String member_id = (String) headerAccessor.getSessionAttributes().get("member_id");
-		String room = (String) headerAccessor.getSessionAttributes().get("room");
 		ChatMessage chatMessage = new ChatMessage();
-		System.out.println(headerAccessor);
-		if (username != null && username != "" && !username.equals("undefined")) {
-			logger.info("User Disconnected : " + username);
-
-			chatMessage.setType(ChatMessage.MessageType.LEAVE);
-			chatMessage.setSender(username);
-			chatMessage.setSessionid(member_id);
-			user.remove(sessionId);
-		}
-
-		else {
-			logger.info("Disconnected : " + sessionId);
-			chatMessage.setType(ChatMessage.MessageType.LEAVE);
-			chatMessage.setSender(user.get(sessionId));
-			chatMessage.setSessionid(member_id);
-			user.remove(sessionId);
-		}
-
+		System.out.println(sessionId);
+		user.remove(sessionId);
 		usercont();
 		messagingTemplate.convertAndSend("/topic/publicChatRoom", chatMessage);
 	}
@@ -85,10 +70,9 @@ public class WebSocketEventListener {
 		String userlist[] = new String[user.size()];
 		int i = 0;
 		while (mapIter.hasNext()) {
-
 			String key = mapIter.next();
 			String value = user.get(key);
-			System.out.println(key + " " + value);
+//			System.out.println(key + " " + value);
 			userlist[i++] = value;
 		}
 
