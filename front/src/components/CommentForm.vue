@@ -1,6 +1,5 @@
 <template>
-    <div class="my-5">
-        <h3 class="px-5">토론 게시판</h3>
+    <div class="mt-5">
         <div v-if=this.$store.state.token>
             <form @submit.prevent="CommentCreate" class="inputcomment">
                 <v-row class="inputbox1">
@@ -8,19 +7,19 @@
                     v-model="text"
                     type="text" id="text"
                     class="textbox"
-                    rows = "5"
+                    rows = "3"
                     >
-                    댓글을 달아 주세요
                     </textarea>
                 </v-row>
                 <v-row class="inputbox2">
                     <v-btn
+                    color="rgb(81, 126, 223)"
+                    dark
                     class = "inputbtn"
                     depressed 
                     type="submit"
-                    text color="white"
                     >
-                        <strong>등록</strong>
+                        등록
                     </v-btn>
                 </v-row>
             </form>
@@ -28,7 +27,6 @@
         <div v-else class="defualtloign">
             <h1>로그인을 해주세요</h1>
         </div>
-        <hr>
     </div>
 </template>
 
@@ -84,6 +82,5 @@ export default {
 }
 .inputbtn{
     margin: 5px;
-    background-color : rgb(81, 126, 223);
 }
 </style>

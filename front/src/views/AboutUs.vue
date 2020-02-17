@@ -1,74 +1,76 @@
 <template>
-  <div class="earth">
-    <div class="room">
-      <div class="wall wall-behind">
-        <div class="team-name">A.M.T</div> <br>
-        <div style="position:relative">
-          <div class="team-name-detail-fake">A.I Machine-learning Team</div>
-          <div class="team-name-detail-real">All Man Team</div>
+  <div>
+    <div class="earth">
+      <div class="room">
+        <div class="wall wall-behind">
+          <div class="team-name">A.M.T</div> <br>
+          <div style="position:relative">
+            <div class="team-name-detail-fake">A.I Machine-learning Team</div>
+            <div class="team-name-detail-real">All Man Team</div>
+          </div>
+        </div>
+        <div class="wall left"></div>
+        <div class="wall right">
+          웹마스터 영길이 캐리한 팀입니다. <br>
+          다음 프로젝트 캐리받을 사람 선착순 두명 받습니다. <br>
+          그 다음 두명은 커피 하루 한잔 사준다는 전제하에 팀원으로 받아드립니다.
+          <div class="taewoo-text"></div>
+          <div class="mouse-hole"></div>
         </div>
       </div>
-      <div class="wall left"></div>
-      <div class="wall right">
-        웹마스터 영길이 캐리한 팀입니다. <br>
-        다음 프로젝트 캐리받을 사람 선착순 두명 받습니다. <br>
-        그 다음 두명은 커피 하루 한잔 사준다는 전제하에 팀원으로 받아드립니다.
-        <div class="taewoo-text"></div>
-        <div class="mouse-hole"></div>
-      </div>
-    </div>
-    <div class="profile-container">
-      <div class="profile-nav" @click="selectMember">
-        <div class="home-icon">
-          <v-icon>mdi-home</v-icon>
+      <div class="profile-container">
+        <div class="profile-nav" @click="selectMember">
+          <div class="home-icon">
+            <v-icon>mdi-home</v-icon>
+          </div>
+          <div v-for="member in Object.keys(members)" :key="member" class="member-icon" :class="[members[member].cssClass]" :data-name="member"></div>
         </div>
-        <div v-for="member in Object.keys(members)" :key="member" class="member-icon" :class="[members[member].cssClass]" :data-name="member"></div>
-      </div>
-      <div v-if="selectedMember" class="profile-content">
-        <div class="profile-picture-box">
-          <img class="profile-picture" :src="require(`../assets/images/${selectedMember}.jpg`)">
-        </div>
-        <div class="profile-info">
-          <div class="first-box">
-            <div class="info-box name">
-              {{members[selectedMember].name}}
-              <span style="font-size:2vw">{{members[selectedMember].major}}</span>
+        <div v-if="selectedMember" class="profile-content">
+          <div class="profile-picture-box">
+            <img class="profile-picture" :src="require(`../assets/images/${selectedMember}.jpg`)">
+          </div>
+          <div class="profile-info">
+            <div class="first-box">
+              <div class="info-box name">
+                {{members[selectedMember].name}}
+                <span style="font-size:2vw">{{members[selectedMember].major}}</span>
+              </div>
+              <div class="info-box git">
+                <a :href="members[selectedMember].gitUrl" target="_blank">
+                  <v-icon>fa-github</v-icon>
+                </a>
+              </div>
             </div>
-            <div class="info-box git">
-              <a :href="members[selectedMember].gitUrl" target="_blank">
-                <v-icon>fa-github</v-icon>
-              </a>
+            <div class="info-box second-box">
+              {{members[selectedMember].info01.role}}
+              <div class="info01-detail">{{members[selectedMember].info01.detail}}</div>
             </div>
-          </div>
-          <div class="info-box second-box">
-            {{members[selectedMember].info01}}
-            <div class="info01-detail">이것저것 했습니다. </div>
-          </div>
-          <div class="info-box third-box">
-            <div style="padding: 0.5vw 3vw; font-size: 2vw;">기술 스택</div>
-            <v-row>
-              <v-col cols="6"  v-for="skill in members[selectedMember].skills" :key="skill.name" class="pt-1">
-                <v-row>
-                  <v-col cols="3" class="d-flex justify-center align-center pa-0">
-                    <v-icon class="skill-icon">{{skill.name}}</v-icon>
-                  </v-col>
-                  <v-col cols="8" class="d-flex justify-center align-center pa-0">
-                    <v-progress-linear
-                      :color="members[selectedMember].color"
-                      height="1.5vw"
-                      :value="skill.rate"
-                      striped
-                    ></v-progress-linear>
-                  </v-col>
-                </v-row>
-                
-              </v-col>
-            </v-row>
+            <div class="info-box third-box">
+              <div style="padding: 0.5vw 3vw; font-size: 2vw;">기술 스택</div>
+              <v-row>
+                <v-col cols="6"  v-for="skill in members[selectedMember].skills" :key="skill.name" class="pt-1">
+                  <v-row>
+                    <v-col cols="3" class="d-flex justify-center align-center pa-0">
+                      <v-icon class="skill-icon">{{skill.name}}</v-icon>
+                    </v-col>
+                    <v-col cols="8" class="d-flex justify-center align-center pa-0">
+                      <v-progress-linear
+                        :color="members[selectedMember].color"
+                        height="1.5vw"
+                        :value="skill.rate"
+                        striped
+                      ></v-progress-linear>
+                    </v-col>
+                  </v-row>
+                  
+                </v-col>
+              </v-row>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div> 
+    </div> 
+  </div>
 </template>
 
 <script>
@@ -77,6 +79,7 @@ export default {
   data() {
     return {
       mousePos : { x:0, y:0 },
+      mouseEventCheck: '',
       selectedMember: '',
       memberIcon: 'member-icon',
       members: {
@@ -85,7 +88,10 @@ export default {
           major: '메카트로닉스공학부',
           imgUrl: './images/jisu.jpg',
           gitUrl: 'https://github.com/JISU-JEONG',
-          info01: 'Front-end',
+          info01: {
+            role: 'Front-end',
+            detail: '자기자랑하세요'
+          },
           cssClass: 'ji-su',
           color: '#64B5F6',
           skills: [
@@ -101,7 +107,10 @@ export default {
           major: '정보통신공학과',
           imgUrl: './images/younghoon.jpg',
           gitUrl: 'https://github.com/hoonyhoony',
-          info01: 'Back-end',
+          info01: {
+            role: 'Back-end',
+            detail: '자기자랑하세요'
+          },          
           cssClass: 'young-hoon',
           color: '#BA68C8',
           skills: [
@@ -118,7 +127,10 @@ export default {
           major: '컴퓨터공학과',
           imgUrl: './images/younggil.jpg',
           gitUrl: 'https://github.com/yg1110',
-          info01: 'Back-end',
+          info01: {
+            role: 'Back-end',
+            detail: '자기자랑하세요'
+          },
           cssClass: 'young-gil',
           color: '#FFB74D',
           skills: [
@@ -136,8 +148,11 @@ export default {
           major: '수학과',
           imgUrl: './images/taewoo.jpg',
           gitUrl: 'https://github.com/EHwooKim',
-          info01: 'Front-end',
-        cssClass: 'tae-woo',
+          info01: {
+            role: 'Front-end',
+            detail: '자기자랑하세요'
+          },
+          cssClass: 'tae-woo',
           color: '#81C784',
           skills: [
             { name: 'mdi-language-python',rate: 65 },
@@ -178,14 +193,14 @@ export default {
     }
   },
   mounted() {
-    setTimeout(()=> {
+    this.mouseEventCheck = window.setTimeout(()=> {
       window.addEventListener('mousemove', this.onMouseMove)
     }, 1900)
-    
     window.addEventListener('keyup', this.onKeyupEsc)
   },
   beforeDestroy() {
-    window.removeEventListener('mousemove', this.onMouseMove)
+    window.clearTimeout(this.mouseEventCheck);
+    window.removeEventListener('mousemove', this.onMouseMove)  
     window.removeEventListener('keyup', this.onKeyupEsc)
   },
 }

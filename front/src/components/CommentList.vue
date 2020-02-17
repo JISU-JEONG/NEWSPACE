@@ -1,21 +1,24 @@
 <template>
   <div>
-    <div v-for="comment in comments" :key="comment.username">
-      <v-card flat>
-        <v-card-title class="cardtop">{{comment.member_name}}</v-card-title>
-        <v-card-text class="commentdate">
-          {{comment.comment_date}}
-          <button
-            v-if="comment.member_id==$store.state.member_id"
-            @click="deleteComment(comment)"
-          >X</button>
-        </v-card-text>
-        <v-card-text class="commentbody black--text">
-          <strong>{{comment.comment_text}}</strong>
-        </v-card-text>
-      </v-card>
-      <hr />
-    </div>
+    <v-card flat v-for="comment in comments" :key="comment.comment_date">
+      <v-card-title class="cardtop pt-2">
+        {{comment.member_name}}
+        <span class="comment-date ml-3 mr-5">{{comment.comment_date}}</span>
+        <v-btn
+          absolute
+          right
+          icon
+          v-if="comment.member_id==$store.state.member_id"
+          @click="deleteComment(comment)" 
+        >
+          <v-icon>fa-times</v-icon>
+        </v-btn>
+      </v-card-title>        
+      <v-card-text class="commentbody pb-2">
+        <strong>{{comment.comment_text}}</strong>
+      </v-card-text>
+    </v-card>
+    <hr>
   </div>
 </template>
 
@@ -69,16 +72,16 @@ export default {
 </script>
 
 <style scoped>
-.cardtop {
-  padding-bottom: 5px;
-  font-size: 25px;
-}
-.commentbody {
-  font-size: 15px;
-  color: black;
-  padding-top: 0;
-}
-.commentdate {
-  font-size: 12px;
-}
+  .cardtop {
+    padding-bottom: 5px;
+    font-size: 16px;
+  }
+  .commentbody {
+    font-size: 16px;
+    color: black;
+    padding-top: 0;
+  }
+  .comment-date {
+    font-size: 12px;
+  }
 </style>
