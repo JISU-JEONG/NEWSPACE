@@ -35,6 +35,7 @@ export default {
       serverSk: false,
       logs: [],
       members: [],
+      test : "aaa"
     };
   },
   mounted() {
@@ -42,6 +43,9 @@ export default {
     this.getMember();
   },
   methods: {
+    test(){
+      console.log("adas");
+    },
     getMember(){
       axios.post(
           "http://192.168.31.85:8080/member/adminManage/",
