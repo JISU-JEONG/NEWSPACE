@@ -6,9 +6,9 @@
           <v-container style="min-height:430px;">
             <v-card-title>관심 키워드 등록</v-card-title>
             <v-card-subtitle>
-              0. 클릭하여 키워드를 추가하거나 삭제할 수 있습니다. <br>
-              1. 키워드와 일치하는 뉴스를 이메일로 전송해드립니다 (이메일 인증 필요) <br>
-              2. 로그인시 해당 키워드와 일치하는 뉴스를 따로 보여드립니다.
+              0. 클릭하여 키워드를 추가하거나 삭제할 수 있습니다.
+              <br />1. 키워드와 일치하는 뉴스를 이메일로 전송해드립니다 (이메일 인증 필요)
+              <br />2. 로그인시 해당 키워드와 일치하는 뉴스를 따로 보여드립니다.
             </v-card-subtitle>
             <v-divider></v-divider>
 
@@ -41,6 +41,7 @@
               </v-container>
             </v-card>
             <v-text-field
+              outlined
               style="margin-top:16px;"
               label="추가하고싶은 키워드"
               v-model="userInputKeyword"
@@ -118,19 +119,27 @@ export default {
               type: localStorage.getItem("member_type")
             })
             .then(res => {
+              console.log(res.data.member_keyword);
               localStorage.setItem("login-token", res.headers["login-token"]);
+              localStorage.setItem("loginStatus", true);
+              localStorage.setItem("member_keyword", res.data.member_keyword);
+              localStorage.setItem("member_name", res.data.member_name);
               resolve("ㄲ");
             });
         });
       };
       _promise().then(() => {
+        console.log(localStorage.getItem("member_keyword"))
         localStorage.setItem("loginStatus", parentFunc.name);
         const payload = {
           token: localStorage.getItem("login-token"),
           member_id: "",
-          member_name: localStorage.getItem("member_name")
+          member_name: localStorage.getItem("member_name"),
+          auth: localStorage.removeItem("auth"),
+          member_keyword: localStorage.getItem("member_keyword")
         };
         this.$store.dispatch("login", payload);
+        parentFunc.$store.dispatch("setMemberNews");
         this.$router.push("/", () => {});
       });
     },
@@ -171,18 +180,21 @@ export default {
         this.error = true;
         this.errorMessages = "두글자 이상을 입력해주세요";
       } else {
-          this.userInputKeyword.split(' ').forEach( value => {
-            if (this.selectedKeywords.findIndex(v => v === value) < 0 && value.length > 1 ) {
-              this.selectedKeywords.push(value)
-            } else {
-              errorKeyword = errorKeyword.concat(` ${value}`)
-            }
-          })
-          errorKeyword = errorKeyword.trim()
-          if (errorKeyword) {
-            this.error = true
-            this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`
+        this.userInputKeyword.split(" ").forEach(value => {
+          if (
+            this.selectedKeywords.findIndex(v => v === value) < 0 &&
+            value.length > 1
+          ) {
+            this.selectedKeywords.push(value);
+          } else {
+            errorKeyword = errorKeyword.concat(` ${value}`);
           }
+        });
+        errorKeyword = errorKeyword.trim();
+        if (errorKeyword) {
+          this.error = true;
+          this.errorMessages = `${errorKeyword}은(는) 이미 추가되었거나 너무 짧은 단어입니다.`;
+        }
       }
       this.userInputKeyword = "";
     }

@@ -8,8 +8,9 @@
           <v-container>
             <v-form ref="loginForm" @submit.prevent="login" v-model="loginValid">
               <v-container>
-                <v-text-field label="이메일" type="email" v-model="email" :rules="emailRules" />
+                <v-text-field outlined label="이메일" type="email" v-model="email" :rules="emailRules" />
                 <v-text-field
+                  outlined
                   label="비밀번호"
                   type="password"
                   v-model="password"
@@ -53,7 +54,6 @@ import http from "../services/http-common";
 import axios from "axios";
 import info from "../services/getInfo";
 
-
 export default {
   name: "login",
   computed: {
@@ -88,7 +88,7 @@ export default {
         // axios
         //   .post("http://52.79.249.4:8080/member/signin", {
         axios
-          .post("http://192.168.31.85:8080/member/signin", {
+          .post("http://192.168.31.84:8080/member/signin", {
             email: this.email,
             password: this.password,
             type: "nomal",
@@ -158,7 +158,7 @@ export default {
             .signInWithPopup(provider)
             .then(res => {
               parentFunc.username = res.user.displayName;
-              parentFunc.socialemail = res.user.email;
+              parentFunc.socialemail = res.user.uid;
               parentFunc.type = "google";
               resolve("ㄲ");
             })
@@ -180,7 +180,7 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/signupcheck", {
           axios
-            .post("http://192.168.31.85:8080/member/signupcheck", {
+            .post("http://192.168.31.84:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -201,7 +201,7 @@ export default {
             // axios
             //   .post("http://52.79.249.4:8080/member/socialtoken", {
             axios
-              .post("http://192.168.31.85:8080/member/socialtoken", {
+              .post("http://192.168.31.84:8080/member/socialtoken", {
                 email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type

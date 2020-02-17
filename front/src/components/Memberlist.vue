@@ -13,5 +13,8 @@
 export default {
   name: "MemberList",
   props: ["members"],
+  mounted(){
+    console.log(this.$parent);
+  }
 };
 </script>
