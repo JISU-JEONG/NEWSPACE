@@ -166,7 +166,6 @@ export default {
 	mounted(){
 		this.driver = new Driver()
 
-		console.log(this.driver)
 		this.getKeyword()
 		this.getStatus()
 	},

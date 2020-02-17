@@ -98,7 +98,7 @@ export default {
 				"dataField": "value"
 				});
 
-				series.labels.template.url = "http://192.168.31.86:8080/search/{word}";
+				series.labels.template.url = "http://192.168.31.84:8081/search/{word}";
 				series.labels.template.urlTarget = "_self";
         series.labels.template.tooltipText = "{word}: {value}";
         

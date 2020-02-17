@@ -2,7 +2,7 @@
 <div>
   <div class="header_box">
       <div class="header_name">"{{user.member.name}}"님 환영합니다.</div>
-      <div class="header_email">{{user.member.email}}</div>
+      <div class="header_email" v-if="isemailcheck !== 'true'">이메일 인증을 완료하여 관심키워드 뉴스를 받아보세요</div>
       <div class="header_email">
         <v-btn text v-if="isemailcheck !== 'true'" @click="emailcheck()">이메일 인증하기</v-btn>
         <span v-else class="d-flex align-center justify-center"><v-icon color="green">mdi-check-decagram</v-icon>이메일 인증 완료</span>

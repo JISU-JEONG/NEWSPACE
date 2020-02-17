@@ -8,8 +8,6 @@ import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
 import Admin from './views/Admin.vue'
-import Offline from './views/Offline.vue'
-import chatlog from './components/Chatlog.vue'
 import AboutUs from './views/AboutUs.vue'
 
 Vue.use(Router)
@@ -73,26 +71,16 @@ const routes = [
   	component: Admin
   },
   {
-    path: "/Offline",
-    name: "Offline",
-    component: Offline
-  },
-  {
-    path: "/chatlog",
-    name: "chatlog",
-    component: chatlog
-  },
-  {
     path: "/AboutUs",
     name: "AboutUs",
     component: AboutUs
   },
-  // {
-  //   path: '*',
-  //   meta: {
-  //     goHome: true
-  //   }
-  // }
+  {
+    path: '*',
+    meta: {
+      goHome: true
+    }
+  }
 ]
 
 const scrollBehavior = function (to, from, savedPosition) {
