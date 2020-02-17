@@ -8,7 +8,7 @@
 				:num="number"
 				/>
 			</div>
-				<div class="under" >
+				<div v-if="flag" class="under" >
 					{{todaytext}} : <strong> {{ commaToay }} </strong> 건 | {{alltext}} : <strong>{{ commaAll }}</strong> 건
 				</div>
 		</div>
@@ -22,8 +22,9 @@
 		<v-col
 		class="d-none d-sm-none d-md-flex"
 		md=3>
-			<div class="side" id="intro">
-				<div class="sidebody">
+			<div class="side">
+				<Sidebanner/>
+				<!-- <div class="sidebody">
 					<strong>당신을 위한 새로운 공간</strong>
 				</div>
 				<div class="sidebody">
@@ -35,7 +36,7 @@
 				</div>
 				<div class="side-btn" >주요 대상</div>
 				<div class="side-btn" @click="guide">NEWSPACE 사용방법</div>
-				<div class="side-btn" @click="$router.push({ path: '/AboutUs' })">ABOUT US</div>
+				<div class="side-btn" @click="$router.push({ path: '/AboutUs' })">ABOUT US</div> -->
 			</div>
 		</v-col>
 	  </v-row>
@@ -50,28 +51,26 @@ import Info from '../services/getInfo';
 import store from "../store";
 import Chat from "../components/Chat"
 import Cloudchart from "../components/Cloudchart"
-import Driver from 'driver.js' // import driver.js
-import 'driver.js/dist/driver.min.css' // import driver.js css
-import steps from '../components/guide/steps.js'
-
+import Sidebanner from '../components/Sidebanner'
 export default {
 	name: 'HomePage',
 	data(){
 		return {
 			number : 0,
 			todaytext : "금일 뉴스",
-			todaycount : 0,
+			todaycount : null,
 			alltext : "전체 뉴스",
-			allcount : 0,
+			allcount : null,
 			status : [],
 			keywords:[],
-			driver: null,
+			flag : false,
 		}
 	},
 	components: {
 		NewsList,
 		Chat,
 		Cloudchart,
+		Sidebanner,
 	},
 	computed: {
 		commaToay(){
@@ -129,6 +128,7 @@ export default {
 						this.todaycount = this.status[4].count
 						this.alltext = "전체 뉴스"
 						this.allcount = this.status[0].count
+						this.flag = true
 					})
 					.catch(e => {
 						console.log(e);
@@ -155,20 +155,14 @@ export default {
 			result = num + result;
 			return result;
 		},
-		guide() {
-      this.driver.defineSteps(steps)
-      this.driver.start()
-    }
 	},
 	beforeMount() {
 		Info();
-	},
-	mounted(){
-		this.driver = new Driver()
-
-		console.log(this.driver)
 		this.getKeyword()
 		this.getStatus()
+	},
+	mounted(){
+		
 	},
 	beforeDestroy(){
 		am4core.disposeAllCharts();
@@ -188,17 +182,11 @@ export default {
 	height: 220px;
 }
 .side{
-	position: sticky;
+	/* position: sticky; */
 	top:100px;
-}
-#intro{
 	margin-top: 81px;
 	width: 300px;
 	height: 500px;
-	text-align: center;
-	padding: 30px 20px 0 20px;
-	box-shadow: 1px 2px 7px lightgray;
-  background-image: url("../components/images/sideback.jpg");
 }
 .under{
 	width: 100%;
@@ -218,31 +206,10 @@ export default {
 	color: white;
 	font-size: 20px;
 }
-.sidebody{
-	font-size: 15px;
-	color: #E5E5E5;
-	margin-top: 20px;
-	margin-bottom: 10px;
-}
-.sidebody strong{
-	color: rgb(74, 204, 255);
-}
+
 .under strong{
 	font-size: 25px;
 	color: #FF5500;
 }
-.side-btn {
-  width: 100%;
-  height: 7%;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(11,43,73,.3);
-  border: 1px solid rgba(11,43,73,.6);
-  font-size: 14px;
-  font-weight: 300;
-  color: white;
-  cursor: pointer;
-}
+
 </style>

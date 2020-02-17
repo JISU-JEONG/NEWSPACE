@@ -4,7 +4,13 @@
     <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
     <Memorychart v-bind:freememory="freememory" v-bind:totalmemory="totalmemory" />
     <Logs v-bind:logs="logs"/>
-    <MemberList v-bind:members="members"/>
+    <v-container>
+    <div class="v-alert v-alert--notification mb-3 info elevation-6" v-for="m in members" :key="m.member_id">
+      <div>
+          {{m.name}} {{m.email}} <v-btn color="info" v-on:click="deleteMember(m.member_id)">앙 삭제띠!</v-btn>
+      </div>
+    </div>
+  </v-container>
   </div>
 </template>
 
@@ -14,15 +20,14 @@ import Memorychart from "../components/Memorychart";
 import Status from "../components/Serverstatus";
 import Logs from "../components/LogList";
 import axios from "axios";
-import MemberList from "../components/Memberlist";
+
 export default {
   name: "Chart",
   components: {
     Cpuchart,
     Memorychart,
     Status,
-    Logs,
-    MemberList
+    Logs
   },
   data: function() {
     return {
@@ -58,6 +63,21 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    deleteMember(member_id){
+      axios
+        .delete(`http://192.168.31.85:8080/member/deleteMember/${member_id}`
+        ,{
+          headers:{
+            "login-token": localStorage.getItem("login-token")
+          }
+        })
+        .then(response => {
+          this.members = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        })
     },
     loop() {
       

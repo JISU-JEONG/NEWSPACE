@@ -1,6 +1,6 @@
  <template>
   <transition name="list">
-    <v-container class="main_web">
+    <v-container class="main_web" id="newstab">
         <v-tabs
           v-model="tab"
           background-color="transparent"

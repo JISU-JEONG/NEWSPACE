@@ -26,13 +26,35 @@
         <span>SK Hynix Crawling Server Down.</span>
       </div>
     </div>
+    <div>
+        <v-btn color="info" v-on:click="ServerOn">앙 나는 버튼띠!</v-btn>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Serverstatus",
-  props: ["serverSamsung", "serverLg", "serverSk"]
+  props: ["serverSamsung", "serverLg", "serverSk"],
+  methods: {
+    ServerOn(){
+      axios
+      .post("http://192.168.31.85:8080/member/adminServerOn/",{}
+        ,{
+          headers: {
+              "login-token": localStorage.getItem("login-token")
+          }
+        })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+    }
+  }
 };
 </script>
 

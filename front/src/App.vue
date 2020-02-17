@@ -27,10 +27,11 @@ export default {
   components: {
     Navigation,
     AppFooter,
-    Chat
+    Chat,
   },
   mounted(){
-  }
+  },
+
 };
 </script>
 
@@ -45,5 +46,5 @@ export default {
 .background {
   background-color: white;
 }
-
+.hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
 </style>
