@@ -36,12 +36,12 @@
           </v-card>
         </v-menu>
       </div>
-      <hr />
-      <br />
+      <hr>
       <div v-html="news.body" class="page"></div>
-      <hr />
-      <CommentForm @commentCreate-event="CommentCreate" />
+      <h2 class="pl-5 mb-2">토론 게시판</h2>
+      <hr>
       <CommentList :comments="comments"></CommentList>
+      <CommentForm @commentCreate-event="CommentCreate" />
       <v-snackbar
         v-model="snackbar"
         bottom
