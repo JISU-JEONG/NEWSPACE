@@ -22,14 +22,6 @@ Vue.use(lineClamp, {})
 new Vue({
   router,
   store,
-  created() {
-    document.addEventListener('beforeunload', this.handler)
-  },
-  methods: {
-    handler: function handler(event) {
-      alert("aaa");
-    }
-  },
   vuetify: new Vuetify({
     theme: {
       primary: "#3f51b5",
