@@ -1,17 +1,53 @@
 <template>
-  <div>
-    <Status v-bind:serverSamsung="serverSamsung" v-bind:serverLg="serverLg" v-bind:serverSk="serverSk"/>
-    <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
-    <Memorychart v-bind:freememory="freememory" v-bind:totalmemory="totalmemory" />
-    <Logs v-bind:logs="logs"/>
-    <v-container>
-    <div class="v-alert v-alert--notification mb-3 info elevation-6" v-for="m in members" :key="m.member_id">
-      <div>
-          {{m.name}} {{m.email}} <v-btn color="info" v-on:click="deleteMember(m.member_id)">앙 삭제띠!</v-btn>
-      </div>
-    </div>
+  <v-container fluid :grid-list-md="!$vuetify.breakpoint.xs">
+    <v-layout wrap row>
+      <v-flex xs12 sm6 class="pb-2">
+        <v-card>
+          <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
+        </v-card>
+      </v-flex>
+            <v-flex xs12 sm6 class="pb-2">
+        <v-card>
+          <Memorychart v-bind:freememory="freememory" v-bind:totalmemory="totalmemory" />
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="pb-2">
+        <v-card height="130px">
+          각종 현황
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="pb-2">
+        <v-card height="130px">
+          각종 현황
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="pb-2">
+        <v-card height="130px">
+          각종 현황
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="pb-2">
+        <v-card height="130px">
+          각종 현황
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm4 class="pb-2">
+        <v-card height="140px">
+          간단한 차트
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm4 class="pb-2">
+        <v-card height="140px">
+          간단한 차트
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm4 class="pb-2">
+        <v-card height="140px">
+          간단한 차트
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
-  </div>
 </template>
 
 <script>

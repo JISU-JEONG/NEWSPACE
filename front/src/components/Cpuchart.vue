@@ -1,6 +1,6 @@
 <template>
   <div>
-    <apexcharts ref="realtime" type="line" height="300" :options="options" :series="series"></apexcharts>
+    <apexcharts ref="realtime" height="200" type="line" :options="options" :series="series"></apexcharts>
   </div>
 </template>
 
@@ -21,25 +21,21 @@ export default {
     clearInterval(this.s);
   },
   methods: {
-    init(){
+    init() {
       const BUF_SIZE = 86400000;
       let d = new Date().getTime();
 
       if (this.series[0].data.length >= BUF_SIZE) {
         this.series[0].data.shift();
-        this.series[1].data.shift();
       }
 
       this.series[0].data.push([d, this.cpuusage]);
-      this.series[1].data.push([d, this.cpuidle]);
       this.$refs.realtime.updateSeries([
-         {
-            name: "cpuusage",
-            data: this.series[0].data
-          },
-          { name: "cpuidle", 
-            data: this.series[1].data }
-        ]);
+        {
+          name: "cpuusage",
+          data: this.series[0].data
+        }
+      ]);
     },
 
     loop() {
@@ -47,7 +43,6 @@ export default {
         this.init();
       }, 1000);
     }
-
   },
   data: function() {
     return {
@@ -74,11 +69,11 @@ export default {
           curve: "smooth"
         },
         title: {
-          text: "Cpu",
-          align: "left"
+          text: "CPU",
+          align: "center"
         },
         markers: {
-          size: 3
+          size: 1
         },
         xaxis: {
           type: "datetime",
@@ -93,20 +88,11 @@ export default {
         },
         legend: {
           show: true
-        },
-        tooltip: {
-          x: {
-            format: "dd/MM/yy HH:mm:ss"
-          }
         }
       },
       series: [
         {
           name: "cpuusage",
-          data: [[new Date().getTime(), 0]]
-        },
-        {
-          name: "cpuidle",
           data: [[new Date().getTime(), 0]]
         }
       ]
