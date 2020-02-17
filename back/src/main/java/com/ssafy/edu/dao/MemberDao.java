@@ -75,6 +75,6 @@ public class MemberDao {
 
 	public void deleteMember(int member_id) {
 		// TODO Auto-generated method stub
-		SQL.delete(ns+"deleteMember");
+		SQL.delete(ns+"deleteMember", member_id);
 	}
 }
