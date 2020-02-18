@@ -1,25 +1,13 @@
 <template>
   <div>
-    <v-tabs 
-      dark
-      background-color="teal darken-3"
-      show-arrows
-      vertical
-      class="admintabs"
-    >
+    <v-tabs dark background-color="teal darken-3" show-arrows vertical class="admintabs">
       <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
-        <v-tab>
-          Option 1
-        </v-tab>
-        <v-tab>
-          Option 2
-        </v-tab>
-        <v-tab>
-          Option 3
-        </v-tab>
-        
-        <v-tab-item>
-          <v-container>
+      <v-tab>Option 1</v-tab>
+      <v-tab>Option 2</v-tab>
+      <v-tab>Option 3</v-tab>
+
+      <v-tab-item>
+        <v-container>
           <v-row>
             <v-col>
               <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
@@ -30,42 +18,89 @@
           </v-row>
           <v-row>
             <v-col>
-              <Status v-bind:serverSamsung="serverSamsung" v-bind:serverLg="serverLg" v-bind:serverSk="serverSk"/>
+              <Status
+                v-bind:serverSamsung="serverSamsung"
+                v-bind:serverLg="serverLg"
+                v-bind:serverSk="serverSk"
+              />
+            </v-col>
+            <v-col></v-col>
+          </v-row>
+        </v-container>
+      </v-tab-item>
+      <v-tab-item>
+        <div class="adminback">
+          <div class="logtitle">NEWSPACE LOG</div>
+          <div class="adminlog">
+            <Logs v-bind:logs="logs" />
+          </div>
+          <div class="logtitle"></div>
+        </div>
+      </v-tab-item>
+      <v-tab-item>
+        <v-container>
+          <h1>Member List</h1>
+          <v-row>
+            <v-col>
+              <ul>
+                <li v-for="(m,i) in members" :key="m.member_id">
+                  <v-avatar class="img" color="blue lighten-2">
+                    <span class="white--text headline">{{m.name[0]}}</span>
+                  </v-avatar>
+                  <div class="username">
+                    <p @click="detailMember(i)">{{m.name}}</p>
+                    <p @click="detailMember(i)">{{m.email}}</p>
+                    <p></p>
+                    <v-icon v-on:click="deleteMember(m.member_id)">fa-times</v-icon>
+                  </div>
+                </li>
+              </ul>
             </v-col>
             <v-col>
+              <ul col>
+                <v-card>
+                  <v-container style="min-height:430px;">
+                    <v-card-title>유저정보</v-card-title>
+                    <v-form ref="form" @submit.prevent="Signup">
+                      <v-text-field
+                        outlined
+                        label="이름"
+                        v-model="name"
+                        type="text"
+                      />
+                      <v-text-field
+                        outlined
+                        label="이메일"
+                        v-model="email"
+                        type="text"
+                      />
+                      <v-text-field
+                        outlined
+                        label="키워드"
+                        v-model="keyword"
+                        type="text"
+                      />
+                      <v-text-field
+                        outlined
+                        label="로그인 타입"
+                        v-model="type"
+                        type="text"
+                      />
+                      <v-btn
+                        id="signupBtn"
+                        color="blue lighten-2"
+                        class="mt-3 white--text"
+                        type="submit"
+                      >수정하기</v-btn>
+                    </v-form>
+                  </v-container>
+                </v-card>
+              </ul>
             </v-col>
           </v-row>
-          </v-container>
-        </v-tab-item>
-        <v-tab-item>
-          <div class="adminback">
-            <div class="logtitle">
-              NEWSPACE LOG
-            </div>
-            <div class="adminlog">
-              <Logs v-bind:logs="logs"/>
-            </div>
-            <div class="logtitle"></div>
-          </div>
-        </v-tab-item>
-        <v-tab-item>
-          <v-container>
-           <ul>
-            <li v-for="m in members" :key="m.member_id">
-              <v-avatar class="img" color="blue lighten-2">
-                <span class="white--text headline">{{m.name[0]}}</span>
-              </v-avatar>
-              <div class="username">
-                <p>{{m.name}}</p>
-                <p>{{m.email}}</p>
-                <p></p>
-                <v-icon v-on:click="deleteMember(m.member_id)">fa-times</v-icon>
-              </div>
-            </li>
-          </ul> 
-          </v-container>
-        </v-tab-item>
-      </v-tabs>
+        </v-container>
+      </v-tab-item>
+    </v-tabs>
   </div>
 </template>
 
@@ -95,6 +130,10 @@ export default {
       serverSk: false,
       logs: [],
       members: [],
+      name: "",
+      email: "",
+      keyword: "",
+      type : ""
     };
   },
   mounted() {
@@ -102,8 +141,15 @@ export default {
     this.getMember();
   },
   methods: {
-    getMember(){
-      axios.post(
+    detailMember(member_id){
+      this.name = this.members[member_id].name;
+      this.email = this.members[member_id].email;
+      this.keyword = this.members[member_id].keyword;
+      this.type = this.members[member_id].type;
+    },
+    getMember() {
+      axios
+        .post(
           "http://192.168.31.85:8080/member/adminManage/",
           {},
           {
@@ -119,11 +165,10 @@ export default {
           console.log(error);
         });
     },
-    deleteMember(member_id){
+    deleteMember(member_id) {
       axios
-        .delete(`http://192.168.31.85:8080/member/deleteMember/${member_id}`
-        ,{
-          headers:{
+        .delete(`http://192.168.31.85:8080/member/deleteMember/${member_id}`, {
+          headers: {
             "login-token": localStorage.getItem("login-token")
           }
         })
@@ -132,7 +177,7 @@ export default {
         })
         .catch(e => {
           console.log(e);
-        })
+        });
     },
     loop() {
       this.s = setInterval(() => {
@@ -172,7 +217,7 @@ export default {
 };
 </script>
 <style scoped>
-  p {
+p {
   margin: 0;
   padding: 0;
 }
@@ -186,7 +231,7 @@ li {
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
   max-width: 400px;
-  height: 50px;
+  height: 70px;
   position: relative;
 }
 
@@ -214,25 +259,25 @@ i {
   cursor: pointer;
   outline: none;
 }
-  .admintabs{
-    width: 100vw;
-    height: 100vh;
-  }
-  .adminlog{
-    overflow-y: scroll;
-    width: 87vw;
-    height: 80vh;
-    background-color: black;
-    margin-left : 20px;
-  }
-  .logtitle{
-    width: 100vw;
-    height: 10vh;
-    color: white;
-    font-size: 30px;
-    padding: 15px 0px 0px 30px;
-  }
-  .adminback{
-    background-color: rgb(32, 32, 32);
-  }
+.admintabs {
+  width: 100vw;
+  height: 100vh;
+}
+.adminlog {
+  overflow-y: scroll;
+  width: 87vw;
+  height: 80vh;
+  background-color: black;
+  margin-left: 20px;
+}
+.logtitle {
+  width: 100vw;
+  height: 10vh;
+  color: white;
+  font-size: 30px;
+  padding: 15px 0px 0px 30px;
+}
+.adminback {
+  background-color: rgb(32, 32, 32);
+}
 </style>
