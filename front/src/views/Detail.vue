@@ -19,9 +19,14 @@
               mdi-star
             </v-icon>
         </span>
+        <span v-else-if="is_like===false && $store.state.token" class="like" @click="like()">
+          <v-icon size=40px color="yellow">
+            mdi-star-outline
+          </v-icon>
+        </span>
         <v-menu v-else top offset-y left open-on-click>
           <template v-slot:activator="{ on }">
-            <span class="like" @click="like()" v-on="on">
+            <span class="like" v-on="on">
               <v-icon size=40px color="yellow">
                 mdi-star-outline
               </v-icon>
