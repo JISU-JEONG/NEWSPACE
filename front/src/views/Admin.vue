@@ -154,7 +154,7 @@ export default {
           this.members = response.data;
         })
         .catch(error => {
-          console.log(error);
+          this.$router.push("/");
         });
     },
     deleteMember(member_id) {
