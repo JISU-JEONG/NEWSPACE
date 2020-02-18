@@ -1,6 +1,8 @@
 <template>
   <div>
     <div class="demos">
+      <strong>Crawling 현황</strong>
+      <hr><br>
       <div class="demo-up" v-if="serverSamsung">
         <span class="server-status" type="up"></span>
         <span>Samsung Crawling ON.</span>
@@ -26,8 +28,9 @@
         <span>SK Hynix Crawling OFF.</span>
       </div>
     </div>
+    <br>
     <div>
-        <v-btn color="info" v-on:click="ServerOn">앙 나는 버튼띠!</v-btn>
+        <v-btn v-on:click="ServerOn">Check Crawling</v-btn>
     </div>
   </div>
 </template>
@@ -48,6 +51,7 @@ export default {
           }
         })
       .then(response => {
+        console.log(response.data);
       })
       .catch(e => {
         console.log(e);

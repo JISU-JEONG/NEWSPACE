@@ -2,12 +2,23 @@
   <div>
     <v-tabs dark background-color="teal darken-3" show-arrows vertical class="admintabs">
       <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
-      <v-tab>Option 1</v-tab>
-      <v-tab>Option 2</v-tab>
-      <v-tab>Option 3</v-tab>
+      <v-tab class="mx-5">
+          Admin
+        </v-tab>
+        <v-tab class="mx-5">
+          LOG
+        </v-tab>
+        <v-tab class="mx-5">
+          Members
+        </v-tab>
+        <v-tab class="mx-5" @click="goHome">
+          NEWSPACE
+        </v-tab>
 
       <v-tab-item>
         <v-container>
+          <strong>서버 현황</strong>
+            <hr>
           <v-row>
             <v-col>
               <Cpuchart v-bind:cpuidle="cpuidle" v-bind:cpuusage="cpuusage" />
@@ -17,14 +28,16 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col class="mx-5">
               <Status
                 v-bind:serverSamsung="serverSamsung"
                 v-bind:serverLg="serverLg"
                 v-bind:serverSk="serverSk"
               />
             </v-col>
-            <v-col></v-col>
+            <v-col>
+              <NewsStatus />
+            </v-col>
           </v-row>
         </v-container>
       </v-tab-item>
@@ -39,7 +52,7 @@
       </v-tab-item>
       <v-tab-item>
         <v-container>
-          <h1>Member List</h1>
+          <strong>유저 목록</strong>
           <v-row>
             <v-col>
               <ul>
@@ -110,6 +123,7 @@ import Memorychart from "../components/Memorychart";
 import Status from "../components/Serverstatus";
 import Logs from "../components/LogList";
 import axios from "axios";
+import NewsStatus from '../components/NewsStatus'
 
 export default {
   name: "Chart",
@@ -117,7 +131,8 @@ export default {
     Cpuchart,
     Memorychart,
     Status,
-    Logs
+    Logs,
+    NewsStatus
   },
   data: function() {
     return {
@@ -146,6 +161,9 @@ export default {
       this.email = this.members[member_id].email;
       this.keyword = this.members[member_id].keyword;
       this.type = this.members[member_id].type;
+    },
+    goHome(){
+      this.$router.push('/')
     },
     getMember() {
       axios
