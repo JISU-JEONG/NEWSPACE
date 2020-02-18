@@ -52,9 +52,6 @@ public class MemberRestController {
 	@Value("${jwt.salt}")
 	private String salt;
 
-	@Value("${AWS.IP")
-	private String aws_ip;
-
 	@Autowired
 	private JwtService jwtService;
 
@@ -255,7 +252,7 @@ public class MemberRestController {
 		emailcontent.append("<body>");
 		emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
 		emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
-		emailcontent.append("<a href='" + aws_ip + "/member/");
+		emailcontent.append("<a href='" + "https://i02b208.p.ssafy.io" + "/member/");
 		emailcontent.append(resultMap.get("member_certifiedkey"));
 		emailcontent.append("/" + resultMap.get("member_email"));
 		emailcontent.append("'>이메일 인증 확인</a>");
@@ -292,6 +289,7 @@ public class MemberRestController {
 	@PostMapping("/member/adminStatus")
 	public ResponseEntity<AdminManageHelp> adminStatus(HttpServletRequest req) {
 		
+		
 		Map<String, Object> resultMap = new HashMap<>();
 		
 		AdminManageHelp amh = new AdminManageHelp();
@@ -307,6 +305,7 @@ public class MemberRestController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}else {
 			
+			log.info("Admin Status Excute By." + resultMap.get("member_email"));
 			List<Boolean> serverCheck = newsService.getServerStatus();
 			List<ServerLog> log = null;
 			
