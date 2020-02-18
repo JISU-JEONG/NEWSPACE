@@ -1,6 +1,40 @@
 <template>
   <div>
-    <div class="earth">
+    <div class="mobile-earth d-block d-md-none">
+      <v-container>
+        <v-card class="ma-2">
+          <v-container calss="d-flex justify-space-between">
+            <span style="font-size: 2rem; font-weight:700">AMT 팀소개  </span>
+            <router-link to="/"><v-icon>mdi-home</v-icon></router-link>
+          </v-container>
+        </v-card>
+        <v-card v-for="member in Object.keys(members)" :key="member" class="mx-2 mb-2">
+          <v-container>
+            <v-row>
+              <v-col cols="4">
+                <v-avatar 
+                  tile
+                  size="96"
+                >
+                  <img class="profile-picture" :src="require(`../assets/images/${member}.jpg`)">
+                </v-avatar>
+              </v-col>
+              <v-col cols="8">
+                <span style="font-weight:700; font-size:5vw; margin-right:10px;">{{members[member].name}}</span> 
+                <a :href="members[member].gitUrl" target="_blank">
+                  <v-icon>fa-github</v-icon>
+                </a>
+                <p style="font-weight:500; font-size:4vw">{{members[member].major}}</p>
+              </v-col>
+            </v-row>
+            <v-divider />
+              <p style="font-weight:700; font-size:5vw">{{members[member].info01.role}}</p>
+              <p class="mx-1">{{members[member].info01.detail}}</p>
+          </v-container>
+        </v-card>
+      </v-container>
+    </div>
+    <div class="earth  d-none d-md-block">
       <div class="room">
         <div class="wall wall-behind">
           <div class="team-name">A.M.T</div> <br>
@@ -9,12 +43,21 @@
             <div class="team-name-detail-real">All Man Team</div>
           </div>
         </div>
-        <div class="wall left"></div>
+        <div class="wall left">
+          <img class="doodle" src="../assets/images/pic03.png" style="top:10%; right:5%; transform:rotate(90deg)">
+          <img class="doodle" src="../assets/images/pic04.png" style="top:35%; right:20%;">
+          <img class="doodle" src="../assets/images/pic06.png" style="bottom:10%; right:10%; width:28%;">
+        </div>
         <div class="wall right">
-          웹마스터 영길이 캐리한 팀입니다. <br>
-          다음 프로젝트 캐리받을 사람 선착순 두명 받습니다. <br>
-          그 다음 두명은 커피 하루 한잔 사준다는 전제하에 팀원으로 받아드립니다.
-          <div class="taewoo-text"></div>
+          <img class="doodle" src="../assets/images/pic01.png" style="top:2%; left:2%; width:23%;">
+          <img class="doodle" src="../assets/images/pic02.png" style="top:28%; left:10%;">
+          <img class="doodle" src="../assets/images/pic05.png" style="top:45%; left:15%;">
+          <img class="doodle" src="../assets/images/pic07.png" style="top:10%; right:45%; width:18%;">
+
+          <img class="doodle" src="../assets/images/pic10.png" style="bottom:1%; right:50%; width:9%;">
+          <img class="doodle" src="../assets/images/pic12.png" style="bottom:-1%; right:50%; width:7%; transform:rotate(70deg)">
+          <img class="doodle" src="../assets/images/pic09.png" style="bottom:19%; right:50%; width:8%;">
+          <img class="doodle" src="../assets/images/pic11.png" style="bottom:13%; right:50%; width:8%;">          
           <div class="mouse-hole"></div>
         </div>
       </div>
@@ -28,7 +71,7 @@
         <div v-if="selectedMember" class="profile-content">
           <div class="profile-picture-box">
             <img class="profile-picture" :src="require(`../assets/images/${selectedMember}.jpg`)">
-          </div>
+          </div>  
           <div class="profile-info">
             <div class="first-box">
               <div class="info-box name">
@@ -90,7 +133,7 @@ export default {
           gitUrl: 'https://github.com/JISU-JEONG',
           info01: {
             role: 'Front-end',
-            detail: '자기자랑하세요'
+            detail: 'Main page, Detail page, Profile page 및 Admin page, Cloud Chart, xy Chart 등 기타 차트 구현, 튜토리얼 구현'
           },
           cssClass: 'ji-su',
           color: '#64B5F6',
@@ -109,7 +152,7 @@ export default {
           gitUrl: 'https://github.com/hoonyhoony',
           info01: {
             role: 'Back-end',
-            detail: '자기자랑하세요'
+            detail: `Jsoup, Selenium을 통한 크롤링 서비스 구현, 그 외 Back-end 서비스 구현, AWS 환경설정 및 배포`
           },          
           cssClass: 'young-hoon',
           color: '#BA68C8',
@@ -129,7 +172,7 @@ export default {
           gitUrl: 'https://github.com/yg1110',
           info01: {
             role: 'Back-end',
-            detail: '자기자랑하세요'
+            detail: `jwt를 이용한 로그인 구현, smtp를 이용한 메일시스템 구현, \n\ websocket 채팅 시스템 구현`
           },
           cssClass: 'young-gil',
           color: '#FFB74D',
@@ -150,7 +193,7 @@ export default {
           gitUrl: 'https://github.com/EHwooKim',
           info01: {
             role: 'Front-end',
-            detail: '자기자랑하세요'
+            detail: 'Search page, navigation 및 side bar, 회원가입, 채팅,  Aboutus, 기타 UX디자인'
           },
           cssClass: 'tae-woo',
           color: '#81C784',
@@ -401,12 +444,10 @@ export default {
   .tae-woo {
     background-image: url('../assets/images/taewoo.jpg');
   }
-  .taewoo-text {
-    width:15%;
-    height:15%;
-    background-image: url('../assets/images/taewooText.png');
-    background-repeat: none;
-    background-size: cover;
+  .doodle {
+    width:20%;
+    height:auto;
+    position:absolute;
   }
   .profile-content {
     width: 100%;
@@ -442,7 +483,7 @@ export default {
     font-size: 2.5vw;
   }
   .info01-detail {
-    font-size: 2vw;
+    font-size: 1.6vw;
   }
   .third-box {
     /* margin: 4%; */
@@ -484,6 +525,4 @@ export default {
   .skill-rate {
     width: 70%;
   }
-
-
 </style>
