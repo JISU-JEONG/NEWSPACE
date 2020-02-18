@@ -17,7 +17,6 @@ export default {
     this.loop();
   },
   destroyed() {
-    console.log("destroyed");
     clearInterval(this.s);
   },
   methods: {
