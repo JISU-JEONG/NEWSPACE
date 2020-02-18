@@ -275,11 +275,10 @@ public class MemberRestController {
 		} catch (RuntimeException e) {
 			log.error("정보조회 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
-			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		}
 		int auth = (int) resultMap.get("auth");
 		if (auth != 1) {
-			return new ResponseEntity(HttpStatus.FORBIDDEN);
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		} else {
 			list = memberservice.getNormalMember();
 
@@ -300,11 +299,10 @@ public class MemberRestController {
 		} catch (RuntimeException e) {
 			log.error("정보조회 실패", e.getMessage());
 			resultMap.put("message", e.getMessage());
-			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		}
 		int auth = (int) resultMap.get("auth");
 		if(auth != 1) {
-			return new ResponseEntity(HttpStatus.FORBIDDEN);
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}else {
 			
 			log.info("Admin Status Excute By." + resultMap.get("member_email"));
