@@ -1,6 +1,13 @@
 <template>
   <div class="chat-world">
-    <v-btn id="chatting" color="green" style="position: fixed; left:24px; bottom: 72px; z-index:50" dark fab @click="openChat" >
+    <v-btn
+      id="chatting"
+      color="green"
+      style="position: fixed; left:24px; bottom: 72px; z-index:50"
+      dark
+      fab
+      @click="openChat"
+    >
       <v-icon v-if="show || !countUnreadMessages">mdi-message-processing</v-icon>
       <v-badge v-else color="red" :content="countUnreadMessages">
         <v-icon>mdi-message-processing</v-icon>
@@ -91,17 +98,9 @@ export default {
   watch: {
     member_name: function() {
       if (this.member_name === null || this.member_name === undefined) {
-        if (!stompClient && stompClient !== null) {
-          this.flag = false;
-          stompClient.disconnect();
-          this.receivemessage.push({
-            from_me: true,
-            content: "연결이 종료되었습니다.",
-            sender: "system"
-          });
+        if (stompClient !== null) {
           this.username = null;
           (this.disabled = true), (this.label = "로그인이 필요합니다.");
-          // console.log("disconnet");
         }
       } else {
         this.username = this.member_name;
@@ -110,6 +109,9 @@ export default {
     }
   },
   methods: {
+    chatdistconnet(){
+      stompClient.disconnect();
+    },
     openChat() {
       // 채팅창 버튼 클릭시
       this.show = !this.show; // 채팅창 열고 닫기
@@ -117,7 +119,7 @@ export default {
         // 닫혔을 때, show ==== false가 되었을때 카운트
         this.countReadMessages = this.receivemessage.length;
       } else {
-        if (!this.flag) {
+        if (!this.flag && this.member_name) {
           this.flag = true;
           this.connect();
         }
@@ -129,7 +131,7 @@ export default {
       stompClient = Stomp.over(socket);
 
       stompClient.connect(
-        { username: this.username, member_id: this.member_id },
+        { username: this.username },
         this.onConnected,
         this.onError
       );
@@ -173,18 +175,14 @@ export default {
       var message = JSON.parse(payload.body);
       if (message.type === "JOIN") {
         if (message.sender !== null) {
-          localStorage.setItem("sessionId", message.sessionid);
           this.receivemessage.push({
-            from_me: message.sessionid,
             content: message.sender + "님이 들어오셨습니다.",
             sender: "system"
           });
         }
       } else if (message.type === "LEAVE") {
         if (message.sender !== null) {
-          localStorage.removeItem(message.sessionid);
           this.receivemessage.push({
-            from_me: message.sessionid,
             content: message.sender + "님이 떠나셨습니다",
             sender: "system"
           });
@@ -193,9 +191,8 @@ export default {
         this.userlist = message.users;
         this.usernumber = message.usernumber;
       } else {
-        if (message.sessionid === localStorage.getItem("sessionId")) {
+        if (message.sessionid === localStorage.getItem("member_id")) {
           if (message.sender !== null) {
-            console.log(message.sessionid);
             this.receivemessage.push({
               from_me: true,
               content: message.content,
@@ -204,7 +201,6 @@ export default {
           }
         } else {
           if (message.sender !== null) {
-            console.log(message.sessionid);
             this.receivemessage.push({
               from_me: false,
               content: message.content,

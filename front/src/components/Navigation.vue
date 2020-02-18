@@ -1,6 +1,6 @@
 <template>
   <nav v-if="$route.name !== ('Admin' && 'AboutUs')">
-    <chat />
+    <chat ref="chat" />
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short  id="navbar">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
@@ -113,7 +113,6 @@ import info from "../services/getInfo";
 import router from "../router";
 import Chat from "../components/Chat";
 import axios from "axios";
-
 export default {
   name: "Navigation",
   components: {
@@ -173,6 +172,7 @@ export default {
       localStorage.setItem("loginStatus", false);
       this.auth = 0;
       this.$store.dispatch("logout");
+      this.$refs.chat.chatdistconnet();
       if (this.$route.name === "Profile") {
         router.push("/");
       }
@@ -186,7 +186,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped> 
 .SAMSUNG {
   background-color: rgba(20, 40, 160, 0.1);
 }
