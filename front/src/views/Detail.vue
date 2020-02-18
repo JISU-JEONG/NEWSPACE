@@ -40,8 +40,8 @@
       <div v-html="news.body" class="page"></div>
       <h2 class="pl-5 mb-2">토론 게시판</h2>
       <hr>
-      <CommentList :comments="comments"></CommentList>
       <CommentForm @commentCreate-event="CommentCreate" />
+      <CommentList :comments="comments"></CommentList>
       <v-snackbar
         v-model="snackbar"
         bottom
