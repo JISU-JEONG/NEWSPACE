@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="$route.name !== ('Admin' && 'AboutUs')">
+  <nav v-if="$route.name !== 'Admin' && $route.name !== 'AboutUs'">
     <chat />
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short  id="navbar">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
