@@ -158,7 +158,7 @@ export default {
             .signInWithPopup(provider)
             .then(res => {
               parentFunc.username = res.user.displayName;
-              parentFunc.socialemail = res.user.uid;
+              parentFunc.socialemail = res.user.email;
               parentFunc.type = "google";
               resolve("ㄲ");
             })
