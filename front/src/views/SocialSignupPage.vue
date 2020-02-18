@@ -119,7 +119,6 @@ export default {
               type: localStorage.getItem("member_type")
             })
             .then(res => {
-              console.log(res.data.member_keyword);
               localStorage.setItem("login-token", res.headers["login-token"]);
               localStorage.setItem("loginStatus", true);
               localStorage.setItem("member_keyword", res.data.member_keyword);
@@ -129,7 +128,6 @@ export default {
         });
       };
       _promise().then(() => {
-        console.log(localStorage.getItem("member_keyword"))
         localStorage.setItem("loginStatus", parentFunc.name);
         const payload = {
           token: localStorage.getItem("login-token"),

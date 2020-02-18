@@ -187,7 +187,6 @@ export default {
                 chart.paddingRight = 1;
                 var data = [];
                 var subtitle = chart.titles.create();
-                console.log(this.chart)
                 subtitle.text = "(click to open)";
                 subtitle.fontSize = 10;
                 var title = chart.titles.create();
