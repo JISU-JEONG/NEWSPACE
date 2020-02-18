@@ -110,7 +110,10 @@ export default {
   },
   methods: {
     chatdistconnet(){
-      stompClient.disconnect();
+      if(stompClient !== null){
+        this.flag = false;
+        stompClient.disconnect();
+      }
     },
     openChat() {
       // 채팅창 버튼 클릭시
