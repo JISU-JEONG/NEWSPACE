@@ -31,7 +31,7 @@
   
           <v-card-text>
 						<br>
-            Samsung, LG, SK의 동향에 관심이 있으며 최신 뉴스들을 모아 보고 싶은 사용자
+            SAMSUNG, LG, SK의 동향에 관심이 있으며 최신 뉴스들을 모아 보고 싶은 사용자
 						<br>
 						ex) 취준생, 주식 투자자, SSAFY 학생 등등
           </v-card-text>
