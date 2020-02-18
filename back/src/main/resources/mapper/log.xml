@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.log">
 
 	<select id="getRecentLog" resultType="com.ssafy.edu.dto.ServerLog">
-		select * from amt.log order by log_date desc limit 5
+		select * from amt.log where log_date >= DATE_SUB(NOW(), INTERVAL 1 DAY) order by log_date desc
 	</select>
 	
 	<insert id="insertLog" parameterType="com.ssafy.edu.dto.ServerLog">

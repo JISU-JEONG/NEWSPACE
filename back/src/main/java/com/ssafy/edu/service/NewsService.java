@@ -1226,21 +1226,21 @@ public class NewsService implements INewsService {
 		serverCheck = true;
 		logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
 		samsungCrawling = true;
-//		samsung_Crawling1();
+		samsung_Crawling1();
 		logger.info("SAMSUNG CRAWLING2..." + "\t" + new Date());
-//		samsung_Crawling2();
+		samsung_Crawling2();
 		samsungCrawling = false;
 		logger.info("LG ELECTRONICS CRAWLING..." + "\t" + new Date());
 		lgCrawling = true;
-//		lg_Crawling();
+		lg_Crawling();
 		lgCrawling = false;
 		logger.info("SK HYNIX CRAWLING..." + "\t" + new Date());
 		skCrawling = true;
-//		sk_Crawling();
+		sk_Crawling();
 		skCrawling = false;
 		logger.info("CRAWLING DONE." + "\t" + new Date());
 		keywordSet = true;
-//		allKeywordSet();
+		allKeywordSet();
 		keywordSet = false;
 		serverCheck = false;
 	}
