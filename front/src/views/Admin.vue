@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="flag">
     <v-tabs dark background-color="teal darken-3" show-arrows vertical class="admintabs">
       <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
       <v-tab class="mx-5">
@@ -122,7 +122,8 @@ export default {
       name: "",
       email: "",
       keyword: "",
-      type: ""
+      type: "",
+      flag: false
     };
   },
   mounted() {
@@ -152,9 +153,12 @@ export default {
         )
         .then(response => {
           this.members = response.data;
+          this.flag = true
         })
         .catch(error => {
           console.log(error);
+          alert('접근 권한이 없습니다.')
+          this.$router.push('/')
         });
     },
     deleteMember(member_id) {
@@ -171,9 +175,11 @@ export default {
           )
           .then(response => {
             this.members = response.data;
+            this.flag=true
           })
           .catch(e => {
             console.log(e);
+
           });
       }
     },
