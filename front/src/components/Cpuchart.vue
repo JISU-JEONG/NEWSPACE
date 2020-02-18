@@ -1,6 +1,6 @@
 <template>
   <div>
-    <apexcharts ref="realtime" height="200" type="line" :options="options" :series="series"></apexcharts>
+    <apexcharts ref="realtime" height="350" type="line" :options="options" :series="series"></apexcharts>
   </div>
 </template>
 
@@ -73,7 +73,7 @@ export default {
           align: "center"
         },
         markers: {
-          size: 1
+          size: 0
         },
         xaxis: {
           type: "datetime",

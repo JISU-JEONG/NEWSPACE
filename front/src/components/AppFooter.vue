@@ -1,10 +1,10 @@
 <template>
-  <v-footer
+  <v-footer 
       dark
       padless
       class="px-5 py-5"
       style="z-index:10"
-      v-if="$route.name !== 'AboutUs'"
+      v-if="$route.name !== 'AboutUs'&& $route.name !== 'Admin'"
     >
       <v-spacer></v-spacer>
       <span >

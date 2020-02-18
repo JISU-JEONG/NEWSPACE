@@ -140,6 +140,7 @@ export default {
     }
 	},
 	mounted(){
+		window.onscroll = function(){window.scrollTo();};
 		this.driver = new Driver({
 				allowClose: false,
 				doneBtnText: '확인',              // Text on the final button
