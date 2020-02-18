@@ -55,7 +55,7 @@
           <strong>유저 목록</strong>
           <v-row>
             <v-col>
-              <ul>
+              <ul class="member-list">
                 <li v-for="(m,i) in members" :key="m.member_id">
                   <v-avatar class="img" color="blue lighten-2">
                     <span class="white--text headline">{{m.name[0]}}</span>
@@ -74,37 +74,11 @@
                 <v-card>
                   <v-container style="min-height:430px;">
                     <v-card-title>유저정보</v-card-title>
-                    <v-form ref="form" @submit.prevent="Signup">
-                      <v-text-field
-                        outlined
-                        label="이름"
-                        v-model="name"
-                        type="text"
-                      />
-                      <v-text-field
-                        outlined
-                        label="이메일"
-                        v-model="email"
-                        type="text"
-                      />
-                      <v-text-field
-                        outlined
-                        label="키워드"
-                        v-model="keyword"
-                        type="text"
-                      />
-                      <v-text-field
-                        outlined
-                        label="로그인 타입"
-                        v-model="type"
-                        type="text"
-                      />
-                      <v-btn
-                        id="signupBtn"
-                        color="blue lighten-2"
-                        class="mt-3 white--text"
-                        type="submit"
-                      >수정하기</v-btn>
+                    <v-form>
+                      <v-text-field outlined label="이름" v-model="name" type="text" />
+                      <v-text-field outlined label="이메일" v-model="email" type="text" />
+                      <v-text-field outlined label="키워드" v-model="keyword" type="text" />
+                      <v-text-field outlined label="로그인 타입" v-model="type" type="text" />
                     </v-form>
                   </v-container>
                 </v-card>
@@ -148,7 +122,7 @@ export default {
       name: "",
       email: "",
       keyword: "",
-      type : ""
+      type: ""
     };
   },
   mounted() {
@@ -156,7 +130,7 @@ export default {
     this.getMember();
   },
   methods: {
-    detailMember(member_id){
+    detailMember(member_id) {
       this.name = this.members[member_id].name;
       this.email = this.members[member_id].email;
       this.keyword = this.members[member_id].keyword;
@@ -184,18 +158,24 @@ export default {
         });
     },
     deleteMember(member_id) {
-      axios
-        .delete(`http://192.168.31.85:8080/member/deleteMember/${member_id}`, {
-          headers: {
-            "login-token": localStorage.getItem("login-token")
-          }
-        })
-        .then(response => {
-          this.members = response.data;
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      var ans = confirm("정말 지우시겠습니까?");
+      if (ans) {
+        axios
+          .delete(
+            `http://192.168.31.85:8080/member/deleteMember/${member_id}`,
+            {
+              headers: {
+                "login-token": localStorage.getItem("login-token")
+              }
+            }
+          )
+          .then(response => {
+            this.members = response.data;
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
     },
     loop() {
       this.s = setInterval(() => {
@@ -229,7 +209,6 @@ export default {
     }
   },
   destroyed() {
-    console.log("destroyed");
     clearInterval(this.s);
   }
 };
@@ -297,5 +276,9 @@ i {
 }
 .adminback {
   background-color: rgb(32, 32, 32);
+}
+.member-list {
+  height: 80vh;
+  overflow-y: scroll;
 }
 </style>

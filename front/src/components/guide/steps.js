@@ -40,7 +40,6 @@ const steps = [
       position: 'top'
     },
     onNext: () => {
-      console.log(this)
     },
   },
   {
