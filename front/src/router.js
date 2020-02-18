@@ -8,7 +8,6 @@ import LoginPage from './views/LoginPage.vue'
 import SocialSignup from './views/SocialSignupPage.vue'
 import Profile from './views/Profile.vue'
 import Admin from './views/Admin.vue'
-import AdminT from './views/AdminT.vue'
 import AboutUs from './views/AboutUs.vue'
 
 Vue.use(Router)
@@ -70,11 +69,6 @@ const routes = [
   	path: "/Admin",
   	name: "Admin",
   	component: Admin
-  },
-  {
-  	path: "/AdminT",
-  	name: "AdminT",
-  	component: AdminT
   },
   {
     path: "/AboutUs",

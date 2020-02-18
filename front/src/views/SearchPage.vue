@@ -186,7 +186,14 @@ export default {
                 var chart = am4core.create("chartdiv", am4charts.XYChart);
                 chart.paddingRight = 1;
                 var data = [];
-        
+                var subtitle = chart.titles.create();
+                console.log(this.chart)
+                subtitle.text = "(click to open)";
+                subtitle.fontSize = 10;
+                var title = chart.titles.create();
+                title.text = "1년 동안 기사에 포함된 키워드"
+                title.fontSize = 10;
+                title.fontWeight = "800";
                 const Gdata = response.data
                 for(let i=0;i<12;i++)
                 {
@@ -235,7 +242,7 @@ export default {
                   animateForward();
 
               }, 1000)
-
+              
               var vm = this
               function animateForward() {
                   label.text = "'"+vm.searchValue+"'"

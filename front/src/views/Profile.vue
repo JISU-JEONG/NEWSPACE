@@ -30,7 +30,7 @@
   </div>
   <v-container class="px-1" style="min-height:850px">
       <v-tabs
-      vertical
+        :vertical=is_size
       >
         <v-tab>
           관심 뉴스
@@ -233,7 +233,7 @@ export default {
       user: {
         list: [],
         member: "",
-        count: 0
+        count: 0,
       },
       snackbar: false,
       timeout: 2000,
@@ -419,6 +419,14 @@ export default {
   mounted() {
     this.get_user();
   },
+  computed: {
+    is_size() {
+      if (this.$vuetify.breakpoint.name=='xs')
+        return false
+      else
+        return true 
+    }
+  }
 };
 </script>
 <style scoped>

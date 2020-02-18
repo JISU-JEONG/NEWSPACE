@@ -98,7 +98,7 @@ export default {
 				"dataField": "value"
 				});
 
-				series.labels.template.url = "http://192.168.31.84:8081/search/{word}";
+				series.labels.template.url = "http://192.168.31.85:8081/search/{word}";
 				series.labels.template.urlTarget = "_self";
         series.labels.template.tooltipText = "{word}: {value}";
         
@@ -110,7 +110,7 @@ export default {
 
 				// var title = chart.titles.create();
 				// title.fontSize = 20;
-        // title.fontWeight = "800";
+        		// title.fontWeight = "800";
         this.chart = chart
         this.series = series
     }

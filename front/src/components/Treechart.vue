@@ -71,6 +71,8 @@ export default {
 
 					networkSeries.links.template.strokeWidth = 1;
 
+					networkSeries.maxLevels = 1;
+
 					var hoverState = networkSeries.links.template.states.create("hover");
 					hoverState.properties.strokeWidth = 3;
 					hoverState.properties.strokeOpacity = 1;
@@ -93,6 +95,13 @@ export default {
 							event.target.dataItem.parentLink.isHover = false;
 					}
 				})
+				var subtitle = chart.titles.create();
+				subtitle.text = "(click to open)";
+				subtitle.fontSize = 20;
+				var title = chart.titles.create();
+				title.text = "사용자 선택 키워드"
+				title.fontSize = 40;
+        		title.fontWeight = "800";
 				this.chart = chart
 		}	
 	},

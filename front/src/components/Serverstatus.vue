@@ -3,27 +3,27 @@
     <div class="demos">
       <div class="demo-up" v-if="serverSamsung">
         <span class="server-status" type="up"></span>
-        <span>Samsung Crawling Server On.</span>
+        <span>Samsung Crawling ON.</span>
       </div>
       <div class="demo-down" v-else>
         <span class="server-status" type="down"></span>
-        <span>Samsung Crawling Server Down.</span>
+        <span>Samsung Crawling OFF.</span>
       </div>
       <div class="demo-up" v-if="serverLg">
         <span class="server-status" type="up"></span>
-        <span>LG Electronics Crawling Server On.</span>
+        <span>LG Electronics Crawling ON.</span>
       </div>
       <div class="demo-down" v-else>
         <span class="server-status" type="down"></span>
-        <span>LG Electronics Crawling Server Down.</span>
+        <span>LG Electronics Crawling OFF.</span>
       </div>
       <div class="demo-up" v-if="serverSk">
         <span class="server-status" type="up"></span>
-        <span>SK Hynix Crawling Server On.</span>
+        <span>SK Hynix Crawling ON.</span>
       </div>
       <div class="demo-down" v-else>
         <span class="server-status" type="down"></span>
-        <span>SK Hynix Crawling Server Down.</span>
+        <span>SK Hynix Crawling OFF.</span>
       </div>
     </div>
     <div>
