@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="$route.name !== ('Admin' && 'AboutUs')">
+  <nav v-if="$route.name !== 'Admin' && $route.name !== 'AboutUs'">
     <chat ref="chat" />
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short  id="navbar">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
@@ -61,7 +61,12 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-container v-if="!member_keyword">회원가입하여 더 많은 정보를 받아보든가</v-container>
+        <v-container v-if="!member_keyword && !usernmae">
+          회원가입, 로그인하여 더 많은 정보를 받아보세요!
+        </v-container>
+        <v-container v-else-if="!member_keyword && usernmae">
+          프로필페이지에서 관심 키워드를 등록하면 더 많은 정보를 받아볼 수 있습니다.
+        </v-container>
         <span v-else>
           <template v-for="item in member_news">
             <v-list-group
@@ -178,7 +183,7 @@ export default {
       }
     },
     moveToDetail(news_id) {
-      router.push({ name: "detail", params: { id: news_id } });
+      router.push({ name: "detail", params: { id: news_id, keyword: ' '} });
     }
   },
   beforeMount() {
