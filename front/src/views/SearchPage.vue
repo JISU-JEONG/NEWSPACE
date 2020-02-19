@@ -45,7 +45,7 @@
 import News from "../components/News"
 import http from "../services/http-common"
 import Chat from "../components/Chat"
-
+import info from "../services/getInfo"
 export default {
   components: {
     News,
@@ -259,6 +259,9 @@ export default {
           console.log(error)
         })
     }
+  },
+  beforeMount(){
+    info();
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.onScroll)
