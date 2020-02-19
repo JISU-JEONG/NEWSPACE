@@ -93,6 +93,7 @@ public class MemberRestController {
 			resultMap.put("status", true);
 			resultMap.put("member_name", loginUser.getName());
 			resultMap.put("member_keyword", loginUser.getKeyword());
+			resultMap.put("certifiedkey", loginUser.getCertifiedkey());
 			status = HttpStatus.ACCEPTED;
 		} catch (RuntimeException e) {
 			log.error("로그인 실패", e.getMessage());
@@ -140,6 +141,13 @@ public class MemberRestController {
 	public int signup(@RequestBody Member member) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		log.info("MemberRestController Excute ! search : " + memberservice.getEmail(member.getEmail()));
 		if (search(member.getEmail()).equals("Notexist")) {
+			if(member.getType().equals("google")) {
+				member.setCertifiedkey("true");
+			}
+			else {
+				String certifiedkey = new TempKey().getKey(10, false);
+				member.setCertifiedkey(certifiedkey);
+			}
 			member.setKeyword(member.getInputkeyword().toString());
 			String keyword = Arrays.toString(member.getInputkeyword()).replace("[", "").replace("]", "").replace(",",
 					"");
@@ -151,8 +159,7 @@ public class MemberRestController {
 			String sha256password = String.format("%064x", new BigInteger(1, digest.digest()));
 			member.setPassword(sha256password);
 
-			String certifiedkey = new TempKey().getKey(10, false);
-			member.setCertifiedkey(certifiedkey);
+			
 
 			log.info("MemberRestController Excute ! signup : " + member);
 			memberservice.insertMember(member);

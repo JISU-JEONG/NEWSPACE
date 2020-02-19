@@ -28,7 +28,8 @@ function getinfo() {
           member_name: localStorage.getItem("member_name"),
           auth: localStorage.getItem("auth"),
           member_keyword: localStorage.getItem("member_keyword"),
-          member_news: JSON.parse(localStorage.getItem('member_news'))
+          certifiedkey: localStorage.getItem('certifiedkey'),
+          member_news: JSON.parse(localStorage.getItem('member_news')),
         };
         store.dispatch("login", payload);
       })
