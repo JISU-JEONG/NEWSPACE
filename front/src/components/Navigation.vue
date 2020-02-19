@@ -1,6 +1,6 @@
 <template>
   <nav v-if="$route.name !== 'Admin' && $route.name !== 'AboutUs'">
-    <chat ref="chat" />
+    <chat ref="chat"/>
     <v-app-bar color="blue lighten-2" dark app :clipped-right="$vuetify.breakpoint.smAndUp" short  id="navbar">
       <v-btn to="/" text v-if="$vuetify.breakpoint.smAndUp">
         <span>New space</span>
@@ -43,7 +43,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              <v-btn text to="/Profile">{{usernmae}}</v-btn>
+              <v-btn text to="/Profile">{{username}}</v-btn>
             </v-list-item-title>
           </v-list-item-content>
           <v-btn text v-on:click="logout">로그아웃</v-btn>
@@ -61,10 +61,10 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-container v-if="!member_keyword && !usernmae">
+        <v-container v-if="!member_keyword && !username">
           회원가입, 로그인하여 더 많은 정보를 받아보세요!
         </v-container>
-        <v-container v-else-if="!member_keyword && usernmae">
+        <v-container v-else-if="!member_keyword && username">
           프로필페이지에서 관심 키워드를 등록하면 더 많은 정보를 받아볼 수 있습니다.
         </v-container>
         <span v-else>
@@ -125,7 +125,7 @@ export default {
   },
   props: {},
   computed: {
-    usernmae() {
+    username() {
       return this.$store.state.member_name;
     },
     member_keyword() {

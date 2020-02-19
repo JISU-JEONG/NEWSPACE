@@ -236,8 +236,14 @@ export default {
     this.keywordSetting();
   },
   beforeMount() {
-    this.$refs.chat.chatdistconnet();
-    this.info();
+    info();
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.selectedKeywords.length === 0) {
+      localStorage.clear()
+      this.$store.dispatch("logout")
+    }
+    next()
   }
 };
 </script>
