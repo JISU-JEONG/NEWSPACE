@@ -24,10 +24,10 @@ public class RedirectController {
 		boolean check = memberservice.emailcheck(member);
 		String url = "";
 		if(check) {
-			url = "https://i02b208.p.ssafy.io/Profile";
+			url = "http://192.168.31.84:8081/Profile";
 		}
 		else {
-			url = "https://i02b208.p.ssafy.io/";
+			url = "http://192.168.31.84:8081/";
 		}
 		return "redirect:"+url;
 	}
