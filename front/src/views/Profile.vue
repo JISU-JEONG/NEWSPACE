@@ -222,6 +222,7 @@ import http from "../services/http-common.js";
 import router from "../router";
 import info from "../services/getInfo";
 import Treechart from '../components/Treechart'
+import axios from "axios";
 
 export default {
   name: "Profile",
@@ -245,7 +246,7 @@ export default {
       unselectedKeywords: [],
       error: false,
       errorMessages: "",
-      isemailcheck: localStorage.getItem("certifiedkey"),
+      isemailcheck: "",
       page: 1,
       like_list : [],
       pagetotal : 0,
@@ -414,10 +415,25 @@ export default {
       this.unselectedKeywords = this.originunselectedKeywords.slice()
       this.userInputKeyword = "";
       this.dialog = false;
+    },
+    email(){
+      console.log(localStorage.getItem("member_email"));
+      axios
+          .post("http://192.168.31.84:8080/member/emailcheck", {
+          email : localStorage.getItem("member_email")
+        })
+        .then(response => {
+          console.log(response.data.certifiedkey);
+          this.certifiedkey = response.data.certifiedkey;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
-  mounted() {
+  beforeMount() {
     this.get_user();
+    this.email();
   },
   computed: {
     is_size() {
