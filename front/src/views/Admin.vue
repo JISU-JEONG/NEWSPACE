@@ -180,12 +180,16 @@ export default {
           })
           .catch(e => {
             console.log(e);
-
           });
       }
     },
     loop() {
+      this.s = setInterval(() => {
+        if (this.check) {
+          this.check = false;
           this.init();
+        }
+      }, 300);
     },
     init() {
       axios
@@ -207,11 +211,12 @@ export default {
           this.serverLg = response.data.serverLg;
           this.serverSk = response.data.serverSk;
           this.logs = response.data.log;
-          this.loop()
+          console.log('asd')
+          this.check = true
         })
         .catch(error => {
           console.log(error);
-          this.loop()
+          this.check = true
         });
     }
   },
