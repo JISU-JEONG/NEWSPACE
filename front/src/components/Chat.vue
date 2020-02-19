@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-world">
+  <div class="chat-world"  v-show="$route.name !== 'SocialSignup'">
     <v-btn
       id="chatting"
       color="green"
@@ -97,11 +97,9 @@ export default {
   },
   watch: {
     member_name: function() {
-      if (this.member_name === null || this.member_name === undefined) {
-        if (stompClient !== null) {
-          this.username = null;
-          (this.disabled = true), (this.label = "로그인이 필요합니다.");
-        }
+      if (this.member_name === null || this.member_name === undefined || this.member_name === '') {
+        this.username = null;
+        (this.disabled = true), (this.label = "로그인이 필요합니다.");
       } else {
         this.username = this.member_name;
         (this.disabled = false), (this.label = "");

@@ -123,7 +123,8 @@ export default {
       email: "",
       keyword: "",
       type: "",
-      flag: false
+      flag: false,
+      check: true
     };
   },
   mounted() {
@@ -184,9 +185,7 @@ export default {
       }
     },
     loop() {
-      this.s = setInterval(() => {
-        this.init();
-      }, 1000);
+          this.init();
     },
     init() {
       axios
@@ -208,9 +207,11 @@ export default {
           this.serverLg = response.data.serverLg;
           this.serverSk = response.data.serverSk;
           this.logs = response.data.log;
+          this.loop()
         })
         .catch(error => {
           console.log(error);
+          this.loop()
         });
     }
   },

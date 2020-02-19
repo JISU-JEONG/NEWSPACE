@@ -46,7 +46,7 @@ export default new Vuex.Store({
       context.commit("setToken", {
         token: null,
         member_id: null,
-        member_name: null,
+        member_name: '',
         auth: null,
         member_keyword: '',
         member_news: [],
