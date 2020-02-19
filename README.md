@@ -417,10 +417,82 @@ for (NewsDTO n : list) {
 </select>
 ```
 
-
-## JWT
+## JWT 토큰 생성
 ```java
+final JwtBuilder builder = Jwts.builder();
+builder.setHeaderParam("typ", "JWT");// 토큰 타입 설정
+builder.setSubject(member.getTokenname())// 토큰 제목 설정
+.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin))// 유효기간
+//추가정보
+.claim("data", member)
+.claim("member_id", member.getMember_id())
+.claim("member_name", member.getName ())
+.claim("member_keyword", member.getKeyword())
+.claim("member_email", member.getEmail())
+.claim("member_certifiedkey", member.getCertifiedkey())
+.claim("auth", member.getAuth());
 
+// signature - secret key를 이용한 암호화
+builder.signWith(SignatureAlgorithm.HS256, salt.getBytes());
 
+// 마지막 직렬화 처리
+final String token = builder.compact();
+```
+
+## JWT 토큰 체크
+```java
+//인터셉터를 이용
+@Override
+public void addInterceptors(InterceptorRegistry registry) {
+	registry.addInterceptor(jwtInterceptor).addPathPatterns("/api") // 기본 적용 경로
+			.excludePathPatterns(Arrays.asList("/member/**"));// 적용 제외 경로
+}
+
+// Interceptor를 이용해서 처리하므로 전역의 Cross Origin 처리를 해준다.
+@Override
+public void addCorsMappings(CorsRegistry registry) {
+	registry.addMapping("/**")
+		.allowedOrigins("*")
+		.allowedMethods("*")
+		.allowedHeaders("*")
+		.exposedHeaders("login-token");
+}
+Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(token);
+
+String logintoken = request.getHeader("login-token");
+
+if(logintoken != null && logintoken.length() > 0) {
+	jwtService.checkValid(logintoken);
+	return true;
+}
+else {
+	throw new RuntimeException("인증 토큰이 없습니다.");            	
+}
+```
+
+## JWT 토큰 분석
+```java
+public Map<String, Object> get(final String token) {
+	Jws<Claims> claims = null;
+	try {
+		claims = Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(token);
+	} catch (final Exception e) {
+		throw new RuntimeException();
+	}
+	return claims.getBody();
+}
+
+try {
+	resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+	status = HttpStatus.ACCEPTED;
+} catch (RuntimeException e) {
+	log.error("정보조회 실패", e.getMessage());
+	resultMap.put("message", e.getMessage());
+	status = HttpStatus.INTERNAL_SERVER_ERROR;
+}
+```
+
+## 이메일 인증
+```java
 
 ```
