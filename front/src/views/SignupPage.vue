@@ -179,7 +179,6 @@ export default {
               this.selectedKeywords.push(value)
             } else {
               errorKeyword = errorKeyword.concat(` ${value}`)
-              console.log(errorKeyword)
             }
           })
           errorKeyword = errorKeyword.trim()

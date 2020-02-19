@@ -208,7 +208,6 @@ export default {
         }
       )
       .then(res => {
-        console.log("O");
         localStorage.setItem("member_id", res.data.member_id);
         localStorage.setItem("member_name", res.data.data.name);
         localStorage.setItem("member_email", res.data.data.email);
@@ -219,7 +218,6 @@ export default {
         localstorage
          })
       .catch(() => {
-        console.log("X");
         localStorage.removeItem("login-token");
         localStorage.removeItem("member_id");
         localStorage.removeItem("member_name");
