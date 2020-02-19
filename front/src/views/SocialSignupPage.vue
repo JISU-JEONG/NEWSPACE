@@ -67,8 +67,8 @@
 
 <script>
 import http from "../services/http-common";
-import info from "../services/getInfo";
 import axios from "axios";
+import store from "../store";
 
 export default {
   name: "SocialSignpPage",
@@ -195,6 +195,41 @@ export default {
         }
       }
       this.userInputKeyword = "";
+    },
+    info(){
+      http
+      .post(
+        "/info",
+        {},
+        {
+          headers: {
+            "login-token": localStorage.getItem("login-token")
+          }
+        }
+      )
+      .then(res => {
+        console.log("O");
+        localStorage.setItem("member_id", res.data.member_id);
+        localStorage.setItem("member_name", res.data.data.name);
+        localStorage.setItem("member_email", res.data.data.email);
+        localStorage.setItem("member_keyword", res.data.data.keyword);
+        localStorage.setItem("member_type", res.data.data.type);
+        localStorage.setItem("auth", res.data.data.auth);
+        localStorage.setItem("certifiedkey", res.data.data.certifiedkey);
+        localstorage
+         })
+      .catch(() => {
+        console.log("X");
+        localStorage.removeItem("login-token");
+        localStorage.removeItem("member_id");
+        localStorage.removeItem("member_name");
+        localStorage.removeItem("member_email");
+        localStorage.removeItem("member_keyword")
+        localStorage.removeItem("member_news")
+        localStorage.removeItem("member_type");
+        localStorage.removeItem("loginStatus");
+        localStorage.removeItem("auth");
+      });
     }
   },
   mounted() {

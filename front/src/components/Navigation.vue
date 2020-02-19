@@ -91,7 +91,7 @@
                 v-for="(child, i) in item.children"
                 :key="i"
                 link
-                @click="moveToDetail(child.news_id)"
+                :to="{ name: 'detail', params: { id: child.news_id, keyword: ' '} }"
                 :class="child.news_brand"
               >
                 <v-list-item-content>
@@ -181,9 +181,6 @@ export default {
       if (this.$route.name === "Profile") {
         router.push("/");
       }
-    },
-    moveToDetail(news_id) {
-      router.push({ name: "detail", params: { id: news_id, keyword: ' '} });
     }
   },
   beforeMount() {
