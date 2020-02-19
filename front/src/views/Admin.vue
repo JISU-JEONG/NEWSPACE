@@ -211,7 +211,6 @@ export default {
           this.serverLg = response.data.serverLg;
           this.serverSk = response.data.serverSk;
           this.logs = response.data.log;
-          console.log('asd')
           this.check = true
         })
         .catch(error => {
