@@ -44,14 +44,14 @@
   
         
       <v-tab-item class="px-2">
-          <v-container fluid v-if="like_list.length !== 0">
+          <v-container fluid>
             <div style="min-height:800px">
 
             <div class="likeheader">
               <strong>{{user.member.name}}'s NEWS ROOM</strong>
               <hr>
             </div>
-            <v-row>
+            <v-row v-if="like_list.length !== 0">
               <v-col
                 v-for="i in like_list[page-1].length"
                 :key="i"
@@ -94,19 +94,15 @@
             </v-pagination>
           </div>
           </v-container>
-          <v-container v-else
-          >
-            관심 뉴스를 등록해 보세요~
-          </v-container>
         </v-tab-item>
         <v-tab-item class="px-2">
-          <v-container fluid v-if="recent.length !== 0">
+          <v-container fluid >
             <div style="min-height:800px">
             <div class="likeheader">
               <strong>{{user.member.name}}님이 최근 보신 뉴스</strong>
               <hr>
             </div>
-            <v-row>
+            <v-row v-if="recent.length !== 0">
               <v-col
                 v-for="i in recent.length"
                 :key="i"
@@ -139,10 +135,6 @@
               </v-col>
             </v-row>
             </div>
-          </v-container>
-          <v-container v-else
-          >
-            보신 뉴스가 없습니다.
           </v-container>
         </v-tab-item>
         <v-tab-item>
@@ -312,7 +304,7 @@ export default {
         });
     },
     goDetail(id) {
-      router.push({ name: "detail", params: { id: id } });
+      router.push({ name: "detail", params: { id: id, keyword: ' ' } });
     },
     onClickKeyword(key) {
       this.$router
