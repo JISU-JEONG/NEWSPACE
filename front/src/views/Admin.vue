@@ -184,9 +184,9 @@ export default {
       }
     },
     loop() {
-      this.s = setInterval(() => {
+      this.s = setTimeout(() => {
         this.init();
-      }, 1000);
+      }, 10);
     },
     init() {
       axios
