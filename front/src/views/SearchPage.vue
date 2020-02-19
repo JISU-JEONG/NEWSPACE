@@ -197,7 +197,6 @@ export default {
                   data.push({date:new Date(day[0],day[1],0), value:Gdata[i].value})
                 }
               chart.data = data;
-              console.log(chart)
               var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
               dateAxis.renderer.grid.template.location = 0;
               dateAxis.gridIntervals.count=1

@@ -155,6 +155,7 @@ export default {
 		},
 	beforeDestroy(){
 		window.onscroll = function(){window.scrollTo();};
+		this.driver.reset()
 	}
 		
 }
