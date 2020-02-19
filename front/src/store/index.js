@@ -43,7 +43,6 @@ export default new Vuex.Store({
       context.commit("setToken", payload);
     },
     logout(context) {
-      console.log("logout");
       context.commit("setToken", {
         token: null,
         member_id: null,
@@ -52,7 +51,6 @@ export default new Vuex.Store({
         member_keyword: '',
         member_news: [],
       });
-      console.log(context.state.member_name)
     },
     error(context) {
       context.commit("setError");
