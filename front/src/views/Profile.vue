@@ -375,44 +375,47 @@ export default {
       this.dialog = false;
     },
     emailcheck() {
-      if (this.$store.state.certifiedkey !== "true") {
-        axios
-          .post("http://192.168.31.84:8080/member/emailcheck", {
-            email: localStorage.getItem("member_email")
-          })
-          .then(response => {
-            if (response.data.certifiedkey === "true") {
-              const payload = {
-                token: localStorage.getItem("login-token"),
-                member_id: "",
-                member_name: response.data.name,
-                auth: localStorage.removeItem("auth"),
-                member_keyword: response.data.member_keyword,
-                certifiedkey: response.data.certifiedkey
-              };
-              this.$store.dispatch("login", payload);
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }
+      axios
+        .post("http://192.168.31.84:8080/member/emailcheck", {
+          email: localStorage.getItem("member_email")
+        })
+        .then(response => {
+          if (response.data.certifiedkey === "true") {
+            const payload = {
+              // token: localStorage.getItem("login-token"),
+              // member_id: "",
+              // member_name: response.data.name,
+              // auth: localStorage.removeItem("auth"),
+              // member_keyword: response.data.keyword,
+              certifiedkey: response.data.certifiedkey
+            };
+            this.$store.dispatch("login", payload);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+  },
+  created(){
+    this.emailcheck();
   },
   beforeMount() {
-    this.emailcheck();
     this.get_user();
   },
-  beforeRouteEnter (to, from, next) {
-    if(from.name === null){
-      next(vm=> {
-        vm.emailcheck
-      })
-    }
-    else{
-      next()
-    }
+  mounted() {
   },
+  // beforeRouteEnter (to, from, next) {
+  //   console.log(from.name);
+  //   if(from.name === null){
+  //     next(vm=> {
+  //       vm.emailcheck()
+  //     })
+  //   }
+  //   else{
+  //     next()
+  //   }
+  // },
   computed: {
     is_size() {
       if (this.$vuetify.breakpoint.name == "xs") return false;

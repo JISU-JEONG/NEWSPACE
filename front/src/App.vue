@@ -12,7 +12,7 @@
 import "@mdi/font/css/materialdesignicons.css";
 import Navigation from "./components/Navigation";
 import AppFooter from "./components/AppFooter";
-import Chat from "./components/Chat"
+import Chat from "./components/Chat";
 
 export default {
   name: "App",
@@ -27,14 +27,13 @@ export default {
   components: {
     Navigation,
     AppFooter,
-    Chat,
+    Chat
   },
-  mounted(){
-  },
-
+  destroyed() {
+    localStorage.clear();
+  }
 };
 </script>
-
 <style>
 .header {
   position: fixed;
@@ -46,5 +45,10 @@ export default {
 .background {
   background-color: white;
 }
-.hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
+.hidden {
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden !important;
+  touch-action: none;
+}
 </style>

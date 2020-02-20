@@ -98,7 +98,6 @@ export default {
             if (res.data.status) {
               localStorage.setItem("login-token", res.headers["login-token"]);
               localStorage.setItem("loginStatus", res.data.name);
-              console.log(res.data.certifiedkey);
               const payload = {
                 token: localStorage.getItem("login-token"),
                 member_id: "",
