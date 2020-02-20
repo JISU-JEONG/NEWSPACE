@@ -275,6 +275,33 @@ module.exports = {
 
 ​		
 
+### [v-drag](https://www.npmjs.com/package/v-drag)
+
+**install**
+
+```bash
+npm install v-drag
+```
+
+**Usage**
+
+````bash
+<div v-drag>Drag me!</div>
+
+<script>
+  import drag from "v-drag"
+  export default {
+    directives: {
+      drag
+    }
+  }
+</script>
+````
+
+
+
+
+
 
 
 
