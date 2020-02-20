@@ -21,6 +21,17 @@ Vue.use(VModal, { dynamic: true });
 Vue.use(VueMinesweeper);
 Vue.use(lineClamp, {})
 new Vue({
+  created() {
+    window.onunload = function () {
+      close();
+    }
+  },
+  
+  methods: {
+    close(){
+      alert("a");
+    }
+  },
   router,
   store,
   vuetify: new Vuetify({
