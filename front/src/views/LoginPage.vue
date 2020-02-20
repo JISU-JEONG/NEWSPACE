@@ -103,7 +103,8 @@ export default {
                 member_id: "",
                 member_name: res.data.name,
                 auth: localStorage.removeItem("auth"),
-                member_keyword: res.data.member_keyword
+                member_keyword: res.data.member_keyword,
+                certifiedkey: res.data.certifiedkey
               };
               localStorage.setItem("member_name", res.data.name);
               this.$store.dispatch("login", payload);
@@ -158,7 +159,7 @@ export default {
             .signInWithPopup(provider)
             .then(res => {
               parentFunc.username = res.user.displayName;
-              parentFunc.socialemail = res.user.uid;
+              parentFunc.socialemail = res.user.email;
               parentFunc.type = "google";
               resolve("ㄲ");
             })
@@ -180,7 +181,7 @@ export default {
           // axios
           //   .post("http://52.79.249.4:8080/member/signupcheck", {
           axios
-            .post("http://192.168.31.85:8080/member/signupcheck", {
+            .post("http://192.168.31.84:8080/member/signupcheck", {
               email: parentFunc.socialemail
             })
             .then(res => {
@@ -201,7 +202,7 @@ export default {
             // axios
             //   .post("http://52.79.249.4:8080/member/socialtoken", {
             axios
-              .post("http://192.168.31.85:8080/member/socialtoken", {
+              .post("http://192.168.31.84:8080/member/socialtoken", {
                 email: parentFunc.socialemail,
                 name: parentFunc.username,
                 type: parentFunc.type
@@ -211,6 +212,7 @@ export default {
                 localStorage.setItem("loginStatus", parentFunc.username);
                 localStorage.setItem("member_keyword", res.data.member_keyword);
                 localStorage.setItem("member_name", res.data.member_name);
+                localStorage.setItem("certifiedkey", res.data.certifiedkey);
                 resolve("ㄲ");
               });
           });
@@ -225,7 +227,8 @@ export default {
               member_id: "",
               member_name: localStorage.getItem("member_name"),
               auth: localStorage.removeItem("auth"),
-              member_keyword: localStorage.getItem("member_keyword")
+              member_keyword: localStorage.getItem("member_keyword"),
+              certifiedkey: localStorage.getItem("certifiedkey")
             };
             this.$store.dispatch("login", payload);
             this.$store.dispatch("setMemberNews"); // 키워드 뉴스 받아오기

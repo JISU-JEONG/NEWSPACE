@@ -42,17 +42,26 @@
             <div class="team-name-detail-fake">A.I Machine-learning Team</div>
             <div class="team-name-detail-real">All Man Team</div>
           </div>
+          <div style="position: absolute; right:4%; top:6%; box-shadow: 2px 3px 8px lightgray; font-size: 2rem; padding: 3%">
+            <p style=" font-size: 2.2rem;">- Ground Rule -</p>
+            <p>1. 표정관리 못하면 만원</p>
+            <p>2. 언성 높이면 삼만원</p>
+            <p>3. 진심으로 화내면  오만원</p>
+          </div>
         </div>
         <div class="wall left">
           <img class="doodle" src="../assets/images/pic03.png" style="top:10%; right:5%; transform:rotate(90deg)">
-          <img class="doodle" src="../assets/images/pic04.png" style="top:35%; right:20%;">
-          <img class="doodle" src="../assets/images/pic06.png" style="bottom:10%; right:10%; width:28%;">
+          <img class="doodle" src="../assets/images/pic04.png" style="top:40%; right:20%;">
+          <img class="doodle" src="../assets/images/pic06.png" style="bottom:5%; right:15%; width:28%;">
+          <img class="doodle" src="../assets/images/pic14.png" style="top:10%; right:30%; ">
+          <img class="doodle" src="../assets/images/pic15.png" style="bottom:30%; right:3%">
         </div>
         <div class="wall right">
           <img class="doodle" src="../assets/images/pic01.png" style="top:2%; left:2%; width:23%;">
           <img class="doodle" src="../assets/images/pic02.png" style="top:28%; left:10%;">
           <img class="doodle" src="../assets/images/pic05.png" style="top:45%; left:15%;">
-          <img class="doodle" src="../assets/images/pic07.png" style="top:10%; right:45%; width:18%;">
+          <img class="doodle" src="../assets/images/pic07.png" style="top:8%; right:45%; width:18%;">
+          <img class="doodle" src="../assets/images/pic13.png" style="top:32%; right:45%; width:18%;">
 
           <img class="doodle" src="../assets/images/pic10.png" style="bottom:1%; right:50%; width:9%;">
           <img class="doodle" src="../assets/images/pic12.png" style="bottom:-1%; right:50%; width:7%; transform:rotate(70deg)">
@@ -317,7 +326,7 @@ export default {
     z-index:2;
     transform: rotate(2deg);
     border: 0.1px solid black;
-    animation: drop 1.5s 3s forwards;
+    animation: drop 1.5s 2.3s forwards;
   }
   @keyframes drop {
     0% {
@@ -490,7 +499,7 @@ export default {
     height: 39%;
   }
   .info-box {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 1);
     box-shadow: 2px 3px 8px lightgray;
     font-family: 'Black Han Sans', sans-serif;
   }

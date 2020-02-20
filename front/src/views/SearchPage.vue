@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- <chat /> -->
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="250" width="10" color="blue-grey lighten-5"></v-progress-circular>
     </v-overlay>
@@ -44,12 +43,10 @@
 <script>
 import News from "../components/News"
 import http from "../services/http-common"
-import Chat from "../components/Chat"
-
+import info from "../services/getInfo"
 export default {
   components: {
     News,
-    Chat
   },
   data() {
     return {
@@ -186,12 +183,9 @@ export default {
                 var chart = am4core.create("chartdiv", am4charts.XYChart);
                 chart.paddingRight = 1;
                 var data = [];
-                var subtitle = chart.titles.create();
-                subtitle.text = "(click to open)";
-                subtitle.fontSize = 10;
                 var title = chart.titles.create();
                 title.text = "1년 동안 기사에 포함된 키워드"
-                title.fontSize = 10;
+                title.fontSize = 20;
                 title.fontWeight = "800";
                 const Gdata = response.data
                 for(let i=0;i<12;i++)
@@ -200,7 +194,6 @@ export default {
                   data.push({date:new Date(day[0],day[1],0), value:Gdata[i].value})
                 }
               chart.data = data;
-              // console.log(chart.data)
               var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
               dateAxis.renderer.grid.template.location = 0;
               dateAxis.gridIntervals.count=1
@@ -259,6 +252,9 @@ export default {
           console.log(error)
         })
     }
+  },
+  beforeMount(){
+    info();
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.onScroll)

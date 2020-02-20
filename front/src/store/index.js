@@ -14,7 +14,8 @@ export default new Vuex.Store({
     member_keyword: '',
     member_news: [],
     error: false,
-    preRouter:'', // 로그인시 이전 페이지로 이동위한 변수
+    preRouter:'', // 로그인시 이전 페이지로 이동위한 변수'
+    certifiedkey: '', //email 체크용
   },
   mutations: {
     // 첫번째 인자는 무조건 state
@@ -26,6 +27,7 @@ export default new Vuex.Store({
       state.member_name = payload.member_name;
       state.member_keyword = payload.member_keyword
       state.member_news = payload.member_news
+      state.certifiedkey = payload.certifiedkey
     },
     setError(state) {
       state.error = true;
@@ -33,7 +35,6 @@ export default new Vuex.Store({
     setMemberNews(state, payload) {
       state.member_news = payload.member_news
     }
-
   },
   actions: {
     // 첫번째 인자는 context (다양한)
@@ -46,7 +47,7 @@ export default new Vuex.Store({
       context.commit("setToken", {
         token: null,
         member_id: null,
-        member_name: null,
+        member_name: '',
         auth: null,
         member_keyword: '',
         member_news: [],
