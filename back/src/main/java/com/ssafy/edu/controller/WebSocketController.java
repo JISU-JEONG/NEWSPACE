@@ -20,17 +20,12 @@ public class WebSocketController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/publicChatRoom")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-    	System.out.println(chatMessage);
         return chatMessage;
     }
  
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/publicChatRoom")
     public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-    	System.out.println("============ 입장 ===============");
-    	System.out.println(chatMessage);
-    	System.out.println(headerAccessor);
-    	System.out.println("===============================");
         websocket.usercont();
         return chatMessage;
     }
