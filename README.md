@@ -799,7 +799,7 @@ emailService.sendMail((String) resultMap.get("member_email"), "[New Space 이메
 ```
 
 ## 이메일 인증
-![emailcheck](./readmeimage/emailcheck.png)
+![emailcheck](./readmeimage/emailcheck.PNG)
 
 ```java
 //사용자가 요청한 이메일값과 이메일인증키를 DB에서 검색합니다.
