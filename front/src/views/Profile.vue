@@ -382,14 +382,15 @@ export default {
         .then(response => {
           if (response.data.certifiedkey === "true") {
             const payload = {
-              // token: localStorage.getItem("login-token"),
-              // member_id: "",
-              // member_name: response.data.name,
-              // auth: localStorage.removeItem("auth"),
-              // member_keyword: response.data.keyword,
+              token: localStorage.getItem("login-token"),
+              member_id: response.data.member_id,
+              member_name: response.data.name,
+              auth: localStorage.removeItem("auth"),
+              member_keyword: response.data.keyword,
               certifiedkey: response.data.certifiedkey
             };
             this.$store.dispatch("login", payload);
+            this.$store.dispatch("setMemberNews"); // 키워드 뉴스 받아오기
           }
         })
         .catch(error => {

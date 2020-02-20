@@ -38,7 +38,9 @@
 <img src="./readmeimage/KoNLPy.png" width="200" height="150">
 </div>
 
+> 시스템 아키텍쳐
 
+<img src="./readmeimage/시스템아키텍쳐.jpg">
 
 
 
@@ -317,7 +319,6 @@ module.exports = {
 </details>
 
 
-
 ---
 
 | 리소스       | GET                       | POST         | PUT   | DELETE       |
@@ -339,7 +340,28 @@ module.exports = {
 </div>
 </details>
 
+<summary>MEMBER REST FUNCTION DESCRIPTION</summary>
+<div markdown="1">
 
+
+| Function  | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| /api/info   | 헤더를 통해 전송된 토큰을 복호화한다. |
+| /api/profile   | 헤더를 통해 전송된 토큰에서 id를 찾아 해당하는 유저를 반환한다. |
+| /api/profileupdate   | 전송된 유저의 관심키워드 값을 업데이트 시킨다. |
+| /api/sendmail   | 헤더를 통해 전송된 유저의 이메일과, 이메일인증키를 포함하여 메일을 전송한다. |
+| /member/adminServerOn   | 크롤링 서버를 재시작한다.			 |
+| /member/adminManage   | 일반유저의 정보를 반환한다.			 |
+| /member/adminStatus   | 서버의 CPU정보, 서버의 메모리정보, 로그정보를 반환한다.			 |
+| /member/signin | 해당 아이디와 비밀번호에 일치하는 유저를 찾는다.                     |
+| /member/signup   | POST 형태로 member를 등록한다.			 |
+| /member/signupcheck   | 소셜로그인 정보를 중복체크한다.			 |
+| /member/socialtoken   | 소셜로그인 정보를 토큰으로 암호화한다.			 |
+| /member/emailcheck   | 현재 유저의 이메일 인증유무를 반환한다.			 |
+| /member/deleteMember/{member_id}   | 입력받은 Member_id의 해당하는 유저를 삭제한다.			 |
+
+</div>
+</details>
 
 ---
 
@@ -776,7 +798,7 @@ emailService.sendMail((String) resultMap.get("member_email"), "[New Space 이메
 ```
 
 ## 이메일 인증
-<img src="./readmeimage/emailcheck.png">
+<img src="/readmeimage/emailcheck.png">
 
 ```java
 //사용자가 요청한 이메일값과 이메일인증키를 DB에서 검색합니다.
@@ -857,5 +879,88 @@ for (Member m : memberList) {
 		logger.error(e.getMessage());
 	}
 
+}
+```
+
+## 채팅
+<img src="/readmeimage/sockjs.png">
+
+### 1. 소켓연결
+```javascript
+connect() {
+	var socket = new sockjs("http://192.168.31.84:8080/ws");
+	stompClient = Stomp.over(socket);
+
+	stompClient.connect(
+	{ username: this.username },
+	this.onConnected,
+	this.onError
+	);
+}
+```
+```java
+@EventListener
+public void handleWebSocketConnectListener(SessionConnectedEvent event) {
+	logger.info("Received a new web socket connection");
+}
+```
+### 2. 채팅방 접속
+```javascript
+onConnected() {
+	stompClient.subscribe("/topic/publicChatRoom", this.onMessageReceived);
+
+	stompClient.send(
+	"/app/chat.addUser",
+	{},
+	JSON.stringify({
+		sender: this.username,
+		type: "JOIN"
+	})
+	);
+}
+```
+```java
+@MessageMapping("/chat.addUser")
+@SendTo("/topic/publicChatRoom")
+public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+	websocket.usercont();
+	return chatMessage;
+}
+```
+
+### 3. 메세지 전송
+```javascript
+sendMessage() {
+	var messageContent = this.message.trim();
+
+	if (messageContent && stompClient) {
+		var chatMessage = {
+			sender: this.username,
+			sessionid: localStorage.getItem("member_id"),
+			content: this.message,
+			type: "CHAT"
+		};
+		stompClient.send(
+			"/app/chat.sendMessage",
+			{},
+			JSON.stringify(chatMessage)
+		);
+	}
+}
+```
+```java
+@MessageMapping("/chat.sendMessage")
+@SendTo("/topic/publicChatRoom")
+public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+	return chatMessage;
+}
+```
+### 4. 연결종료
+```javascript
+chatdistconnet(){
+	if(stompClient !== null){
+	this.flag = false;
+	stompClient.disconnect();
+	}
 }
 ```
