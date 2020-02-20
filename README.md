@@ -40,7 +40,7 @@
 
 > 시스템 아키텍쳐
 
-<img src="/readmeimage/시스템아키텍쳐.jpg">
+<img src="./readmeimage/시스템아키텍쳐.jpg">
 
 
 
@@ -799,7 +799,7 @@ emailService.sendMail((String) resultMap.get("member_email"), "[New Space 이메
 ```
 
 ## 이메일 인증
-<img src="/readmeimage/emailcheck.png">
+<img src="./readmeimage/emailcheck.png">
 
 ```java
 //사용자가 요청한 이메일값과 이메일인증키를 DB에서 검색합니다.
@@ -884,7 +884,7 @@ for (Member m : memberList) {
 ```
 
 ## 채팅
-<img src="/readmeimage/sockjs.png">
+<img src="./readmeimage/sockjs.png">
 
 ### 1. 소켓연결
 ```javascript
