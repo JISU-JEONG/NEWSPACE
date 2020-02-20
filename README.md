@@ -40,7 +40,7 @@
 
 > 시스템 아키텍쳐
 
-<img src="./readmeimage/시스템아키텍쳐.jpg">
+<img src="/readmeimage/시스템아키텍쳐.jpg">
 
 
 
@@ -340,6 +340,7 @@ module.exports = {
 </div>
 </details>
 
+<details>
 <summary>MEMBER REST FUNCTION DESCRIPTION</summary>
 <div markdown="1">
 
