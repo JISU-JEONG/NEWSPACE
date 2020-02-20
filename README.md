@@ -692,6 +692,8 @@ public void addCorsMappings(CorsRegistry registry) {
 		.allowedHeaders("*")
 		.exposedHeaders("login-token");
 }
+
+//적용제외 경로를 제외한 경로는 인터셉트를 이용하여 토큰을 검사합니다.
 Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(token);
 
 String logintoken = request.getHeader("login-token");
@@ -728,8 +730,132 @@ try {
 }
 ```
 
+## 이메일 전송
+```java
+// 이메일 전송 요청 호출시 토큰을 검사합니다.
+Map<String, Object> resultMap = new HashMap<>();
+try {
+	resultMap.putAll(jwtService.get(req.getHeader("login-token")));
+} catch (RuntimeException e) {
+	log.error("정보조회 실패", e.getMessage());
+	resultMap.put("message", e.getMessage());
+}
+
+// 이메일의 경우 스프링 MimeMessage 서비스를 이용하였습니다.
+private JavaMailSender javaMailSender;
+
+public void sendMail(String toEmail, String subject, String message) throws MessagingException {
+	SimpleMailMessage mailMessage = new SimpleMailMessage();
+	MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+	MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+	
+	helper.setTo(toEmail);
+	helper.setSubject(subject);
+	helper.setText(message, true);
+
+	helper.setFrom("NewsSpace");
+
+	javaMailSender.send(mimeMessage);
+}
+// 토큰에서 이메일값과, 이메일인증 키값을 복호화하여 이메일 html형식으로 보내게 됩니다.
+StringBuffer emailcontent = new StringBuffer();
+emailcontent.append("<!DOCTYPE html>");
+emailcontent.append("<html>");
+emailcontent.append("<head>");
+emailcontent.append("</head>");
+emailcontent.append("<body>");
+emailcontent.append("<h1>[New Space 이메일 인증]</h1>");
+emailcontent.append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>");
+emailcontent.append("<a href='" + "http://192.168.31.84:8080/" + "/member/");
+emailcontent.append(resultMap.get("member_certifiedkey"));
+emailcontent.append("/" + resultMap.get("member_email"));
+emailcontent.append("'>이메일 인증 확인</a>");
+emailcontent.append("</body>");
+emailcontent.append("</html>");
+emailService.sendMail((String) resultMap.get("member_email"), "[New Space 이메일 인증]", emailcontent.toString());
+```
+
 ## 이메일 인증
+<img src="./readmeimage/emailcheck.png">
 
 ```java
+//사용자가 요청한 이메일값과 이메일인증키를 DB에서 검색합니다.
+<select id="emailcheck" parameterType="파라미터 타입" resultType="결과 타입">
+	select * from amt.member where email = #{email} and certifiedkey = #{certifiedkey}
+</select>
 
+//만약 검색한 결과가 존재할경우 Profile페이지로 이동 / 없을경우 메인페이지로 이동시킵니다.
+boolean check = memberservice.emailcheck(member);
+String url = "";
+if(check) {
+	url = "https://i02b208.p.ssafy.io/Profile";
+}
+else {
+	url = "https://i02b208.p.ssafy.io/";
+}
+	return "redirect:"+url;
+}
+```
+
+## 관심키워드 이메일 전송
+```java
+//counterList의 경우 
+ArrayList<NewsKeywordCounter> counterList = new ArrayList<NewsKeywordCounter>();
+String keyword = "";
+
+for (int i = 0; i < counterList.size(); i++) {
+	if (i >= 5) {
+		break;
+	}
+	keyword += counterList.get(i).getKeyword() + " ";
+}
+if (keyword.length() >= 1) {
+	keyword = keyword.substring(0, keyword.length() - 1);
+}
+addNewsKeyword(news_id, keyword);
+
+<select id="emailSendList" resultType="결과 타입"
+parameterType="파라미터 타입">
+	select * from amt.member
+	where (
+		<choose>
+		<when test="search.length != 0">
+			(
+			//
+			<foreach collection="search" item="word" index="index"
+				separator="OR ">
+				keyword like concat('%',#{word},'%')
+			</foreach>
+			)
+		</when>
+	</choose>
+	) and certifiedkey = "true"
+</select>
+List<Member> memberList = memberDao.emailSendList(keyword);
+
+for (Member m : memberList) {
+
+	try {
+
+		StringBuffer emailcontent = new StringBuffer();
+		emailcontent.append("<!DOCTYPE html>");
+		emailcontent.append("<html>");
+		emailcontent.append("<head>");
+		emailcontent.append("</head>");
+		emailcontent.append("<body>");
+		emailcontent.append("<strong>" + m.getName() + "</strong>" + "님 안녕하세요.<br>");
+		emailcontent.append("당신이 선택하신 키워드에 매칭되는 최신 뉴스가 올라왔습니다. :)<br>");
+		emailcontent.append("<br><br><br>");
+		emailcontent.append(n.getTitle() + "<br>");
+		emailcontent.append(n.getBody() + "<br>");
+		emailcontent.append("<a href='" + n.getUrl() + "'>해당 기사 사이트로 가기</a><br>");
+		emailcontent.append("</body>");
+		emailcontent.append("</html>");
+		emailService.sendMail(m.getEmail(), "[NEWSPACE] 추천 뉴스가 도착했습니다.", emailcontent.toString());
+		logger.info("Email Service Send To : " + m.getName() + "\t" + "news_id : " + news_id);
+	} catch (MessagingException e) {
+		logger.error(e.getMessage());
+	}
+
+}
 ```
