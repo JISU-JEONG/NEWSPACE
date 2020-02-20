@@ -1,46 +1,279 @@
 ﻿# DEMO SITE
 
-[<img src="/readmeimage/newspace.png" width="200" height="180">](https://i02b208.p.ssafy.io/)
+[<img src="./readmeimage/newspace.png" width="200" height="180">](https://i02b208.p.ssafy.io/)
 <br>
 이미지를 클릭시 NEWSPACE로 이동됩니다.
 
 ### 개발환경
 
 > OS
+
 <div>
-<img src="/readmeimage/windows.png" width="200" height="150">
-<img src="/readmeimage/ubuntu.png" width="200" height="150">
+<img src="./readmeimage/windows.png" width="200" height="150">
+<img src="./readmeimage/ubuntu.png" width="200" height="150">
 </div>
 
 > Language
+
 <div>
-<img src="/readmeimage/java.png" width="200" height="150">
-<img src="/readmeimage/vue.png" width="200" height="150">
-<img src="/readmeimage/css.png" width="200" height="150">
-<img src="/readmeimage/javascript.png" width="200" height="150">
+<img src="./readmeimage/java.png" width="200" height="150">
+<img src="./readmeimage/vue.png" width="200" height="150">
+<img src="./readmeimage/css.png" width="200" height="150">
+<img src="./readmeimage/javascript.png" width="200" height="150">
 </div>
 
 > IDE
+
 <div>
-<img src="/readmeimage/vscode.png" width="200" height="150">
-<img src="/readmeimage/eclipse.png" width="200" height="150">
+<img src="./readmeimage/vscode.png" width="200" height="150">
+<img src="./readmeimage/eclipse.png" width="200" height="150">
 </div>
 
 > Library
+
 <div>
-<img src="/readmeimage/vuetify.png" width="200" height="150">
-<img src="/readmeimage/jsoup.png" width="200" height="150">
-<img src="/readmeimage/selenium.png" width="200" height="150">
-<img src="/readmeimage/KoNLPy.png" width="200" height="150">
+<img src="./readmeimage/vuetify.png" width="200" height="150">
+<img src="./readmeimage/jsoup.png" width="200" height="150">
+<img src="./readmeimage/selenium.png" width="200" height="150">
+<img src="./readmeimage/KoNLPy.png" width="200" height="150">
 </div>
 
-## 기술역할 분담
 
-김태우 | 정지수 | 정영길 | 정영훈
-------- | ------- | ------- | -------
- Front | Front | GOD | Back
+
+
+
+# 기술역할 분담
+
+
+
+## 1. Front-end
+
+![정지수](./readmeimage/정지수.jpg)
+![김태우](./readmeimage/김태우.jpg)
+
+
+
+## 2. Back-end
+
+![정영훈](./readmeimage/정영훈.jpg)
+![정영길](./readmeimage/정영길.jpg)
+
+
 
 # front-end
+
+
+
+## 1. 컴포넌트 구조도
+
+![components](./readmeimage/components.png)
+
+```markdown
+App
+* Navigation
+  * chat
+* Router
+  * HomePage
+    * Sidebanner
+    * CloudChart
+    * NewsList
+      * News
+  * SearchPage
+    * News
+  *  DetailPage
+    * CommentForm
+    * CommentList
+  * SignupPage
+  * SocialSignup
+  * LoginPage
+  * Profile
+    * TreeChart
+  * Aboutus
+  * Admin
+    * CpuChart
+    * MemoryChart
+    * ServerStatus
+    * LogList
+    * NewsStatus
+```
+
+
+
+## 2. Npm Module
+
+### [vue-line-clamp](https://www.npmjs.com/package/vue-line-clamp)
+
+: 글씨 줄수를 제한해 준다.
+
+
+
+**install**
+
+```bash
+npm install vue-line-clamp
+```
+
+```vue
+import Vue       from 'vue'
+import lineClamp from 'vue-line-clamp'
+ 
+Vue.use(lineClamp, {
+  // plugin options
+})
+```
+
+
+
+**Usage**
+
+```vue
+<p v-line-clamp:20="2">Some long text that needs to be truncated to a fixed number, which is 2 in this case. And if the browser doesn't support `-webkit-line-clamp`, then a line-height of 20px is going to be used in order to truncate this text, thus calculating its max-height.</p>
+```
+
+
+
+### [vue-apexcharts](https://apexcharts.com/docs/vue-charts/)
+
+: 워드 클라우드 차트, xy차트 등 각종 차트를 사용 가능
+
+
+
+**install**
+
+```bash
+npm install --save apexcharts
+npm install --save vue-apexcharts
+```
+
+
+
+**Usage**
+
+```vue
+<template>
+<div>
+  <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
+</div>
+</template>
+```
+
+```vue
+import VueApexCharts from 'vue-apexcharts'
+
+Vue.component('apexchart', VueApexCharts)
+
+var app = new Vue({
+  el: '#appl',
+  data: function() {
+    return {
+      options: {
+        chart: {
+          id: 'vuechart-example'
+        },
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        }
+      },
+      series: [{
+        name: 'series-1',
+        data: [30, 40, 45, 50, 49, 60, 70, 91]
+      }]
+    }
+  }
+});
+```
+
+
+
+### [driver.js](https://www.npmjs.com/package/driver.js)
+
+: 튜토리얼 등을 만들기 위한 오버레이 팝업 등을 제공
+
+
+
+**install**
+
+```bash
+npm i driver.js
+```
+
+
+
+**Usage**
+
+```vue
+import Driver from 'driver.js';
+```
+
+```vue
+const driver = new Driver();
+driver.highlight({
+  element: '#some-element',
+  popover: {
+    title: 'Title for the Popover',
+    description: 'Description for it',
+  }
+});
+```
+
+
+
+### [@babel/polyfill](https://steemit.com/vue-cli3/@stepanowon/vue-cli-3-x-ie11)
+
+: vue.js에서 explore에 실행하기 위해 설정
+
+
+
+**install**
+
+```bash
+npm install --save @babel/polyfill
+```
+
+
+
+**Usage**
+
+```vue
+import '@babel/polyfill'
+import Vue from "vue";
+......
+
+```
+
+
+
+babel.config.js
+
+```js
+module.exports = {
+  presets: [
+    [
+      '@vue/app',
+      {
+        "useBuiltIns": "entry"
+      }
+    ]
+  ]
+}
+```
+
+​		
+
+* vue.config.js
+
+  ```js
+  const ansiRegex = require('ansi-regex')
+  
+  module.exports = {
+      ......(기존 설정이 있다면 다음에 추가)
+      transpileDependencies: [ansiRegex]
+  }
+  ```
+
+​		
+
+
 
 
 # back-end
@@ -49,10 +282,10 @@
 
 ---
 
-리소스 | GET | POST | PUT | DELETE
-------- | ------- | ------- | ------- | -------
-`news` |	Error | 좋아요 추가/삭제 | Error | Error
-`news/1` | 해당 번호의 뉴스 조회 | Error | Error | Error
+| 리소스   | GET                   | POST             | PUT   | DELETE |
+| -------- | --------------------- | ---------------- | ----- | ------ |
+| `news`   | Error                 | 좋아요 추가/삭제 | Error | Error  |
+| `news/1` | 해당 번호의 뉴스 조회 | Error            | Error | Error  |
 
 
 
@@ -60,24 +293,26 @@
 <summary>NEWS REST FUNCTION DESCRIPTION</summary>
 <div markdown="1">
 
-|Function|Description|
-|--|--|
-| news/? | 해당 번호의 뉴스를 가져온다. |
-| news | POST 형태로 해당 번호의 뉴스를 좋아요 표시한다. |
-| getAllNews | 모든 뉴스를 가져온다.(DataBase에 저장된 순서대로) |
-| getSamsungNews | 날짜순으로 삼성의 모든 뉴스를 가져온다. |
-| getLgNews | 날짜순으로 LG의 모든 뉴스를 가져온다. |
-| getSkNews | 날짜순으로 SK의 모든 뉴스를 가져온다. |
-| getAllNewsRecent | 날짜순으로 최근 20개의 모든 브랜드의 뉴스를 가져온다. |
-| getSamsungRecent | 날짜순으로 최근 20개의 삼성 뉴스를 가져온다. |
-| getLgRecent | 날짜순으로 최근 20개의 LG 뉴스를 가져온다. |
-| getSkRecent | 날짜순으로 최근 20개의 SK 뉴스를 가져온다. |
-| getUserKeyword | TOP 20 키워드들을 보여준다. |
-| getUserKeywordNews/? | 토큰에 있는 Keyword를 전달 시 자신의 키워드에 따른 뉴스를 검색한다. |
-| findNews/? | 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다. |
-| getChartKeyword | 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스에서 가장 많이 나온 키워드들을 검색한다. |
+
+| Function                | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| news/?                  | 해당 번호의 뉴스를 가져온다.                                 |
+| news                    | POST 형태로 해당 번호의 뉴스를 좋아요 표시한다.              |
+| getAllNews              | 모든 뉴스를 가져온다.(DataBase에 저장된 순서대로)            |
+| getSamsungNews          | 날짜순으로 삼성의 모든 뉴스를 가져온다.                      |
+| getLgNews               | 날짜순으로 LG의 모든 뉴스를 가져온다.                        |
+| getSkNews               | 날짜순으로 SK의 모든 뉴스를 가져온다.                        |
+| getAllNewsRecent        | 날짜순으로 최근 20개의 모든 브랜드의 뉴스를 가져온다.        |
+| getSamsungRecent        | 날짜순으로 최근 20개의 삼성 뉴스를 가져온다.                 |
+| getLgRecent             | 날짜순으로 최근 20개의 LG 뉴스를 가져온다.                   |
+| getSkRecent             | 날짜순으로 최근 20개의 SK 뉴스를 가져온다.                   |
+| getUserKeyword          | TOP 20 키워드들을 보여준다.                                  |
+| getUserKeywordNews/?    | 토큰에 있는 Keyword를 전달 시 자신의 키워드에 따른 뉴스를 검색한다. |
+| findNews/?              | 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스 데이터를 최신순으로 검색한다. |
+| getChartKeyword         | 전체, SAMSUNG, LG, SK 각각 따로따로 뉴스에서 가장 많이 나온 키워드들을 검색한다. |
 | getSearchChartKeyword/? | 검색결과 뉴스들 사이에서 해당 검색어의 빈도수를 1년동안 월별로 나타낸다. |
-| getNewsStatus | 전체, 삼성, LG, SK의 뉴스 수, 그리고 오늘 업로드 된 뉴스 수를 리턴한다. |
+| getNewsStatus           | 전체, 삼성, LG, SK의 뉴스 수, 그리고 오늘 업로드 된 뉴스 수를 리턴한다. |
+
 </div>
 </details>
 
@@ -85,24 +320,24 @@
 
 ---
 
-| 리소스 | GET | POST | PUT | DELETE |
-| ------- | ------- | ------- | ------- | ------- |
-| `/comment` | Error | comment 등록 | Error | comment 삭제 |
-| `/comment/1` | news_id 값의 comment 조회 | Error | Error | Error |
+| 리소스       | GET                       | POST         | PUT   | DELETE       |
+| ------------ | ------------------------- | ------------ | ----- | ------------ |
+| `/comment`   | Error                     | comment 등록 | Error | comment 삭제 |
+| `/comment/1` | news_id 값의 comment 조회 | Error        | Error | Error        |
 
 <details>
 <summary>COMMENT REST FUNCTION DESCRIPTION</summary>
 <div markdown="1">
 
-|Function|Description|
-|--|--|
-|comment/?|해당 번호의 뉴스의 Comment들을 가져온다.|
-| comment | POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date) |
-| comment | DELETE로 comment_id를 넘겨주면 삭제된다. (세션 유저의 member_id 값과 comment에 저장된 member_id 값이 같아야 지워짐) |
+
+| Function  | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| comment/? | 해당 번호의 뉴스의 Comment들을 가져온다.                     |
+| comment   | POST 형태로 Comment를 등록한다.(입력값 : news_id, comment_text, comment_date) |
+| comment   | DELETE로 comment_id를 넘겨주면 삭제된다. (세션 유저의 member_id 값과 comment에 저장된 member_id 값이 같아야 지워짐) |
 
 </div>
 </details>
-
 
 
 
@@ -111,7 +346,6 @@
 ## Crawling
 
 ```java
-
 doc = Jsoup.connect("https://news.samsung.com/kr/category/%ea%b8%b0%ec%97%85/" + category[i] + "/page/"
 						+ pageIndex++).get();
 //index 증가를 통해 페이지 이동
@@ -271,7 +505,6 @@ for (int i = 0; i < webElements.size(); i++) {
 ## Keyword Sort
 
 ```java
-
 //DataBase에 저장되어있는 News 데이터들을 브랜드 별로 불러와 해당 뉴스의 키워드들을 압축한다.
 //압축된 키워드들은 NewsKeyword 라는 Table에 저장된다.
 
@@ -418,6 +651,7 @@ for (NewsDTO n : list) {
 ```
 
 ## JWT 토큰 생성
+
 ```java
 final JwtBuilder builder = Jwts.builder();
 builder.setHeaderParam("typ", "JWT");// 토큰 타입 설정
@@ -440,6 +674,7 @@ final String token = builder.compact();
 ```
 
 ## JWT 토큰 체크
+
 ```java
 //인터셉터를 이용
 @Override
@@ -471,6 +706,7 @@ else {
 ```
 
 ## JWT 토큰 분석
+
 ```java
 public Map<String, Object> get(final String token) {
 	Jws<Claims> claims = null;
@@ -493,6 +729,7 @@ try {
 ```
 
 ## 이메일 인증
+
 ```java
 
 ```
