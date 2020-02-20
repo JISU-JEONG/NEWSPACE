@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- <chat /> -->
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="250" width="10" color="blue-grey lighten-5"></v-progress-circular>
     </v-overlay>
@@ -44,12 +43,10 @@
 <script>
 import News from "../components/News"
 import http from "../services/http-common"
-import Chat from "../components/Chat"
 import info from "../services/getInfo"
 export default {
   components: {
     News,
-    Chat
   },
   data() {
     return {
