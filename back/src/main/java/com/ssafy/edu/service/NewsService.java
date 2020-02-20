@@ -565,7 +565,7 @@ public class NewsService implements INewsService {
 					lmax += count[c];
 				}
 			}
-			
+
 			if (max == 0) {
 				max = lmax;
 				result.add(new SearchChart("ALL", index--, max - lmax, find, search));
@@ -1215,9 +1215,7 @@ public class NewsService implements INewsService {
 			} else {
 				dao.updateNewsKeyword(new NewsKeyword(news_id, keyword));
 			}
-
 		}
-
 	}
 
 //	@Scheduled(cron = "0 31 10 * * *")
@@ -1244,12 +1242,12 @@ public class NewsService implements INewsService {
 		keywordSet = false;
 		serverCheck = false;
 	}
-	
+
 	public boolean adminServerOn() throws IOException, ParseException {
-		if(serverCheck) {
+		if (serverCheck) {
 			logger.info("Already Server. CRAWLING NOT EXCUTE " + new Date());
 			return false;
-		}else {
+		} else {
 			serverCheck = true;
 			logger.info("SAMSUNG CRAWLING1..." + "\t" + new Date());
 			samsungCrawling = true;
@@ -1266,7 +1264,7 @@ public class NewsService implements INewsService {
 			sk_Crawling();
 			skCrawling = false;
 			logger.info("CRAWLING DONE." + "\t" + new Date());
-			keywordSet = true; 
+			keywordSet = true;
 			allKeywordSet();
 			keywordSet = false;
 			serverCheck = false;
